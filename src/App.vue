@@ -19,7 +19,7 @@ const path = computed(() => route.path);
 
         <div id="body" 
         
-        style="background: linear-gradient(180deg, rgba(228,246,255,1) 0%, rgba(255,255,255,1) 100%);background: rgb(228,246,255);"
+        style="background: linear-gradient(180deg, rgba(228,246,255,1) 0%, rgba(255,255,255,1) 100%);"
         class="
         w-full h-full flex flex-row items-start  pl-32 pr-3 py-12 gap-x-12">
             <Navbar />

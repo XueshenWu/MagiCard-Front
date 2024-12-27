@@ -2,6 +2,7 @@
 
 import FeatureBoard from '../components/FeatureBoard.vue';
 import FeatureBoardX from '../components/FeatureBoardX.vue';
+import SubscribeButton from '../components/SubscribeButton.vue';
 
 const features = [
     {
@@ -26,15 +27,16 @@ const features = [
 </script>
 
 <template>
-    <div class=" flex flex-col items-center justify-start flex-grow h-full w-full gap-y-10 pt-12 pr-16 ">
+    <div class=" flex flex-col items-center justify-start flex-grow h-full w-full gap-y-6 pt-12 pr-16 ">
         <div class="text-3xl font-semibold">
             欢迎开通 Card 支付会员
         </div>
         <img src="/my-card-member.png" alt="my-card-member" class="w-[240px] h-[40px]" />
-        <div class="grid grid-cols-4 gap-x-6">
+        <div class="grid grid-cols-4 gap-x-6 mt-6">
             <FeatureBoardX />
             <FeatureBoard v-for="feature in features" :title="feature.title" :feature="feature.feature"
                 :paragraphs="feature.paragraphs" :src="feature.src" />
         </div>
+        <SubscribeButton/>
     </div>
 </template>
