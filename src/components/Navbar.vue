@@ -3,6 +3,10 @@ import { computed } from "vue";
 import { RouterLink, useRoute } from "vue-router";
 
 
+// TODO: set a gateway to dashboard filtering users not logged in
+
+
+
 const route = useRoute();
 const path = computed(() => route.path);
 
