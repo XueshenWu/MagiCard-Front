@@ -50,7 +50,7 @@ const items = steps.map(item => ({
 
 
 <template>
-    <div class="flex flex-col gap-y-8">
+    <div class="flex flex-col gap-y-8 p-12 py-4">
 
 
         <div class="steps-content h-[300px]">

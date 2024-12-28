@@ -21,7 +21,7 @@ const path = computed(() => route.path);
             class="
         w-full h-full flex flex-row items-start  pl-20 pr-12 py-12 gap-x-6">
             <Navbar />
-            <div v-if="path !== '/'" id="view" class="bg-white rounded-lg shadow-sm w-full h-full p-12 py-4">
+            <div v-if="path !== '/'" id="view" class="bg-white rounded-lg shadow-sm w-full h-full ">
                 <RouterView />
             </div>
             <div v-else class="w-full h-full">

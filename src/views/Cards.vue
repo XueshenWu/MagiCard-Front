@@ -60,7 +60,8 @@ watchEffect(async () => {
 
 
 <template>
-    <div class="flex flex-col items-start justify-start gap-y-6 w-full h-full">
+    
+    <div class="flex p-12 py-4 flex-col items-start justify-start gap-y-6 w-full h-full">
 
         <div id="tabs" class="w-full flex flex-row justify-between items-center">
             <Tabs class="grow flex-grow" v-model:activeKey="activeKey" size="medium">

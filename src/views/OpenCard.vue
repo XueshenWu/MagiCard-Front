@@ -3,6 +3,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import CardDurationSelector from '../components/CardDurationSelector.vue';
+import ServiceSelector from '../components/ServiceSelector.vue';
 
 
 const router = useRouter();
@@ -45,22 +46,24 @@ const items = steps.map(item => ({
 
 
 <template>
-    <div class="flex flex-col gap-y-8">
+    <div class="flex flex-col gap-y-8 items-center justify-start">
 
 
-        <div class="steps-content h-[300px]">
+        <div class="steps-content h-[440px] w-full">
             <CardDurationSelector v-if="current === 0" />
+            <ServiceSelector v-else-if="current === 1" />
             <div v-else>
                 <div>其他步骤</div>
             </div>
         </div>
 
         <a-steps progress-dot size="small" :current="current" :items="items" />
-        <div class="steps-action flex justify-end items-center gap-x-4 *:w-28">
+        <div class="steps-action flex justify-end items-center gap-x-4 *:w-28 w-full py-4 pr-12">
             <a-button class="bg-gray-100 border-none" v-if="current >= 0" style="margin-left: 8px"
                 @click="prev">上一步</a-button>
 
             <a-button v-show="current === 0" type="primary" @click="next">下一步</a-button>
+            <a-button v-show="current === 1" type="primary" @click="next">线上购买</a-button>
 
 
         </div>

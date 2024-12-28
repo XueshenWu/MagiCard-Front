@@ -17,9 +17,9 @@ const rate = [
 </script>
 
 <template>
-    <div class="flex flex-row w-full items-start justify-between h-full">
+    <div class="flex flex-row w-full items-start justify-between h-full ">
 
-        <div class="flex flex-col items-start justify-start w-1/2 gap-y-4">
+        <div class="flex flex-col items-start justify-start w-1/2 gap-y-4 p-12 py-8">
             <div class=" font-bold">
                 选择卡片年限
             </div>
@@ -44,20 +44,19 @@ const rate = [
                     <span class="font-semibold ">{{ item.price }}</span>
                 </div>
             </div>
-            
+
 
         </div>
-        <div class="w-1/2 h-full flex flex-col items-center justify-start"
-        style="background: linear-gradient(180deg, rgba(193,236,255,1) 0%, rgba(255,255,255,1) 100%);"
-        
-        >
-            <img src="/card-wildcard.webp" alt="card-wildcard" class="w-1/2" />
-            <div>
-                <div>
+        <div class="w-1/2 h-full flex flex-col items-center justify-start p-12 py-4 rounded-r-lg"
+            style="background: linear-gradient(180deg, rgba(193,236,255,1) 0%, rgba(255,255,255,1) 100%);">
+            <img src="/card-wildcard.webp" alt="card-wildcard" class="w-2/3" />
+            <div class="flex flex-col items-center justify-center gap-y-2">
+                <div class="font-semibold text-sm">
                     开卡费用
                 </div>
-                <div>
-
+                <div >
+                    <span class="font-bold text-2xl">$</span>
+                    <span class="font-bold text-3xl">{{ rate[currentPlan].price }}</span>
                 </div>
             </div>
 
