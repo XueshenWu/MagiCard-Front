@@ -2,9 +2,13 @@
 import { ArrowDownOutlined, EllipsisOutlined } from '@ant-design/icons-vue';
 import CashoutButton from './CashoutButton.vue';
 import CardOptionButton from './CardOptionButton.vue';
+import CardHelp from './CardHelp.vue';
+import RechargeButton from './RechargeButton.vue';
+import { useRouter } from 'vue-router';
 
 
 const { cardData } = defineProps(['cardData']);
+const router = useRouter();
 
 </script>
 
@@ -18,7 +22,8 @@ const { cardData } = defineProps(['cardData']);
                             可支付
                         </div>
                         <div>
-                            <span class="font-bold text-xl">$</span><span class="font-bold text-3xl">{{ Number(cardData["balance"]).toFixed(2) }}</span>
+                            <span class="font-bold text-xl">$</span><span class="font-bold text-3xl">{{
+                                Number(cardData["balance"]).toFixed(2) }}</span>
                         </div>
                     </div>
                     <div class="flex flex-row items-center text-sm gap-x-2">
@@ -26,10 +31,12 @@ const { cardData } = defineProps(['cardData']);
                             提现
                         </button> -->
                         <CashoutButton :availableBalance="cardData['balance']" />
-                        <button class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-400 duration-100">
+                        <!-- <button class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-400 duration-100">
                             充值
-                        </button>
-                        <button class="bg-black text-slate-200 px-6 py-2 rounded-lg hover:bg-slate-800 duration-100">
+                        </button> -->
+                        <RechargeButton cardInfo="test" />
+                        <button @click="()=>router.replace('/openCard')"
+                            class="bg-black text-slate-200 px-6 py-2 rounded-lg hover:bg-slate-800 duration-100">
                             开新卡
                         </button>
                         <!-- <button class="bg-slate-200 px-4 py-2 rounded-lg hover:bg-slate-300 duration-100">
@@ -42,17 +49,14 @@ const { cardData } = defineProps(['cardData']);
 
             <div class="flex flex-row items-start justify-center h-[300px]">
                 <div id="cardDetail"
-                
-                style="background: radial-gradient(circle at top left, rgba(238,238,238,1) 0%, rgba(255,255,255,1) 100%);"
-                class="flex flex-col bg-gray-100 w-1/2 h-full gap-y-6 rounded-l-lg px-5 py-3">
+                    style="background: radial-gradient(circle at top left, rgba(238,238,238,1) 0%, rgba(255,255,255,1) 100%);"
+                    class="flex flex-col bg-gray-100 w-1/2 h-full gap-y-6 rounded-l-lg px-5 py-3">
                     <div class="flex flex-row items-center justify-between">
                         <img src="/logo.png" alt="logo" class="w-6 h-4" />
                         <div
                             class="flex flex-row items-center justify-center gap-x-4 text-sky-500 [&>a]:cursor-pointer">
+                            <CardHelp />
                             <a>
-                                如何使用
-                            </a>
-                            <a >
                                 复制全部
                             </a>
                             <a class="grid place-content-center">
@@ -79,7 +83,7 @@ const { cardData } = defineProps(['cardData']);
                                 <div class="text-sm text-gray-500">
                                     安全码/CVC/CVV
                                 </div>
-                                 <div class="font-bold text-lg">
+                                <div class="font-bold text-lg">
                                     * * *
                                 </div>
                             </div>
@@ -92,7 +96,7 @@ const { cardData } = defineProps(['cardData']);
                                 <div class="text-sm text-gray-500">
                                     有效期
                                 </div>
-                                 <div class="font-bold text-lg">
+                                <div class="font-bold text-lg">
                                     {{
                                         `${String(cardData['issueDate']).split('-')[1]}月/${String(cardData['issueDate']).split('-')[0]}年`
                                     }}
@@ -107,7 +111,7 @@ const { cardData } = defineProps(['cardData']);
                                 <div class="text-sm text-gray-500">
                                     姓名
                                 </div>
-                                 <div class="font-bold text-lg">
+                                <div class="font-bold text-lg">
                                     {{ cardData["userName"] }}
                                 </div>
                             </div>
@@ -120,9 +124,9 @@ const { cardData } = defineProps(['cardData']);
                     </div>
                 </div>
 
-                <div id="addressDetail" 
-                style="background: radial-gradient(circle at top left, rgba(241,253,255,1) 0%, rgba(255,255,255,1) 100%);"
-                class="flex flex-col bg-sky-100 w-1/2 h-full gap-y-6 rounded-r-lg px-5 py-3">
+                <div id="addressDetail"
+                    style="background: radial-gradient(circle at top left, rgba(241,253,255,1) 0%, rgba(255,255,255,1) 100%);"
+                    class="flex flex-col bg-sky-100 w-1/2 h-full gap-y-6 rounded-r-lg px-5 py-3">
                     <div class="flex flex-row items-center justify-between">
 
                         <div class="flex items-center gap-x-2">
@@ -136,9 +140,7 @@ const { cardData } = defineProps(['cardData']);
 
                         <div
                             class="flex flex-row items-center justify-center gap-x-4 text-sky-500 [&>a]:cursor-pointer">
-                            <a>
-                                如何使用
-                            </a>
+                            <CardHelp />
                             <a>
                                 复制全部
                             </a>
@@ -153,7 +155,7 @@ const { cardData } = defineProps(['cardData']);
                                 <div class="text-sm text-gray-500">
                                     地址1
                                 </div>
-                                 <div class="font-bold text-lg">
+                                <div class="font-bold text-lg">
                                     {{ cardData["addressLine1"] }}
                                 </div>
                             </div>
@@ -166,7 +168,7 @@ const { cardData } = defineProps(['cardData']);
                                 <div class="text-sm text-gray-500">
                                     城市
                                 </div>
-                                 <div class="font-bold text-lg">
+                                <div class="font-bold text-lg">
                                     {{ cardData["city"] }}
                                 </div>
                             </div>
@@ -179,7 +181,7 @@ const { cardData } = defineProps(['cardData']);
                                 <div class="text-sm text-gray-500">
                                     邮编
                                 </div>
-                                 <div class="font-bold text-lg">
+                                <div class="font-bold text-lg">
                                     {{ cardData["postalCode"] }}
                                 </div>
                             </div>
@@ -192,9 +194,9 @@ const { cardData } = defineProps(['cardData']);
                                 <div class="text-sm text-gray-500">
                                     州
                                 </div>
-                                 <div class="font-bold text-lg">
+                                <div class="font-bold text-lg">
                                     {{ cardData["stateName"] }} {{ cardData["stateCnName"] && '/' }} {{
-                                    cardData["stateCnName"] }}
+                                        cardData["stateCnName"] }}
                                 </div>
                             </div>
                             <a class="cursor-pointer text-blue-500">

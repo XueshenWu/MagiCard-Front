@@ -1,0 +1,67 @@
+<script setup>
+import { ref } from 'vue';
+
+const currentPlan = ref(0);
+
+const rate = [
+    {
+        duration: 2,
+        price: 14.99
+    },
+    {
+        duration: 1,
+        price: 9.99
+    }
+]
+
+</script>
+
+<template>
+    <div class="flex flex-row w-full items-start justify-between h-full">
+
+        <div class="flex flex-col items-start justify-start w-1/2 gap-y-4">
+            <div class=" font-bold">
+                选择卡片年限
+            </div>
+            <!-- <div>
+                <div @click="duration = 2"
+                    :class="`cursor-pointer tracking-wide text-sm flex border w-64 rounded-lg px-8 h-16 justify-between duration-75 items-center ${duration === 2 ? 'border-blue-500' : 'border-gray-100'}`">
+                    <span class=" first-letter:font-semibold">2年</span>
+                    <span class="font-semibold ">$14.99</span>
+                </div>
+            </div>
+            <div>
+                <div @click="duration = 1"
+                    :class="`cursor-pointer tracking-wide text-sm flex border w-64 rounded-lg px-8 h-16 justify-between duration-75 items-center ${duration === 1 ? 'border-blue-500' : 'border-gray-100'}`">
+                    <span class=" first-letter:font-semibold">1年</span>
+                    <span class="font-semibold ">$9.99</span>
+                </div>
+            </div> -->
+            <div v-for="(item, idx) in rate" :key="idx">
+                <div @click="currentPlan = idx"
+                    :class="`cursor-pointer tracking-wide text-sm flex border w-64 rounded-lg px-8 h-16 justify-between duration-75 items-center ${rate[currentPlan].duration === item.duration ? 'border-blue-500' : 'border-gray-100'}`">
+                    <span class=" first-letter:font-semibold">{{ item.duration }}年</span>
+                    <span class="font-semibold ">{{ item.price }}</span>
+                </div>
+            </div>
+            
+
+        </div>
+        <div class="w-1/2 h-full flex flex-col items-center justify-start"
+        style="background: linear-gradient(180deg, rgba(193,236,255,1) 0%, rgba(255,255,255,1) 100%);"
+        
+        >
+            <img src="/card-wildcard.webp" alt="card-wildcard" class="w-1/2" />
+            <div>
+                <div>
+                    开卡费用
+                </div>
+                <div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</template>

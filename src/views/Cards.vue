@@ -10,7 +10,6 @@ import InviteBanner from '../components/InviteBanner.vue';
 
 
 // TODO: vue3 节流防抖
-// TODO: 斜线变横线
 
 // TODO: 充值，开新卡按钮
 // TODO：卡片消费记录，用户消费记录，邀请界面
@@ -64,7 +63,7 @@ watchEffect(async () => {
     <div class="flex flex-col items-start justify-start gap-y-6 w-full h-full">
 
         <div id="tabs" class="w-full flex flex-row justify-between items-center">
-            <Tabs class="grow flex-grow" v-model:activeKey="activeKey" size="medium" >
+            <Tabs class="grow flex-grow" v-model:activeKey="activeKey" size="medium">
                 <TabPane v-for="(card, idx) in cardList" :key="idx">
                     <template #tab>
                         <span>
@@ -95,7 +94,7 @@ watchEffect(async () => {
                         本月充值限额
                     </span>
                     <span>
-                        {{ userInfo.limit }}
+                        ${{ userInfo.limit }}
                     </span>
                 </div>
                 <a class="text-blue-500" href="#">
@@ -106,7 +105,7 @@ watchEffect(async () => {
                 加载中...
             </div>
         </div>
-        
+
         <CardDetail :cardData="currentCard" />
 
         <div id="invite" class="mt-6 w-full">

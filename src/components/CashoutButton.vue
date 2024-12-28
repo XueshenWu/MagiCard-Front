@@ -4,7 +4,8 @@ import { ref } from 'vue';
 
 
 const open = ref(false);
-const { availableBalance } = defineProps(['availableBalance']);
+const { availableBalance, className } = defineProps(['availableBalance', 'className']);
+
 // const availableBalance = 100
 
 </script>
@@ -14,7 +15,7 @@ const { availableBalance } = defineProps(['availableBalance']);
 
 
 
-    <button @click="open = true" class="bg-slate-200 px-6 py-2 rounded-lg hover:bg-slate-300 duration-100">
+    <button @click="open = true" :class="className??`bg-slate-200 px-6 py-2 rounded-lg hover:bg-slate-300 duration-100`">
         提现
     </button>
     <Modal v-model:open='open' width="400px">

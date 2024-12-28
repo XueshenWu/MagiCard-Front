@@ -7,13 +7,15 @@ import Cards from './views/Cards.vue'
 import Subscriptions from './views/Subscriptions.vue'
 import Home from './views/Home.vue'
 import NotFound from './views/NotFound.vue'
+import OpenCard from './views/OpenCard.vue'
 
 
 const routes = [
     { path: "/", component: Home },
     { path: '/cards', component: Cards },
     { path: "/subscriptions", component: Subscriptions },
-    {path:'/:pathMatch(.*)*', redirect: '/'}
+    { path: '/openCard', component: OpenCard },
+    { path: '/:pathMatch(.*)*', redirect: '/' }
 
 ]
 
