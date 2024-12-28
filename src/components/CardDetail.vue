@@ -1,5 +1,7 @@
 <script setup>
 import { ArrowDownOutlined, EllipsisOutlined } from '@ant-design/icons-vue';
+import CashoutButton from './CashoutButton.vue';
+import CardOptionButton from './CardOptionButton.vue';
 
 
 const { cardData } = defineProps(['cardData']);
@@ -20,18 +22,20 @@ const { cardData } = defineProps(['cardData']);
                         </div>
                     </div>
                     <div class="flex flex-row items-center text-sm gap-x-2">
-                        <button class="bg-slate-200 px-6 py-2 rounded-lg hover:bg-slate-300 duration-100">
+                        <!-- <button class="bg-slate-200 px-6 py-2 rounded-lg hover:bg-slate-300 duration-100">
                             提现
-                        </button>
+                        </button> -->
+                        <CashoutButton :availableBalance="cardData['balance']" />
                         <button class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-400 duration-100">
                             充值
                         </button>
                         <button class="bg-black text-slate-200 px-6 py-2 rounded-lg hover:bg-slate-800 duration-100">
                             开新卡
                         </button>
-                        <button class="bg-slate-200 px-4 py-2 rounded-lg hover:bg-slate-300 duration-100">
+                        <!-- <button class="bg-slate-200 px-4 py-2 rounded-lg hover:bg-slate-300 duration-100">
                             <EllipsisOutlined />
-                        </button>
+                        </button> -->
+                        <CardOptionButton />
                     </div>
                 </div>
             </div>

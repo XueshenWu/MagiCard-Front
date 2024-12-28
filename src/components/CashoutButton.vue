@@ -1,0 +1,34 @@
+<script setup>
+import { Modal } from 'ant-design-vue';
+import { ref } from 'vue';
+
+
+const open = ref(false);
+const { availableBalance } = defineProps(['availableBalance']);
+// const availableBalance = 100
+
+</script>
+
+
+<template>
+
+
+
+    <button @click="open = true" class="bg-slate-200 px-6 py-2 rounded-lg hover:bg-slate-300 duration-100">
+        提现
+    </button>
+    <Modal v-model:open='open' width="400px">
+        <div class="flex flex-col items-center justify-center gap-y-4">
+
+            <p class="text-xl">提现</p>
+            <p class="text-xs">您可提现的金额为</p>
+            <p class="font-bold text-3xl">${{ Number(availableBalance).toFixed(2) }}</p>
+            <button :class='`mt-4 px-10 py-2  rounded-lg   ${availableBalance === 0 ? "disabled cursor-not-allowed bg-gray-100 text-gray-400" : " duration-100 bg-blue-500 hover:bg-blue-400 text-white"}`'>全部提现</button>
+
+        </div>
+        <template #footer>
+            
+        </template>
+
+    </Modal>
+</template>
