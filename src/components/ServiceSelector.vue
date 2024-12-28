@@ -34,7 +34,7 @@ const service = ref('multi-media')
                     <div class="text-xs text-gray-500">
                         支持
                     </div>
-                    <div class="grid grid-cols-4   text-[8px] w-full border rounded-lg overflow-hidden">
+                    <div class="grid grid-cols-4   text-[7px] w-full border rounded-lg overflow-hidden">
                         <div class=" px-1 py-1  flex flex-row items-center justify-between border border-gray-200"
                             v-for="item in generallySupported" :key="item">
                             <div class="flex flex-row items-center gap-x-1 w-full">
@@ -49,7 +49,7 @@ const service = ref('multi-media')
                     <div class="text-xs text-gray-500">
                         独家支持
                     </div>
-                    <div class="grid grid-cols-4   text-[8px] w-full border rounded-lg overflow-hidden ">
+                    <div class="grid grid-cols-4   text-[7px] w-full border rounded-lg overflow-hidden ">
                         <div class=" px-1 py-1  flex flex-row items-center justify-between border border-gray-200"
                             v-for="item in multiMedia.exclusive" :key="item">
                             <div class="flex flex-row items-center gap-x-1 w-full">
@@ -64,7 +64,7 @@ const service = ref('multi-media')
                     <div class="text-xs text-gray-500">
                         不支持
                     </div>
-                    <div class="grid grid-cols-4   text-[8px] w-full border rounded-lg overflow-hidden">
+                    <div class="grid grid-cols-4   text-[7px] w-full border rounded-lg overflow-hidden">
                         <div class=" px-1 py-1  flex flex-row items-center justify-between border border-gray-200"
                             v-for="item in multiMedia.incompatible" :key="item">
                             <div class="flex flex-row items-center gap-x-1 w-full">
@@ -86,7 +86,7 @@ const service = ref('multi-media')
                     <div class="text-xs text-gray-500">
                         支持
                     </div>
-                    <div class="grid grid-cols-4   text-[8px] w-full border rounded-lg overflow-hidden">
+                    <div class="grid grid-cols-4   text-[7px] w-full border rounded-lg overflow-hidden">
                         <div class=" px-1 py-1  flex flex-row items-center justify-between border border-gray-200"
                             v-for="item in generallySupported" :key="item">
                             <div class="flex flex-row items-center gap-x-1 w-full">
@@ -101,7 +101,7 @@ const service = ref('multi-media')
                     <div class="text-xs text-gray-500">
                         独家支持
                     </div>
-                    <div class="grid grid-cols-4   text-[8px] w-full border rounded-lg overflow-hidden ">
+                    <div class="grid grid-cols-4   text-[7px] w-full border rounded-lg overflow-hidden ">
                         <div class=" px-1 py-1  flex flex-row items-center justify-between border border-gray-200"
                             v-for="item in creativity.exclusive" :key="item">
                             <div class="flex flex-row items-center gap-x-1 w-full">
@@ -116,7 +116,7 @@ const service = ref('multi-media')
                     <div class="text-xs text-gray-500">
                         不支持
                     </div>
-                    <div class="grid grid-cols-4   text-[8px] w-full border rounded-lg overflow-hidden">
+                    <div class="grid grid-cols-4   text-[7px] w-full border rounded-lg overflow-hidden">
                         <div class=" px-1 py-1  flex flex-row items-center justify-between border border-gray-200"
                             v-for="item in creativity.incompatible" :key="item">
                             <div class="flex flex-row items-center gap-x-1 w-full">
