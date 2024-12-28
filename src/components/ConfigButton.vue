@@ -16,9 +16,12 @@ import { DownOutlined } from '@ant-design/icons-vue';
                 <Menu.Item key="7">退出登录</Menu.Item>
             </Menu>
         </template>
-        <Button>
-            设置
-            <DownOutlined />
-        </Button>
+   
+            <Button class="flex items-center">
+                设置
+                <DownOutlined />
+            </Button>
+     
+
     </Dropdown>
 </template>
