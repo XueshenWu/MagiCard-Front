@@ -2,6 +2,9 @@ import { createApp } from 'vue'
 import './style.css'
 import App from './App.vue'
 import { createMemoryHistory, createRouter, createWebHistory } from 'vue-router'
+// import { Geetest } from 'vue3-geetest'
+
+
 
 import Cards from './views/Cards.vue'
 import Subscriptions from './views/Subscriptions.vue'
@@ -28,4 +31,6 @@ const router = createRouter({
     routes
 })
 
-createApp(App).use(router).mount('#app')
+createApp(App)
+    .use(router)
+    .mount('#app')

@@ -1,15 +1,67 @@
 <script setup>
 import PasswordInput from './PasswordInput.vue';
 import PhoneNumberInput from './PhoneNumberInput.vue';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import OtpInput from './OtpInput.vue';
 import Agreement from './Agreement.vue';
+
+
+
+const captchaReady = ref(false)
+const captchaObj = ref(null)
+
+async function login() {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve()
+        }, 100)
+    })
+}
+
+onMounted(async () => {
+    await import('../utils/gt4.js')
+    window.initGeetest4({
+        captchaId: "3f236c8add769bd4a2b93f2fc6f74b35",
+        product: "bind",
+    }, function (captcha) {
+
+        captchaObj.value = captcha
+
+        captcha.onReady(function () {
+            captchaReady.value = true
+        })
+
+        captcha.onSuccess(function () {
+            login().then(() => {
+                alert('success')
+            })
+        })
+
+        captcha.onClose(function () {
+            
+        })
+
+        captcha.onFail(function () {
+         
+        })
+
+
+    })
+})
 
 const loginType = ref('password')
 const phoneNumber = ref('')
 const credential = ref('')
 const phoneNumberValidated = ref(false)
 const checkedAgreement = ref(false)
+const handleLogin = () => {
+
+    if (!captchaReady) {
+        return
+    } else {
+        captchaObj.value.showCaptcha()
+    }
+}
 
 const handleLoginTypeChange = () => {
     loginType.value = loginType.value === 'password' ? 'phone' : 'password'
@@ -42,8 +94,9 @@ const handleLoginTypeChange = () => {
             </div>
 
             <div class="[&>*]:w-72 flex flex-col items-center justify-center gap-y-4">
-                <button class="w-full bg-blue-500 hover:bg-blue-400 duration-100 text-white rounded-md py-2">
-                    登录
+                <button @click="handleLogin"
+                    :class="`w-full ${captchaReady?' bg-blue-500 hover:bg-blue-400  text-white':'bg-gray-100 text-gray-400 cursor-wait'} duration-100 rounded-md py-2`">
+                    {{ captchaReady ? '登录' : '加载中' }}
                 </button>
 
                 <button @click="handleLoginTypeChange"

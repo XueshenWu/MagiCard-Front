@@ -2,7 +2,7 @@
 import { Button } from 'ant-design-vue';
 import { Modal } from 'ant-design-vue';
 import { ref } from 'vue';
-import CardContainer from './CardContainer.vue';
+import _ from './CardContainer.vue';
 
 const openModal = ref(false);
 
