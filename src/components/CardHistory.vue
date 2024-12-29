@@ -47,7 +47,7 @@ watch(current, async () => {
             .orderBy([pair => new Date(pair[0])], ['desc'])
             .value()
 
-    console.log(map);
+
     transactionMap.value = map;
 }, { immediate: true });
 
