@@ -4,13 +4,20 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import CardDurationSelector from '../components/CardDurationSelector.vue';
 import ServiceSelector from '../components/ServiceSelector.vue';
+import CheckoutResult from '../components/CheckoutResult.vue';
 
 
 const router = useRouter();
 
 const current = ref(0);
 const next = () => {
-    current.value++;
+
+    if(current.value === 1){
+        current.value = 4
+    }else{
+               current.value++; 
+    }
+
 };
 const prev = () => {
     current.value--;
@@ -52,6 +59,7 @@ const items = steps.map(item => ({
         <div class="steps-content h-[440px] w-full">
             <CardDurationSelector v-if="current === 0" />
             <ServiceSelector v-else-if="current === 1" />
+            <CheckoutResult v-else-if="current === 4" v-model:current="current" />
             <div v-else>
                 <div>其他步骤</div>
             </div>

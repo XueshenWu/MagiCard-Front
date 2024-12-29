@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import SelectionBoard from '../components/SelectionBoard.vue';
 import CardRechargeBoard from '../components/CardRechargeBoard.vue';
 import { Modal } from 'ant-design-vue';
+import CheckoutResult from '../components/CheckoutResult.vue';
 
 
 
@@ -46,6 +47,13 @@ const items = steps.map(item => ({
     key: item.title,
     title: item.title,
 }));
+
+
+const handleCheckoutModalConfirm = ()=>{
+    openCheckoutConfirm.value = false
+    current.value++
+}
+
 </script>
 
 
@@ -54,6 +62,7 @@ const items = steps.map(item => ({
         <div class="steps-content">
             <SelectionBoard v-if="current === 0" />
             <CardRechargeBoard v-if="current === 1" v-model:price="price" v-model:valid="valid" />
+            <CheckoutResult v-if="current === 2" v-model:current="current" />
         </div>
         <a-steps :current="current" :items="items" />
         <div class="steps-action flex justify-end items-center gap-x-4 *:w-28">
@@ -90,7 +99,7 @@ const items = steps.map(item => ({
             <template #footer>
                 <div class="grid place-content-center mt-4">
                     <button class="px-10 py-2 w-40 text-white  rounded-lg bg-blue-500 hover:bg-blue-400 duration-100"
-                    @click="openCheckoutConfirm = false">
+                    @click="handleCheckoutModalConfirm">
                     去支付
                 </button>
                 </div>
