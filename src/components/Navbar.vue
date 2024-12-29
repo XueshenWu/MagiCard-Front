@@ -13,8 +13,8 @@ const path = computed(() => route.path);
 const navEntries = [
     { to: "/subscriptions", text: "按产品支付", src: 'product-icon.png' },
     { to: "/cards", text: "我的卡片", src: '/card-icon.png' },
-    { to: "/record", text: "消费记录", src: "/" },
-    { to: "/invite-record", text: "我的邀请", src: "/" }
+    { to: "/record", text: "消费记录", src: "/record-icon.png" },
+    { to: "/invite-record", text: "我的邀请", src: "/invite-icon.png" }
 
 ]
 

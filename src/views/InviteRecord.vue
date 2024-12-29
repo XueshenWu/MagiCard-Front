@@ -87,7 +87,8 @@ const columns = [
         title: '奖励金额',
         dataIndex: 'rewardAmount',
         key: 'rewardAmount',
-    },
+    }
+   
 ]
 
 const isRotating = ref(false);

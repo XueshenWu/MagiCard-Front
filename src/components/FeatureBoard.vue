@@ -1,6 +1,5 @@
 
 <script setup>
-import { defineProps } from 'vue';
 const {title, feature, paragraphs, src} = defineProps(['title', 'feature', 'paragraphs', 'src'])
 
 
