@@ -2,7 +2,7 @@
 import { InputPassword } from 'ant-design-vue';
 
 
-const password = defineModel()
+const password = defineModel('password')
 </script>
 
 

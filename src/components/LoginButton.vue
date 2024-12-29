@@ -1,10 +1,16 @@
 <script setup>
 import { Button } from 'ant-design-vue';
 import { Modal } from 'ant-design-vue';
-import { ref } from 'vue';
-import _ from './CardContainer.vue';
+import { ref , provide} from 'vue';
+import CardContainer from './CardContainer.vue';
 
 const openModal = ref(false);
+
+const closeModal = () => {
+   openModal.value = false;
+}
+
+provide('closeLoginRegisterModal', closeModal);
 
 
 const handleClick = () => {
@@ -31,7 +37,7 @@ const handleOk = () => {
 
       </template>
 
-      <CardContainer />
+      <CardContainer  />
    </Modal>
 
 </template>
