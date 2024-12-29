@@ -6,12 +6,13 @@ import { Divider, TabPane, Tabs } from 'ant-design-vue';
 import { CreditCardOutlined } from '@ant-design/icons-vue';
 import CardDetail from '../components/CardDetail.vue';
 import InviteBanner from '../components/InviteBanner.vue';
+import CardHistory from '../components/CardHistory.vue';
 
 
 
 // TODO: vue3 节流防抖
 
-// TODO: 充值，开新卡按钮
+
 // TODO：卡片消费记录，用户消费记录，邀请界面
 
 
@@ -60,7 +61,7 @@ watchEffect(async () => {
 
 
 <template>
-    
+
     <div class="flex p-12 py-4 flex-col items-start justify-start gap-y-6 w-full h-full">
 
         <div id="tabs" class="w-full flex flex-row justify-between items-center">
@@ -112,8 +113,9 @@ watchEffect(async () => {
         <div id="invite" class="mt-6 w-full">
             <InviteBanner />
         </div>
-        <div id="history">
-
+        <Divider />
+        <div id="history" class="w-full">
+            <CardHistory />
         </div>
 
     </div>

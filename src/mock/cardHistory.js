@@ -114,9 +114,8 @@ export const cardHistoryResp1 = {
         ],
         "totalPage": 2
     },
-    "traceId": "6cc973c52f723c92"
+    "traceId": "48fa56f7c5ce1c9e"
 }
-
 export const cardHistoryResp2 = {
     "code": 200,
     "msg": "成功",
@@ -233,5 +232,5 @@ export const cardHistoryResp2 = {
         ],
         "totalPage": 2
     },
-    "traceId": "a9161e5721172b47"
+    "traceId": "0b61080912a6530e"
 }

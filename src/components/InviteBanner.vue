@@ -96,8 +96,8 @@ watchEffect(async () => {
             <Modal v-model:open='openBonusCashout' width="400px">
                 <div class="flex flex-col items-center justify-center gap-y-4">
 
-                    <p class="text-xl">提现</p>
-                    <p class="text-xs">您可提现的金额为</p>
+                    <p class="text-xl">邀请奖励余额</p>
+                    <p class="text-xs">你可提现的奖励金额为</p>
                     <p class="font-bold text-3xl">${{ Number(invitationInfo['balance']).toFixed(2) }}</p>
 
 
