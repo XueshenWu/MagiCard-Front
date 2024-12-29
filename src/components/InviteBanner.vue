@@ -64,7 +64,7 @@ watchEffect(async () => {
                         <Tooltip placement="top" title="编辑邀请码">
                             <EditOutlined @click="open = true" class=" text-blue-500 cursor-pointer" />
                         </Tooltip>
-                        <Modal width="280px" title="修改邀请码" v-model:open="open">
+                        <Modal width="280px" title="修改邀请码" v-model:open="open" :centered="true">
                             <div class="flex flex-col gap-y-2">
                                 <div class="text-gray-500 text-xs ">
                                     邀请码
@@ -93,7 +93,7 @@ watchEffect(async () => {
                 :availableBalance="invitationInfo['balance']">
                 提现
             </button>
-            <Modal v-model:open='openBonusCashout' width="400px">
+            <Modal v-model:open='openBonusCashout' width="400px" :centered="true">
                 <div class="flex flex-col items-center justify-center gap-y-4">
 
                     <p class="text-xl">邀请奖励余额</p>

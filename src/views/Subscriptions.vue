@@ -51,16 +51,10 @@ const items = steps.map(item => ({
 
 <template>
     <div class="flex flex-col gap-y-8 p-12 py-4">
-
-
-        <div class="steps-content h-[300px]">
+        <div class="steps-content">
             <SelectionBoard v-if="current === 0" />
             <CardRechargeBoard v-if="current === 1" v-model:price="price" v-model:valid="valid" />
         </div>
-
-
-
-
         <a-steps :current="current" :items="items" />
         <div class="steps-action flex justify-end items-center gap-x-4 *:w-28">
             <a-button class="bg-gray-100 border-none" v-if="current > 0" style="margin-left: 8px"
@@ -73,7 +67,7 @@ const items = steps.map(item => ({
             </a-button>
 
         </div>
-        <Modal id="checkoutConfirm" v-model:open="openCheckoutConfirm" width="360px">
+        <Modal id="checkoutConfirm" v-model:open="openCheckoutConfirm" width="360px" :centered="true">
             <div class="flex flex-col items-center justify-center gap-y-4 text-gray-500">
 
                 <p class="text-xl text-black">充值</p>

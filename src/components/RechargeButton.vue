@@ -21,7 +21,7 @@ const imgList = new Array(18).fill(0).map((_, idx) => `/subscriptionIcons/downlo
         class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-400 duration-100">
         充值
     </button>
-    <Modal v-model:open="openRechargeModal" width="760px">
+    <Modal v-model:open="openRechargeModal" width="760px" :centered="true">
         <div class="flex flex-col gap-y-5 p-4">
             <div class="text-lg">
                 选择充值后去消费的产品

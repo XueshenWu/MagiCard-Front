@@ -230,7 +230,7 @@ const handleOpenWithdrewRewardAmount = () => {
                 <a-table :dataSource="dataSource" :columns="columns" class="w-full" bordered />
             </div>
         </div>
-        <Modal v-model:open='open' width="600px">
+        <Modal v-model:open='open' width="600px" :centered="true">
             <div class="flex flex-col items-center justify-center gap-y-4 w-full p-6">
                 <p class="text-2xl">修改邀请码</p>
                 <div class="flex flex-col w-full">
@@ -251,20 +251,21 @@ const handleOpenWithdrewRewardAmount = () => {
                 </div>
             </template>
         </Modal>
-        <Modal v-model:open='openRewardShow' width="400px">
-        <div class="flex flex-col items-center justify-center gap-y-4">
+        <Modal v-model:open='openRewardShow' width="400px" :centered="true">
+            <div class="flex flex-col items-center justify-center gap-y-4">
 
-            <p class="text-xl">邀请奖励余额</p>
-            <p class="text-xs">你可提现的奖励金额为</p>
-            <p class="font-bold text-3xl">${{ Number(rewardAmount).toFixed(2) }}</p>
-            <button :class='`mt-4 px-10 py-2  rounded-lg   ${rewardAmount === 0 ? "disabled cursor-not-allowed bg-gray-100 text-gray-400" : " duration-100 bg-blue-500 hover:bg-blue-400 text-white"}`'>全部提现</button>
+                <p class="text-xl">邀请奖励余额</p>
+                <p class="text-xs">你可提现的奖励金额为</p>
+                <p class="font-bold text-3xl">${{ Number(rewardAmount).toFixed(2) }}</p>
+                <button
+                    :class='`mt-4 px-10 py-2  rounded-lg   ${rewardAmount === 0 ? "disabled cursor-not-allowed bg-gray-100 text-gray-400" : " duration-100 bg-blue-500 hover:bg-blue-400 text-white"}`'>全部提现</button>
 
-        </div>
-        <template #footer>
-            
-        </template>
+            </div>
+            <template #footer>
 
-    </Modal>
+            </template>
+
+        </Modal>
     </div>
 </template>
 <style scoped>
