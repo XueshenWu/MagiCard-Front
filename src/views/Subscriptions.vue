@@ -58,7 +58,7 @@ const handleCheckoutModalConfirm = () => {
 
 
 <template>
-    <div class="flex flex-col justify-around gap-y-20 p-12 py-4 h-[830px]" ref="replayModal">
+    <div class="flex flex-col justify-around gap-y-20 p-12 py-4 h-[850px]" ref="replayModal">
         <div class="steps-content">
             <SelectionBoard v-if="current === 0" />
             <CardRechargeBoard v-if="current === 1" v-model:price="price" v-model:valid="valid" />

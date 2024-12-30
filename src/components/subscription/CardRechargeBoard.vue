@@ -112,23 +112,19 @@ watchEffect(async () => {
                         <span>支付卡号</span>
                         <span>可用余额: ${{ availableCards[currentCard].balance.toFixed(2) }}</span>
                     </div>
-                    <Select size="large" v-model:value="currentCard" style="width: 100%">
-                        <Select.Option v-for="(card, idx) in availableCards" :key="idx" :value="idx">
+                    <Select size="large" v-model:value="currentCard" >
+                        <Select.Option  v-for="(card, idx) in availableCards" :key="idx" :value="idx">
                             <CardNumber :value="card.accountNumber" />
                         </Select.Option>
                     </Select>
 
                 </div>
-                <div class="w-full rounded-xl  px-6 py-4"
-                    style="background-color: rgb(229, 250, 235);
+                <div class="w-full rounded-xl  px-6 py-4" style="background-color: rgb(229, 250, 235);
                         color: rgb(58, 173, 159);
                         border: 1px solid rgb(203, 239, 212);
-                    "
-                >
+                    ">
                     绑卡支付成功后，每个月都会自动进行扣费，如想取消下个月的自动扣费，请前往：
-                    <a
-                        class="text-blue-500  underline underline-offset-4" href="#"
-                    >取消订阅服务教程</a>
+                    <a class="text-blue-500  underline underline-offset-4" href="#">取消订阅服务教程</a>
                 </div>
             </div>
             <div id="checkout"
@@ -144,7 +140,8 @@ watchEffect(async () => {
                 </div>
                 <div class="flex flex-col items-start w-full">
 
-                    <div class="text-3xl border-t border-dashed w-full border-gray-200 pt-4  flex flex-row items-center gap-x-4 w-full">
+                    <div
+                        class="text-3xl border-t border-dashed w-full border-gray-200 pt-4  flex flex-row items-center gap-x-4 w-full">
                         <span class="">总价</span>
                         <span class="font-semibold">${{ rechargeAmount.toFixed(2) }}</span>
                     </div>
@@ -163,3 +160,31 @@ watchEffect(async () => {
 
 </template>
 
+
+<style lang="less" scoped>
+:deep(.ant-select-selector) {
+  height: 60px !important;
+  line-height: 60px !important;
+  padding: 0 11px !important;
+}
+
+:deep(.ant-select-selection-search) {
+  height: 60px !important;
+  line-height: 60px !important;
+}
+
+:deep(.ant-select-selection-search-input) {
+  height: 60px !important;
+  line-height: 60px !important;
+}
+
+:deep(.ant-select-selection-item) {
+  line-height: 58px !important; /* height - 2px for borders */
+  height: 58px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+
+
+</style>
