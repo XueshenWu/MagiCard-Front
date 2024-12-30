@@ -12,7 +12,6 @@ const closeModal = () => {
 
 provide('closeLoginRegisterModal', closeModal);
 
-
 const handleClick = () => {
    openModal.value = true;
 }
@@ -44,8 +43,7 @@ const handleOk = () => {
 
 </template>
 <style lang="less" scoped>
-div /deep/ .ant-modal .ant-modal-content {
+:deep(.ant-modal .ant-modal-content) {
    border-radius: 25px !important;
-
 }
 </style>
