@@ -1,8 +1,8 @@
 <script setup>
 import { Modal } from 'ant-design-vue';
 import { ref } from 'vue';
-import SelectionBoard from './SelectionBoard.vue';
-import CashAmountSelector from './CashAmountSelector.vue';
+
+import CashAmountSelector from '../CashAmountSelector.vue';
 
 
 const { cardInfo } = defineProps(['cardInfo']);
@@ -18,7 +18,7 @@ const imgList = new Array(18).fill(0).map((_, idx) => `/subscriptionIcons/downlo
 
 <template>
     <button @click="openRechargeModal = true"
-        class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-400 duration-100">
+        class="bg-blue-500 text-white px-8 py-3 rounded-xl hover:bg-blue-400 duration-100">
         充值
     </button>
     <Modal v-model:open="openRechargeModal" width="760px" :centered="true">

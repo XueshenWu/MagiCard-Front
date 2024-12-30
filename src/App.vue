@@ -2,9 +2,9 @@
 
 import { RouterLink, RouterView, useRoute } from 'vue-router';
 import { Button } from 'ant-design-vue';
-import Navbar from './components/Navbar.vue';
+import Navbar from './components/layout/Navbar.vue';
 import { computed, onMounted, onUnmounted } from 'vue';
-import Header from './components/Header.vue';
+import Header from './components/layout/Header.vue';
 
 const route = useRoute();
 const path = computed(() => route.path);
@@ -72,9 +72,9 @@ onMounted(() => {
 
         <div id="body" style="background: linear-gradient(180deg, rgba(228,246,255,1) 0%, rgba(255,255,255,1) 100%);"
             class="
-        w-full h-full flex flex-row items-start  px-36 py-12 gap-x-6 ">
+        w-full h-full flex flex-row items-start  px-48 py-16 gap-x-6 ">
             <Navbar />
-            <div v-if="path !== '/'" id="view" class="bg-white rounded-lg shadow-sm w-full h-full ">
+            <div v-if="path !== '/'" id="view" class="bg-white border border-gray-200 rounded-xl shadow-sm w-full h-full ml-6">
                 <RouterView />
             </div>
             <div v-else class="w-full h-full">

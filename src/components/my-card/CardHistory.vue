@@ -9,7 +9,7 @@ import _, { cloneWith } from 'lodash';
 const current = ref(1);
 
 
-import { cardHistoryResp1, cardHistoryResp2 } from '../mock/cardHistory';
+import { cardHistoryResp1, cardHistoryResp2 } from '../../mock/cardHistory';
 import { Divider, Pagination, Tag } from 'ant-design-vue';
 
 const cardHistory = ref();
@@ -108,18 +108,18 @@ const typeToColor = (txType) => {
 <template>
 
     <template v-if="transactionMap">
-        <div class="w-full flex flex-col items-start gap-y-6">
-            <div class="text-lg">
+        <div class="w-full flex flex-col items-start gap-y-6 border-t border-gray-300 pt-12 mt-6">
+            <div class="text-2xl ">
                 消费记录
             </div>
             <div class="w-full flex flex-col items-center gap-y-4">
                 <div class="w-full" v-for="([date, transactions]) in transactionMap" :key="date">
-                    <div class="text-xs text-gray-500">{{ date }}</div>
+                    <div class=" text-gray-500">{{ date }}</div>
                     <div class="py-2 mt-1 border-gray-200 flex flex-row items-center justify-between gap-x-4 border-t"
                         v-for="transaction in transactions" :key="transaction.id">
-                        <div class="flex flex-row items-center gap-x-4">
-                            <img class="w-8 h-8" :src="typeToImg(transaction.type)" />
-                            <div class="flex flex-col gap-y-1 items-start text-xs">
+                        <div class="flex flex-row items-center gap-x-6">
+                            <img class="w-12 h-12" :src="typeToImg(transaction.type)" />
+                            <div class="flex flex-col gap-y-1 items-start text-lg">
 
                                 <div class="flex flex-row items-center gap-x-2">
                                     <div>{{ typeToString(transaction.type) }}</div>
@@ -129,11 +129,14 @@ const typeToColor = (txType) => {
                             </div>
                         </div>
                         <div class="flex flex-col items-end gap-y-1">
-                            <div class="text-xs font-semibold tracking-wide" :style="{ color: typeToColor(transaction.type) }">{{
-                                typeToSign(transaction.type) }}${{
+                            <div class="text-lg font-semibold tracking-wide"
+                                :style="{ color: typeToColor(transaction.type) }">{{
+                                    typeToSign(transaction.type) }}${{
                                     Number(transaction.orderAmount).toFixed(2) }}
-                                    <span class="text-black font-light">{{transaction.fee > 0 ? `(-$${Number(transaction.fee).toFixed(2)})`:'' }}</span></div>
-                            <div class="text-[11px] text-center rounded-md px-1  " v-if="transaction.status === 2"
+                                <span class="text-black font-normal ">{{ transaction.fee > 0 ?
+                                    `(-$${Number(transaction.fee).toFixed(2)})` : '' }}</span>
+                            </div>
+                            <div class="text-md font-semibold text-center rounded-md py-1 px-1  " v-if="transaction.status === 2"
                                 :style="`${transaction.status === 2 ? 'color: #5daca1;' : ''} background-color:#e8f6f0;`">
                                 {{ transaction.status === 2 ? '成功' : '失败' }}
                             </div>

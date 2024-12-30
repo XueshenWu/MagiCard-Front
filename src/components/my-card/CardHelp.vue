@@ -8,7 +8,7 @@ const openHelpModal = ref(false);
 
 
 <template>
-    <a @click="openHelpModal = true" class="text-sky-500">如何使用</a>
+    <a @click="openHelpModal = true" class="text-sky-500 text-lg tracking-widest">如何使用</a>
     <Modal v-model:open='openHelpModal' width="970px" :centered="true">
         <div class=" flex flex-col items-center justify-start">
             <div class="text-xl ">

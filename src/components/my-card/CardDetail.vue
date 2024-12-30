@@ -7,7 +7,8 @@ import RechargeButton from './RechargeButton.vue';
 import { useRouter } from 'vue-router';
 import useClipboard from 'vue-clipboard3';
 import { message } from 'ant-design-vue';
-import CardNumber from './CardNumber.vue';
+import CardNumber from '../CardNumber.vue';
+import DateDisply from './DateDisply.vue';
 
 
 
@@ -23,6 +24,19 @@ const copy = async (text) => {
         message.error('复制失败');
     }
 };
+
+function formateDate(dateStr) {
+ 
+    const [year, month] = dateStr.split('-');
+    
+    const style1 = `${month}月/${year}年`;
+    
+ 
+    const style2 = `${month}月/${year}年`;
+    
+ 
+    return `${style1} (或${style2})`;
+}
 
 const copyCardDetails = async () => {
     try {
@@ -53,8 +67,8 @@ const copyAddressDetails = async () => {
 
 <template>
     <template v-if="!!cardData">
-        <div class="flex flex-col justify-start w-full gap-y-4">
-            <!-- Previous top section remains unchanged -->
+        <div class="flex flex-col justify-start w-full gap-y-10">
+
             <div class="flex flex-col items-center justify-start w-full">
                 <div class="flex flex-row justify-between w-full">
                     <div class="flex flex-col gap-y-4">
@@ -62,41 +76,39 @@ const copyAddressDetails = async () => {
                             可支付
                         </div>
                         <div class="flex items-end gap-x-2">
-                            <div class="font-bold text-4xl">$</div><div class="font-bold text-5xl">{{
+                            <div class="font-bold text-4xl">$</div>
+                            <div class="font-bold text-5xl">{{
                                 Number(cardData["balance"]).toFixed(2) }}</div>
                         </div>
                     </div>
-                    <div class="flex flex-row items-center text-sm gap-x-2">
-                        <!-- <button class="bg-slate-200 px-6 py-2 rounded-lg hover:bg-slate-300 duration-100">
-                            提现
-                        </button> -->
+                    <div class="flex flex-row items-center text-xl gap-x-6">
+
                         <CashoutButton :availableBalance="cardData['balance']" />
-                        <!-- <button class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-400 duration-100">
-                            充值
-                        </button> -->
+
                         <RechargeButton cardInfo="test" />
                         <button @click="() => router.replace('/openCard')"
-                            class="bg-black text-slate-200 px-6 py-2 rounded-lg hover:bg-slate-800 duration-100">
+                            class="bg-black text-slate-200 px-8 py-3 rounded-xl hover:bg-slate-800 duration-100">
                             开新卡
                         </button>
-                        <!-- <button class="bg-slate-200 px-4 py-2 rounded-lg hover:bg-slate-300 duration-100">
-                            <EllipsisOutlined />
-                        </button> -->
+
                         <CardOptionButton />
                     </div>
                 </div>
             </div>
 
-            <div class="flex flex-row items-start justify-center h-[300px]">
+            <div id="cardDisplay" class="flex flex-row items-start justify-center border rounded-2xl"
+            
+              style="background: radial-gradient(circle at top , rgb(241, 253, 255) 0%, rgb(249, 249, 249) 100%);"
+            >
                 <div id="cardDetail"
-                    style="background: radial-gradient(circle at top left, rgba(238,238,238,1) 0%, rgba(255,255,255,1) 100%);"
-                    class="flex flex-col bg-gray-100 w-1/2 h-full gap-y-6 rounded-l-lg px-5 py-3">
+                    style="background: radial-gradient(circle at top left, rgba(238,238,238,1) 0%, rgb(249, 249, 249) 100%);"
+                    class="flex flex-col bg-gray-100 w-1/2 h-full gap-y-6  px-9 py-7 border  border-gray-300 rounded-2xl">
                     <div class="flex flex-row items-center justify-between">
-                        <img src="/logo.png" alt="logo" class="w-6 h-4" />
+                        <img src="/logo.png" alt="logo" class="w-9 h-7" />
                         <div
                             class="flex flex-row items-center justify-center gap-x-4 text-sky-500 [&>a]:cursor-pointer">
                             <CardHelp />
-                            <a @click="copyCardDetails">
+                            <a @click="copyCardDetails" class="text-lg tracking-widest">
                                 复制全部
                             </a>
                             <a class="grid place-content-center">
@@ -107,43 +119,41 @@ const copyAddressDetails = async () => {
                     <div class="flex flex-col gap-y-2">
                         <div class="flex flex-row justify-between items-end">
                             <div class="flex flex-col items-start">
-                                <div class="text-sm text-gray-500">卡号</div>
+                                <div class=" text-gray-500 text-lg">卡号</div>
                                 <!-- <div class="font-bold text-lg">{{ cardData['cardNo'] }}</div> -->
-                                <CardNumber :value="cardData['cardNo']" class="font-bold text-lg" />
+                                <CardNumber :value="cardData['cardNo']" class="font-semibold text-3xl" />
                             </div>
-                            <a class="cursor-pointer text-blue-500" @click="copy(cardData['cardNo'])">
+                            <a class="cursor-pointer text-lg tracking-widest text-blue-500" @click="copy(cardData['cardNo'])">
                                 复制
                             </a>
                         </div>
                         <div class="flex flex-row justify-between items-end">
                             <div class="flex flex-col items-start">
-                                <div class="text-sm text-gray-500">安全码/CVC/CVV</div>
-                                <div class="font-bold text-lg">* * *</div>
+                                <div class=" text-gray-500 text-lg">安全码/CVC/CVV</div>
+                                <div class="font-semibold text-3xl">* * *</div>
                             </div>
-                            <a class="cursor-pointer text-blue-500" @click="copy(cardData['cvv'])">
+                            <a class="cursor-pointer text-lg tracking-widest text-blue-500" @click="copy(cardData['cvv'])">
                                 复制
                             </a>
                         </div>
                         <div class="flex flex-row justify-between items-end">
                             <div class="flex flex-col items-start">
-                                <div class="text-sm text-gray-500">有效期</div>
-                                <div class="font-bold text-lg">
-                                    {{
-                                        `${String(cardData['issueDate']).split('-')[1]}月/${String(cardData['issueDate']).split('-')[0]}年`
-                                    }}
+                                <div class="text-lg text-gray-500">有效期</div>
+                                <div class="font-semibold text-3xl">
+                                   <DateDisply :dateStr="cardData['issueDate']" />
                                 </div>
                             </div>
-                            <a class="cursor-pointer text-blue-500"
+                            <a class="cursor-pointer text-blue-500 tracking-widest text-lg"
                                 @click="copy(`${String(cardData['issueDate']).split('-')[1]}月/${String(cardData['issueDate']).split('-')[0]}年`)">
                                 复制
                             </a>
                         </div>
                         <div class="flex flex-row justify-between items-end">
                             <div class="flex flex-col items-start">
-                                <div class="text-sm text-gray-500">姓名</div>
-                                <div class="font-bold text-lg">{{ cardData["userName"] }}</div>
+                                <div class="text-lg text-gray-500">姓名</div>
+                                <div class="font-bold text-3xl">{{ cardData["userName"] }}</div>
                             </div>
-                            <a class="cursor-pointer text-blue-500" @click="copy(cardData['userName'])">
+                            <a class="cursor-pointer text-blue-500 tracking-widest text-lg" @click="copy(cardData['userName'])">
                                 复制
                             </a>
                         </div>
@@ -151,17 +161,16 @@ const copyAddressDetails = async () => {
                 </div>
 
                 <div id="addressDetail"
-                    style="background: radial-gradient(circle at top left, rgba(241,253,255,1) 0%, rgba(255,255,255,1) 100%);"
-                    class="flex flex-col bg-sky-100 w-1/2 h-full gap-y-6 rounded-r-lg px-5 py-3">
+                    class="flex flex-col bg-gray-100 w-1/2 h-full gap-y-6 px-9 py-7 border border-l-0 bg-inherit  border-gray-300 rounded-r-2xl">
                     <div class="flex flex-row items-center justify-between">
                         <div class="flex items-center gap-x-2">
                             <img src="/usflag.png" alt="logo" class="w-6 h-4" />
-                            <div class="">账单地址</div>
+                            <div class="text-lg">账单地址</div>
                         </div>
                         <div
                             class="flex flex-row items-center justify-center gap-x-4 text-sky-500 [&>a]:cursor-pointer">
                             <CardHelp />
-                            <a @click="copyAddressDetails">
+                            <a @click="copyAddressDetails" class="text-lg tracking-widest">
                                 复制全部
                             </a>
                             <a class="grid place-content-center">
@@ -172,40 +181,40 @@ const copyAddressDetails = async () => {
                     <div class="flex flex-col gap-y-2">
                         <div class="flex flex-row justify-between items-end">
                             <div class="flex flex-col items-start">
-                                <div class="text-sm text-gray-500">地址1</div>
-                                <div class="font-bold text-lg">{{ cardData["addressLine1"] }}</div>
+                                <div class="text-lg text-gray-500">地址1</div>
+                                <div class="font-semibold text-3xl">{{ cardData["addressLine1"] }}</div>
                             </div>
-                            <a class="cursor-pointer text-blue-500" @click="copy(cardData['addressLine1'])">
+                            <a class="cursor-pointer text-blue-500 tracking-widest text-lg" @click="copy(cardData['addressLine1'])">
                                 复制
                             </a>
                         </div>
                         <div class="flex flex-row justify-between items-end">
                             <div class="flex flex-col items-start">
-                                <div class="text-sm text-gray-500">城市</div>
-                                <div class="font-bold text-lg">{{ cardData["city"] }}</div>
+                                <div class="text-lg text-gray-500">城市</div>
+                                <div class="font-semibold text-3xl">{{ cardData["city"] }}</div>
                             </div>
-                            <a class="cursor-pointer text-blue-500" @click="copy(cardData['city'])">
+                            <a class="cursor-pointer text-blue-500 tracking-widest text-lg" @click="copy(cardData['city'])">
                                 复制
                             </a>
                         </div>
                         <div class="flex flex-row justify-between items-end">
                             <div class="flex flex-col items-start">
-                                <div class="text-sm text-gray-500">邮编</div>
-                                <div class="font-bold text-lg">{{ cardData["postalCode"] }}</div>
+                                <div class="text-lg text-gray-500">邮编</div>
+                                <div class="font-semibold text-3xl">{{ cardData["postalCode"] }}</div>
                             </div>
-                            <a class="cursor-pointer text-blue-500" @click="copy(cardData['postalCode'])">
+                            <a class="cursor-pointer text-blue-500 tracking-widest text-lg" @click="copy(cardData['postalCode'])">
                                 复制
                             </a>
                         </div>
                         <div class="flex flex-row justify-between items-end">
                             <div class="flex flex-col items-start">
-                                <div class="text-sm text-gray-500">州</div>
-                                <div class="font-bold text-lg">
+                                <div class="text-lg text-gray-500">州</div>
+                                <div class="font-semibold text-3xl">
                                     {{ cardData["stateName"] }} {{ cardData["stateCnName"] && '/' }}
                                     {{ cardData["stateCnName"] }}
                                 </div>
                             </div>
-                            <a class="cursor-pointer text-blue-500"
+                            <a class="cursor-pointer text-blue-500 text-lg tracking-widest"
                                 @click="copy(`${cardData['stateName']}${cardData['stateCnName'] ? ' / ' + cardData['stateCnName'] : ''}`)">
                                 复制
                             </a>

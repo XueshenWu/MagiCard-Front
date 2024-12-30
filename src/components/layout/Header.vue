@@ -1,21 +1,21 @@
 <script setup>
-import { tokenStore } from '../states/tokenStore';
+import { tokenStore } from '../../states/tokenStore';
 import { Button } from 'ant-design-vue';
 import { RouterLink } from 'vue-router';
 import ConfigButton from './ConfigButton.vue';
-import LoginButton from './LoginButton.vue';
+import LoginButton from '../login-register/LoginButton.vue';
 
 </script>
 
 <template>
     <div
-        class="sticky top-0 shadow-md z-50 w-full h-14 flex flex-row items-center justify-between px-16 py-2 bg-white">
+        class="sticky top-0 shadow-md z-50 w-full h-16 flex flex-row items-center justify-between pl-12 pr-20 py-2 bg-white">
         <div id="logo" class="text-3xl font-semibold  text-center font-sans">
 
             <RouterLink class="flex flex-row items-center gap-x-4" to="/">
                 
-                <img src="/logo.png" alt="logo" class="w-8 h-6" />
-                <div class="text-lg tracking-wide ">
+                <img src="/logo.png" alt="logo" class="w-9 h-7" />
+                <div class="text-[26px] tracking-wide ">
                     WildCard
                 </div>
             </RouterLink>

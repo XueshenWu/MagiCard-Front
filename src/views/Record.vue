@@ -1,7 +1,7 @@
 <script setup>
 import { Divider } from 'ant-design-vue';
-import RecordMetaDisplay from '../components/RecordMetaDisplay.vue';
-import RecordDataDisplay from '../components/RecordDataDisplay.vue';
+import RecordMetaDisplay from '../components/transaction-record/RecordMetaDisplay.vue';
+import RecordDataDisplay from '../components/transaction-record/RecordDataDisplay.vue';
 </script>
 
 

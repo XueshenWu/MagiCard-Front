@@ -1,6 +1,6 @@
 <script setup>
 import PasswordInput from './PasswordInput.vue';
-import PhoneNumberInput from './PhoneNumberInput.vue';
+import PhoneNumberInput from '../PhoneNumberInput.vue';
 import { ref, onMounted, reactive, inject } from 'vue';
 import { useRouter } from 'vue-router';
 import Agreement from './Agreement.vue';
@@ -29,7 +29,7 @@ const login = async (captchaValidateResult) => {
 }
 
 onMounted(async () => {
-    await import('../utils/gt4.js')
+    await import('../../utils/gt4.js')
     window.initGeetest4({
         captchaId: "3f236c8add769bd4a2b93f2fc6f74b35",
         product: "bind",

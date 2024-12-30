@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch, watchEffect } from 'vue';
 import { Divider, InputNumber, Select } from 'ant-design-vue';
-import CardNumber from './CardNumber.vue';
+import CardNumber from '../CardNumber.vue';
 
 
 const rechargeAmount = ref(0);

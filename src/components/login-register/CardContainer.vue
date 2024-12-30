@@ -1,6 +1,6 @@
 <script setup>
 import LoginCard from './LoginCard.vue';
-import RegisterForm from './RegisterForm.vue';
+import RegisterForm from './forms/RegisterForm.vue';
 import { ref } from 'vue';
 
 

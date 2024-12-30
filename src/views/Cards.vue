@@ -4,16 +4,16 @@ import { cardListResp } from '../mock/cardList';
 import { defaultCardResp } from '../mock/defaultCard';
 import { Divider, TabPane, Tabs } from 'ant-design-vue';
 import { CreditCardOutlined } from '@ant-design/icons-vue';
-import CardDetail from '../components/CardDetail.vue';
-import InviteBanner from '../components/InviteBanner.vue';
-import CardHistory from '../components/CardHistory.vue';
+import CardDetail from '../components/my-card/CardDetail.vue';
+import InviteBanner from '../components/my-card/InviteBanner.vue';
+import CardHistory from '../components/my-card/CardHistory.vue';
 
 
 
 // TODO: vue3 节流防抖
 
 
-// TODO：卡片消费记录，用户消费记录，邀请界面
+
 
 
 
@@ -62,15 +62,15 @@ watchEffect(async () => {
 
 <template>
 
-    <div class="flex px-12 py-4 flex-col items-start justify-start gap-y-6  h-full">
+    <div class="flex px-10 py-4 flex-col items-start justify-start gap-y-6  h-full">
 
         <div id="tabs" class="w-full flex flex-row justify-between items-center">
             <Tabs class="grow flex-grow " v-model:activeKey="activeKey" tabBarStyle=" ">
                 <TabPane class="h-full" v-for="(card, idx) in cardList" :key="idx">
                     <template #tab>
-                        <div class="h-full text-3xl">
+                        <div class="h-full text-3xl font-semibold flex items-end">
                             <CreditCardOutlined />
-                            {{ String(card['cardNo']).slice(-4) }}
+                           <div> {{ String(card['cardNo']).slice(-4) }}</div>
                         </div>
                     </template>
 
@@ -79,12 +79,12 @@ watchEffect(async () => {
 
             </Tabs>
 
-            <div v-if="userInfo" class="flex flex-row items-center  gap-x-2 text-xs">
+            <div v-if="userInfo" class="flex flex-row items-center  gap-x-2 text-md">
                 <div>
                     <span class=" text-gray-400">
                         会员有效期至
                     </span>
-                    <span>
+                    <span class="font-semibold">
                         {{
                             `${userInfo.expiration.split('-')[0]}年${userInfo.expiration.split('-')[1]}月${userInfo.expiration.split('-')[2]}日`
                         }}
@@ -95,7 +95,7 @@ watchEffect(async () => {
                     <span class=" text-gray-400">
                         本月充值限额
                     </span>
-                    <span>
+                    <span class="font-semibold">
                         ${{ userInfo.limit }}
                     </span>
                 </div>
@@ -113,7 +113,7 @@ watchEffect(async () => {
         <div id="invite" class="mt-6 w-full">
             <InviteBanner />
         </div>
-        <Divider />
+  
         <div id="history" class="w-full">
             <CardHistory />
         </div>

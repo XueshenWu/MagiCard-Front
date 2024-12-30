@@ -2,8 +2,8 @@
 
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import CardDurationSelector from '../components/CardDurationSelector.vue';
-import ServiceSelector from '../components/ServiceSelector.vue';
+import CardDurationSelector from '../components/open-card/CardDurationSelector.vue';
+import ServiceSelector from '../components/open-card/ServiceSelector.vue';
 import CheckoutResult from '../components/CheckoutResult.vue';
 
 

@@ -1,8 +1,8 @@
 <script setup>
 
-import FeatureBoard from '../components/FeatureBoard.vue';
-import FeatureBoardX from '../components/FeatureBoardX.vue';
-import SubscribeButton from '../components/SubscribeButton.vue';
+import FeatureBoard from '../components/layout/FeatureBoard.vue';
+import FeatureBoardX from '../components/layout/FeatureBoardX.vue';
+import SubscribeButton from '../components/layout/SubscribeButton.vue';
 
 const features = [
     {

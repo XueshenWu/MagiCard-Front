@@ -1,8 +1,8 @@
 <script setup>
 import { ref, reactive, onMounted, inject } from 'vue'
 import { useRouter } from 'vue-router'
-import PhoneNumberInput from './PhoneNumberInput.vue'
-import Agreement from './Agreement.vue'
+import PhoneNumberInput from '../../PhoneNumberInput.vue'
+import Agreement from '../Agreement.vue'
 import { Form, FormItem, Input, message } from 'ant-design-vue'
 
 const formRef = ref(null)
@@ -103,7 +103,7 @@ const handleSendOtp = () => {
 
 // Initialize CAPTCHA
 onMounted(async () => {
-    await import('../utils/gt4.js')
+    await import('../../../utils/gt4.js')
     window.initGeetest4({
         captchaId: "7ca96590f151feb5236f2a3227dc99db",
         product: "bind",

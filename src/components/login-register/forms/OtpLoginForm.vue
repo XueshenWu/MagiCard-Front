@@ -1,9 +1,9 @@
 <script setup>
 
-import PhoneNumberInput from './PhoneNumberInput.vue';
+import PhoneNumberInput from '../../PhoneNumberInput.vue';
 import { ref, onMounted, reactive, inject } from 'vue';
 import { useRouter } from 'vue-router';
-import Agreement from './Agreement.vue';
+import Agreement from '../Agreement.vue';
 import { Form, FormItem, Input, message, Modal } from 'ant-design-vue';
 
 
@@ -32,7 +32,7 @@ const login = async () => {
 }
 
 onMounted(async () => {
-    await import('../utils/gt4.js')
+    await import('../../../utils/gt4.js')
     window.initGeetest4({
         captchaId: "3f236c8add769bd4a2b93f2fc6f74b35",
         product: "bind",

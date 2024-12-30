@@ -1,11 +1,10 @@
 <script setup>
 
 import { watch, watchEffect, ref, computed } from 'vue';
-import { txRecordResp, txRecordResp2 } from '../mock/txrRecord';
-import RecordMetaDisplay from '../components/RecordMetaDisplay.vue';
+import { txRecordResp, txRecordResp2 } from '../../mock/txrRecord';
 import { Table } from 'ant-design-vue';
 
-import { typeToColor, typeToString, typeToImg, typeToSign } from '../utils/txTypeConversion';
+import { typeToColor, typeToString, typeToImg, typeToSign } from '../../utils/txTypeConversion';
 
 
 

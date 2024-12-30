@@ -1,7 +1,7 @@
 <script setup>
 import { Checkbox, Modal } from 'ant-design-vue';
 import { ref } from 'vue';
-import { agreement } from '../assets/agreement';
+import { agreement } from '../../assets/agreement';
 
 const checked = defineModel('checkedAgreement')
 

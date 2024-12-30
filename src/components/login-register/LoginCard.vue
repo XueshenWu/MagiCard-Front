@@ -2,7 +2,7 @@
 
 import { ref } from 'vue';
 import PasswordLoginForm from './PasswordLoginForm.vue';
-import OtpLoginForm from './OtpLoginForm.vue';
+import OtpLoginForm from './forms/OtpLoginForm.vue';
 
 
 const loginType = ref('password')

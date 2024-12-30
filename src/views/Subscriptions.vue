@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
-import SelectionBoard from '../components/SelectionBoard.vue';
-import CardRechargeBoard from '../components/CardRechargeBoard.vue';
+import SelectionBoard from '../components/subscription/SelectionBoard.vue';
+import CardRechargeBoard from '../components/subscription/CardRechargeBoard.vue';
 import { Modal } from 'ant-design-vue';
 import CheckoutResult from '../components/CheckoutResult.vue';
 
