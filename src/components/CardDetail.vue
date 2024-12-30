@@ -5,7 +5,7 @@ import CardOptionButton from './CardOptionButton.vue';
 import CardHelp from './CardHelp.vue';
 import RechargeButton from './RechargeButton.vue';
 import { useRouter } from 'vue-router';
-import  useClipboard  from 'vue-clipboard3';
+import useClipboard from 'vue-clipboard3';
 import { message } from 'ant-design-vue';
 import CardNumber from './CardNumber.vue';
 
@@ -57,13 +57,13 @@ const copyAddressDetails = async () => {
             <!-- Previous top section remains unchanged -->
             <div class="flex flex-col items-center justify-start w-full">
                 <div class="flex flex-row justify-between w-full">
-                    <div class="flex flex-col">
-                        <div class="text-xl">
+                    <div class="flex flex-col gap-y-4">
+                        <div class="text-2xl">
                             可支付
                         </div>
-                        <div>
-                            <span class="font-bold text-xl">$</span><span class="font-bold text-3xl">{{
-                                Number(cardData["balance"]).toFixed(2) }}</span>
+                        <div class="flex items-end gap-x-2">
+                            <div class="font-bold text-4xl">$</div><div class="font-bold text-5xl">{{
+                                Number(cardData["balance"]).toFixed(2) }}</div>
                         </div>
                     </div>
                     <div class="flex flex-row items-center text-sm gap-x-2">
@@ -75,7 +75,7 @@ const copyAddressDetails = async () => {
                             充值
                         </button> -->
                         <RechargeButton cardInfo="test" />
-                        <button @click="()=>router.replace('/openCard')"
+                        <button @click="() => router.replace('/openCard')"
                             class="bg-black text-slate-200 px-6 py-2 rounded-lg hover:bg-slate-800 duration-100">
                             开新卡
                         </button>
@@ -93,7 +93,8 @@ const copyAddressDetails = async () => {
                     class="flex flex-col bg-gray-100 w-1/2 h-full gap-y-6 rounded-l-lg px-5 py-3">
                     <div class="flex flex-row items-center justify-between">
                         <img src="/logo.png" alt="logo" class="w-6 h-4" />
-                        <div class="flex flex-row items-center justify-center gap-x-4 text-sky-500 [&>a]:cursor-pointer">
+                        <div
+                            class="flex flex-row items-center justify-center gap-x-4 text-sky-500 [&>a]:cursor-pointer">
                             <CardHelp />
                             <a @click="copyCardDetails">
                                 复制全部
@@ -108,7 +109,7 @@ const copyAddressDetails = async () => {
                             <div class="flex flex-col items-start">
                                 <div class="text-sm text-gray-500">卡号</div>
                                 <!-- <div class="font-bold text-lg">{{ cardData['cardNo'] }}</div> -->
-                                 <CardNumber :value="cardData['cardNo']" class="font-bold text-lg" />
+                                <CardNumber :value="cardData['cardNo']" class="font-bold text-lg" />
                             </div>
                             <a class="cursor-pointer text-blue-500" @click="copy(cardData['cardNo'])">
                                 复制
@@ -127,11 +128,13 @@ const copyAddressDetails = async () => {
                             <div class="flex flex-col items-start">
                                 <div class="text-sm text-gray-500">有效期</div>
                                 <div class="font-bold text-lg">
-                                    {{ `${String(cardData['issueDate']).split('-')[1]}月/${String(cardData['issueDate']).split('-')[0]}年` }}
+                                    {{
+                                        `${String(cardData['issueDate']).split('-')[1]}月/${String(cardData['issueDate']).split('-')[0]}年`
+                                    }}
                                 </div>
                             </div>
-                            <a class="cursor-pointer text-blue-500" 
-                               @click="copy(`${String(cardData['issueDate']).split('-')[1]}月/${String(cardData['issueDate']).split('-')[0]}年`)">
+                            <a class="cursor-pointer text-blue-500"
+                                @click="copy(`${String(cardData['issueDate']).split('-')[1]}月/${String(cardData['issueDate']).split('-')[0]}年`)">
                                 复制
                             </a>
                         </div>
@@ -155,7 +158,8 @@ const copyAddressDetails = async () => {
                             <img src="/usflag.png" alt="logo" class="w-6 h-4" />
                             <div class="">账单地址</div>
                         </div>
-                        <div class="flex flex-row items-center justify-center gap-x-4 text-sky-500 [&>a]:cursor-pointer">
+                        <div
+                            class="flex flex-row items-center justify-center gap-x-4 text-sky-500 [&>a]:cursor-pointer">
                             <CardHelp />
                             <a @click="copyAddressDetails">
                                 复制全部
@@ -201,8 +205,8 @@ const copyAddressDetails = async () => {
                                     {{ cardData["stateCnName"] }}
                                 </div>
                             </div>
-                            <a class="cursor-pointer text-blue-500" 
-                               @click="copy(`${cardData['stateName']}${cardData['stateCnName'] ? ' / ' + cardData['stateCnName'] : ''}`)">
+                            <a class="cursor-pointer text-blue-500"
+                                @click="copy(`${cardData['stateName']}${cardData['stateCnName'] ? ' / ' + cardData['stateCnName'] : ''}`)">
                                 复制
                             </a>
                         </div>
