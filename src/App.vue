@@ -1,4 +1,4 @@
-<script setup>
+<!-- <script setup>
 
 import { RouterLink, RouterView, useRoute } from 'vue-router';
 import { Button } from 'ant-design-vue';
@@ -11,24 +11,7 @@ const path = computed(() => route.path);
 
 
 
-// onMounted(() => {
-//     window.windowHeight = document.documentElement.clientHeight
-//     window.windowWidth = document.documentElement.clientWidth
-//     let heightScale = window.windowHeight / 1080
-//     let widthScale = window.windowWidth / 1920
-//     document.body.style.transform = `scale(${widthScale},${heightScale})`;
-//     document.body.style.msTransform = `scale(${widthScale},${heightScale})`;
-//     document.body.style.webkitTransform = `scale(${widthScale},${heightScale})`;
-//     window.onresize = () => { 
-//         window.windowHeight = document.documentElement.clientHeight
-//         window.windowWidth = document.documentElement.clientWidth
-//         let heightScale = window.windowHeight / 1080
-//         let widthScale = window.windowWidth / 1920
-//         document.body.style.transform = `scale(${widthScale},${heightScale})`;
-//         document.body.style.msTransform = `scale(${widthScale},${heightScale})`;
-//         document.body.style.webkitTransform = `scale(${widthScale},${heightScale})`;
-//     }
-// })
+
 
 onMounted(() => {
     const updateScale = () => {
@@ -88,4 +71,94 @@ onMounted(() => {
 
 </template>
 
-// NOTE: changed padding and applied rezise with respect to the screen resolution
+// NOTE: changed padding and applied rezise with respect to the screen resolution -->
+
+<!-- App.vue -->
+<script setup>
+import { RouterLink, RouterView, useRoute } from 'vue-router';
+import { Button } from 'ant-design-vue';
+import Navbar from './components/layout/Navbar.vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
+import Header from './components/layout/Header.vue';
+
+const route = useRoute();
+const path = computed(() => route.path);
+const headerHeight = ref(0); // 16 * 4 = 64px (h-16)
+
+onMounted(() => {
+    const updateScale = () => {
+        const viewport = {
+            width: window.innerWidth || document.documentElement.clientWidth,
+            height: window.innerHeight || document.documentElement.clientHeight
+        };
+        
+        const baseSize = {
+            width: 1920,
+            height: 1080
+        };
+        
+        const widthScale = viewport.width / baseSize.width;
+        
+        const scaleContainer = document.getElementById('scale-container');
+        if (scaleContainer) {
+            scaleContainer.style.transform = `scale(${widthScale})`;
+            scaleContainer.style.width = `${baseSize.width}px`;
+            scaleContainer.style.height = `${baseSize.height}px`;
+            
+            // Update the wrapper height
+            const scaledHeight = baseSize.height * widthScale;
+            document.getElementById('content-wrapper').style.height = `${scaledHeight}px`;
+        }
+    };
+    
+    updateScale();
+    
+    window.addEventListener('resize', () => {
+        requestAnimationFrame(updateScale);
+    });
+
+    onUnmounted(() => {
+        window.removeEventListener('resize', updateScale);
+    });
+});
+</script>
+
+<template>
+    <!-- Fixed header outside of scaled content -->
+    <Header class="fixed top-0 left-0 w-full z-50" />
+    
+    <!-- Main content wrapper -->
+    <div id="content-wrapper" class="w-full overflow-x-hidden" :style="{ paddingTop: headerHeight + 'px' }">
+        <div id="scale-container" class="origin-top-left absolute left-0">
+            <div id="app" class="flex flex-col min-h-screen">
+                <div id="body" 
+                    style="background: linear-gradient(180deg, rgba(228,246,255,1) 0%, rgba(255,255,255,1) 100%);"
+                    class="w-full flex-1 flex flex-row items-start px-48 py-16 gap-x-6">
+                    <Navbar />
+                    <div v-if="path !== '/'" 
+                        id="view" 
+                        class="bg-white border border-gray-200 rounded-xl shadow-sm w-full h-full ml-6">
+                        <RouterView />
+                    </div>
+                    <div v-else class="w-full h-full">
+                        <RouterView />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    width: 100vw;
+    height: 100vh;
+}
+
+#content-wrapper {
+    position: relative;
+}
+</style>

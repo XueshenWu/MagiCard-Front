@@ -25,7 +25,7 @@ const handleOk = () => {
 <template>
    <div ref="replayModal">
       <button @click="handleClick"
-         class="bg-black text-white text-xs px-4 py-2 h-10 rounded-md hover:bg-slate-800 duration-150">
+         class="bg-black text-white text-xs px-4  h-7 rounded-xl hover:bg-slate-800 duration-150">
          登录/注册
       </button>
       <Modal v-model:open="openModal" width="400px" :centered="true" :get-container="()=>$refs.replayModal">
