@@ -28,7 +28,7 @@ const navEntries = [
         </div>
         <div id="navitems" class="flex flex-col items-start justify-start gap-y-2 w-48 h-full">
             <RouterLink v-for="(entry, index) in navEntries" :to="entry.to"
-                :class="` flex flex-row items-center gap-x-2 px-3 py-3 w-full rounded-md text-xs duration-100  ${(path === entry.to || (path === '/' && index === 0)) && 'bg-sky-200'}`">
+                :class="` flex flex-row items-center gap-x-2 px-3 py-3 w-full rounded-md text-lg duration-100  ${(path === entry.to || (path === '/' && index === 0)) && 'bg-sky-200'}`">
                 <img :src="entry.src" class="w-4 h-4" /> {{ entry.text }}
             </RouterLink>
         </div>

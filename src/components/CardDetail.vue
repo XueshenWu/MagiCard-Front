@@ -56,7 +56,35 @@ const copyAddressDetails = async () => {
         <div class="flex flex-col justify-start w-full gap-y-4">
             <!-- Previous top section remains unchanged -->
             <div class="flex flex-col items-center justify-start w-full">
-                <!-- ... (previous code) ... -->
+                <div class="flex flex-row justify-between w-full">
+                    <div class="flex flex-col">
+                        <div class="text-xl">
+                            可支付
+                        </div>
+                        <div>
+                            <span class="font-bold text-xl">$</span><span class="font-bold text-3xl">{{
+                                Number(cardData["balance"]).toFixed(2) }}</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-row items-center text-sm gap-x-2">
+                        <!-- <button class="bg-slate-200 px-6 py-2 rounded-lg hover:bg-slate-300 duration-100">
+                            提现
+                        </button> -->
+                        <CashoutButton :availableBalance="cardData['balance']" />
+                        <!-- <button class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-400 duration-100">
+                            充值
+                        </button> -->
+                        <RechargeButton cardInfo="test" />
+                        <button @click="()=>router.replace('/openCard')"
+                            class="bg-black text-slate-200 px-6 py-2 rounded-lg hover:bg-slate-800 duration-100">
+                            开新卡
+                        </button>
+                        <!-- <button class="bg-slate-200 px-4 py-2 rounded-lg hover:bg-slate-300 duration-100">
+                            <EllipsisOutlined />
+                        </button> -->
+                        <CardOptionButton />
+                    </div>
+                </div>
             </div>
 
             <div class="flex flex-row items-start justify-center h-[300px]">

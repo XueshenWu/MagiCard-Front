@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watchEffect } from 'vue';
 import { invitationInfoResp } from '../mock/invitationInfo';
-import { Input, Modal, Tooltip, Button, message } from 'ant-design-vue';
+import { Input, Modal,  Button, message } from 'ant-design-vue';
 import { CopyOutlined, EditOutlined } from '@ant-design/icons-vue';
 import CashoutButton from './CashoutButton.vue';
 import  useClipboard  from 'vue-clipboard3';
@@ -67,9 +67,9 @@ const copyInviteCode = async () => {
 
                     <template #suffix>
                         <div class="flex gap-x-4">
-                            <Tooltip placement="top" title="编辑邀请码">
+                          
                                 <EditOutlined @click="open = true" class="text-blue-500 cursor-pointer" />
-                            </Tooltip>
+                          
                             <Modal width="280px" title="修改邀请码" v-model:open="open" :centered="true">
                                 <div class="flex flex-col gap-y-2">
                                     <div class="text-gray-500 text-xs ">
@@ -85,9 +85,9 @@ const copyInviteCode = async () => {
                                     </div>
                                 </template>
                             </Modal>
-                            <Tooltip placement="top" title="复制邀请码">
+                          
                                 <CopyOutlined @click="copyInviteCode" class="text-blue-500 cursor-pointer" />
-                            </Tooltip>
+                          
                         </div>
                     </template>
                 </Input>
