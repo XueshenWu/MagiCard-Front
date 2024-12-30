@@ -2,3 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body{
+    transform: scale(1,1);
+    -ms-transform: scale(1,1); /* IE 9 */
+    -webkit-transform: scale(1,1); /* Safari and Chrome */
+    transform-origin: left top; /*设置左上角为缩放原点*/
+  }
+  
