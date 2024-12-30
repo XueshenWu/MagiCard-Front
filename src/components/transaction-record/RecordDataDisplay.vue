@@ -74,7 +74,7 @@ const dataSource = computed(() => {
 
 const columns = [
     {
-        title: '时间',
+        title: '交易时间',
         dataIndex: 'transactionTime',
         key: 'orderNo',
         sorter: (a, b) => new Date(a.transactionTime) - new Date(b.transactionTime)
@@ -111,16 +111,16 @@ const columns = [
 
 <template>
 
-    <div class="w-full flex flex-col  gap-y-6">
+    <div class="w-full flex flex-col  gap-y-6 border-t border-gray-200 pt-10 mt-12">
         <div class="flex flex-row justify-between items-center w-full">
-            <div class="text-sm font-semibold">
+            <div class="text-2xl font-semibold">
                 消费记录
             </div>
             <div @click="handleRefresh" class="flex items-center text-blue-400 gap-x-1 cursor-pointer">
 
                 <img :style="{ transform: `rotate(${rotateDegree}deg)`, transition: 'transform 0.5s ease' }"
-                    :class='` w-4 h-4`' src="/invitation/refresh.png" alt="refresh" />
-                <span class="text-xs">刷新</span>
+                    :class='` w-6 h-6`' src="/invitation/refresh.png" alt="refresh" />
+                <span class="text-lg">刷新</span>
             </div>
         </div>
         <div>
@@ -130,7 +130,7 @@ const columns = [
                 <Table @change="handleTableChange" :pagination="pagination" :columns="columns" class="w-full" bordered
                     :dataSource="dataSource">
                     <template v-slot:bodyCell="{ text, record, index, column }">
-                        <div class="text-xs">
+                        <div class="text-lg py-2 px-1">
                             <span class="font-semibold" v-if="column.dataIndex === 'transactionTime'">
                                 {{ new Date(record.transactionTime).toLocaleString('zh-CN', {
                                     year: 'numeric', month:

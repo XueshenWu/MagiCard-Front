@@ -8,8 +8,8 @@ const current = ref(0);
 </script>
 
 <template>
-    <div class="flex flex-col items-center gap-y-12 pt-4">
-        <div class="text-2xl">
+    <div class="flex flex-col items-center gap-y-20 pt-32">
+        <div class="text-4xl">
             选择你要支付的产品
         </div>
         <div class="grid grid-cols-9 gap-5">

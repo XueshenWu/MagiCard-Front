@@ -6,9 +6,9 @@ import RecordDataDisplay from '../components/transaction-record/RecordDataDispla
 
 
 <template>
-    <div class="flex flex-col items-start w-full py-6 px-12">
+    <div class="flex flex-col items-start w-full py-12 px-16">
         <RecordMetaDisplay />
-        <Divider />
+
         <RecordDataDisplay />
     </div>
 

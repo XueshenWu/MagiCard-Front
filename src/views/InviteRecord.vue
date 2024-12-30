@@ -2,7 +2,9 @@
 import { DownOutlined } from '@ant-design/icons-vue';
 import { ref } from 'vue';
 import { Modal } from 'ant-design-vue';
+import { message } from 'ant-design-vue';
 
+import useClipboard from 'vue-clipboard3';
 const open = ref(false);
 const openRewardShow = ref(false);
 let rewardAmount = ref(0.00);
@@ -22,6 +24,27 @@ const statusMap = {
     unpaid: '未支付',
     paid: '已支付'
 };
+const { toClipboard } = useClipboard();
+
+const copy = async (text) => {
+    try {
+        await toClipboard(text);
+        message.success('复制成功');
+    } catch (error) {
+        message.error('复制失败');
+    }
+};
+
+
+const rotateDegree = ref(0)
+const rotate = () => {
+    rotateDegree.value += 360
+}
+
+const handleRefresh = () => {
+    rotate()
+}
+
 function generatePreviousMonths() {
     const monthsMap = { all: '全部' };
     const currentDate = new Date();
@@ -72,6 +95,7 @@ const columns = [
         title: '日期',
         dataIndex: 'rewardTime',
         key: 'rewardTime',
+        sorter: true
     },
     {
         title: '状态',
@@ -88,7 +112,7 @@ const columns = [
         dataIndex: 'rewardAmount',
         key: 'rewardAmount',
     }
-   
+
 ]
 
 const isRotating = ref(false);
@@ -131,7 +155,7 @@ const handleOpenWithdrewRewardAmount = () => {
                             @click="handleOpenChangeInvitationCode">
                     </div>
                     <div>
-                        <button @click="handleCopyLink"
+                        <button @click="()=>copy(inviteCode)"
                             class="bg-[#eeeeee] text-black px-8 py-3 rounded-lg duration-100 cursor-pointer text-xl font-normal">
                             复制链接
                         </button>
@@ -216,14 +240,11 @@ const handleOpenWithdrewRewardAmount = () => {
                             </template>
                         </a-dropdown>
                     </div>
-                    <div class="flex flex-row items-center space-x-2 cursor-pointer" @click="toggleRotation">
-                        <!-- 图标 -->
-                        <img src="/invitation/refresh.png" class="w-5 h-5 transition-transform duration-500"
-                            :class="{ 'rotate': isRotating }" />
-                        <!-- 刷新文字 -->
-                        <div class="text-[#3189ef]">
-                            刷新
-                        </div>
+                    <div @click="handleRefresh" class="flex items-center text-blue-400 gap-x-1 cursor-pointer">
+
+                        <img :style="{ transform: `rotate(${rotateDegree}deg)`, transition: 'transform 0.5s ease' }"
+                            :class='` w-6 h-6`' src="/invitation/refresh.png" alt="refresh" />
+                        <span class="text-lg">刷新</span>
                     </div>
                 </div>
             </div>
@@ -282,5 +303,15 @@ const handleOpenWithdrewRewardAmount = () => {
 .rotate {
     transform: rotate(360deg);
     /* 完整旋转一圈 */
+}
+</style>
+
+<style scoped>
+img {
+    will-change: transform;
+}
+
+::v-deep(.ant-table-wrapper .ant-table-thead > tr > th) {
+    background-color: white;
 }
 </style>
