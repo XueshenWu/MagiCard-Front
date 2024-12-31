@@ -5,7 +5,7 @@
 
 
 <template>
-    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-16 text-lg rounded-md duration-100">
+    <button class="bg-[#3189ef] text-white font-normal text-2xl py-4 px-14 rounded-xl duration-100 mt-10">
         开通会员
     </button>
 </template>

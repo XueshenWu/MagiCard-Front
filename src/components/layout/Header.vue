@@ -9,7 +9,7 @@ import LoginButton from '../login-register/LoginButton.vue';
 
 <template>
     <div
-        class="sticky top-0 shadow-md z-50 w-full h-12 flex flex-row items-center justify-between pl-12 pr-20 py-2 bg-white">
+        class="sticky top-0 shadow-md z-50 w-full h-20 flex flex-row items-center justify-between pl-12 pr-20 py-2 bg-white">
         <div id="logo" class="text-3xl font-semibold  text-center font-sans">
 
             <RouterLink class="flex flex-row items-center gap-x-4" to="/">

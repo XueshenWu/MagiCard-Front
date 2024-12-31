@@ -119,7 +119,7 @@ const columns = [
             <div @click="handleRefresh" class="flex items-center text-blue-400 gap-x-1 cursor-pointer">
 
                 <img :style="{ transform: `rotate(${rotateDegree}deg)`, transition: 'transform 0.5s ease' }"
-                    :class='` w-6 h-6`' src="/invitation/refresh.png" alt="refresh" />
+                    :class='` w-4 h-4`' src="/invitation/refresh.png" alt="refresh" />
                 <span class="text-lg">刷新</span>
             </div>
         </div>

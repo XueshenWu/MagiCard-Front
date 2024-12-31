@@ -1,8 +1,8 @@
 <script setup>
-import CustomModal from '../CustomModal.vue';
 import { Form, FormItem } from 'ant-design-vue';
 import NumberBoxInput from '../NumberBoxInput.vue';
 import { ref, onMounted, reactive } from 'vue';
+import GeneralModal from '../Modal/GeneralModal.vue';
 
 const formRef = ref(null);
 const captchaReady = ref(false);
@@ -71,7 +71,7 @@ const rules = {
 </script>
 
 <template>
-    <CustomModal v-model:open="open">
+    <GeneralModal v-model:open="open">
         <div class="flex flex-col items-center justify-center gap-y-6 px-8">
             <div>
                 <div class="text-xl">
@@ -127,5 +127,5 @@ const rules = {
             </a>
         </div>
         <template #footer></template>
-    </CustomModal>
+    </GeneralModal>
 </template>
