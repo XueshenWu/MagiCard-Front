@@ -5,6 +5,7 @@ import { Modal } from 'ant-design-vue';
 import { message } from 'ant-design-vue';
 
 import useClipboard from 'vue-clipboard3';
+import GeneralModal from '../components/Modal/GeneralModal.vue';
 const open = ref(false);
 const openRewardShow = ref(false);
 let rewardAmount = ref(0.00);
@@ -138,6 +139,9 @@ const handleOpenChangeInvitationCode = () => {
 const handleOpenWithdrewRewardAmount = () => {
     openRewardShow.value = true;
 }
+const handleCloseWithdrewRewardAmount = () => {
+    openRewardShow.value = false;
+};
 </script>
 
 
@@ -155,7 +159,7 @@ const handleOpenWithdrewRewardAmount = () => {
                             @click="handleOpenChangeInvitationCode">
                     </div>
                     <div>
-                        <button @click="()=>copy(inviteCode)"
+                        <button @click="() => copy(inviteCode)"
                             class="bg-[#eeeeee] text-black px-8 py-3 rounded-lg duration-100 cursor-pointer text-xl font-normal">
                             复制链接
                         </button>
@@ -273,7 +277,7 @@ const handleOpenWithdrewRewardAmount = () => {
                 </div>
             </template>
         </Modal>
-        <Modal v-model:open='openRewardShow' width="400px" :centered="true">
+        <!-- <Modal v-model:open='openRewardShow' width="400px" :centered="true">
             <div class="flex flex-col items-center justify-center gap-y-4">
 
                 <p class="text-xl">邀请奖励余额</p>
@@ -281,13 +285,26 @@ const handleOpenWithdrewRewardAmount = () => {
                 <p class="font-bold text-3xl">${{ Number(rewardAmount).toFixed(2) }}</p>
                 <button
                     :class='`mt-4 px-10 py-2  rounded-lg   ${rewardAmount === 0 ? "disabled cursor-not-allowed bg-gray-100 text-gray-400" : " duration-100 bg-blue-500 hover:bg-blue-400 text-white"}`'>全部提现</button>
-
             </div>
             <template #footer>
-
             </template>
+        </Modal> -->
+        <GeneralModal v-model:open='openRewardShow' width="400px" @close="handleCloseWithdrewRewardAmount">
+            <template #default>
+                <div class="flex flex-col items-center justify-center gap-y-4">
+                    <p class="text-xl">邀请奖励余额</p>
+                    <p class="text-xs">你可提现的奖励金额为</p>
+                    <p class="font-bold text-3xl">${{ Number(rewardAmount).toFixed(2) }}</p>
+                </div>
+            </template>
+            <template #footer>
+                <div class="flex items-center justify-center">
+                    <button
+                        :class='`mt-4 px-10 py-2  rounded-lg   ${rewardAmount === 0 ? "disabled cursor-not-allowed bg-gray-100 text-gray-400" : " duration-100 bg-blue-500 hover:bg-blue-400 text-white"}`'>全部提现</button>
+                </div>
+            </template>
+        </GeneralModal>
 
-        </Modal>
     </div>
 </template>
 <style scoped>

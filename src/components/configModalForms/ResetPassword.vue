@@ -1,5 +1,5 @@
 <script setup>
-import CustomModal from '../CustomModal.vue';
+import GeneralModal from '../Modal/GeneralModal.vue';
 import { Form, FormItem } from 'ant-design-vue';
 import { InputPassword, Input } from 'ant-design-vue';
 import { ref, onMounted, reactive } from 'vue';
@@ -81,9 +81,9 @@ onMounted(async () => {
 </script>
 
 <template>
-    <CustomModal v-model:open="open" width="480px">
-        <div class="flex flex-col items-center justify-center gap-y-6 w-full px-8">
-            <div class="text-xl">
+    <GeneralModal v-model:open="open" width="600px">
+        <div class="flex flex-col items-center justify-center gap-y-6 w-full px-8 pt-6">
+            <div class="text-4xl">
                 重置登陆密码
             </div>
             <Form 
@@ -95,16 +95,16 @@ onMounted(async () => {
                 name="password_reset_form"
             >
                 <div class="flex flex-col items-center justify-center w-full gap-y-2">
-                    <div class="flex flex-col items-start justify-center w-full gap-y-2">
-                        <div>
+                    <div class="flex flex-col items-center justify-center w-full gap-y-2">
+                        <div class="text-[#595a61] py-3 text-xl">
                             请输入您的新登陆密码
                         </div>
                         <FormItem name="password_new">
-                            <InputPassword class="w-72" v-model:value="formState.password_new" size="large" />
+                            <InputPassword class="w-72"  v-model:value="formState.password_new" size="large" />
                         </FormItem>
                     </div>
-                    <div class="flex flex-col items-start justify-start w-full gap-y-2">
-                        <div>
+                    <div class="flex flex-col items-center justify-start w-full gap-y-2">
+                        <div class="text-[#595a61] py-3 text-xl">
                             请再次输入您的新登陆密码
                         </div>
                         <FormItem name="password_confirm">
@@ -112,7 +112,7 @@ onMounted(async () => {
                         </FormItem>
                     </div>
                     <div class="flex flex-col items-start justify-start w-full gap-y-2">
-                        <div class="flex items-center gap-x-4">
+                        <div class="flex items-center gap-x-4 text-[#595a61] py-3 text-xl">
                             <span>请输入验证码</span>
                             <span class="text-gray-400 text-xs">
                                 将发送至 +86 {{ phoneNumber }}
@@ -121,7 +121,7 @@ onMounted(async () => {
                         <FormItem name="otp">
                             <div class="flex items-center justify-between gap-x-6 h-12 w-full">
                                 <Input class="w-48" v-model:value="formState.otp" size="large" />
-                                <a class="text-blue-500 text-xs" @click="handleSendOtp" v-if="captchaReady">
+                                <a class="text-blue-500 text-md" @click="handleSendOtp" v-if="captchaReady">
                                     获取验证码
                                 </a>
                                 <span v-else class="text-gray-500 text-xs">
@@ -143,5 +143,10 @@ onMounted(async () => {
             </Form>
         </div>
         <template #footer></template>
-    </CustomModal>
+    </GeneralModal>
 </template>
+<style scoped>
+::v-deep(.ant-input-affix-wrapper-lg){
+    padding: 20px 30px  !important;
+}
+</style>

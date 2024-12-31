@@ -107,16 +107,19 @@ watchEffect(async () => {
                     </div>
 
                 </div>
-                <div id="cardSelection" class="flex flex-col gap-y-2">
+                <div id="cardSelection" class="flex flex-col gap-y-2" ref="options">
                     <div class="flex flex-row justify-between items-center text-gray-400 text-xl tracking-wide">
                         <span>支付卡号</span>
                         <span>可用余额: ${{ availableCards[currentCard].balance.toFixed(2) }}</span>
                     </div>
-                    <Select size="large" v-model:value="currentCard" >
-                        <Select.Option  v-for="(card, idx) in availableCards" :key="idx" :value="idx">
-                            <CardNumber :value="card.accountNumber" />
-                        </Select.Option>
-                    </Select>
+
+                    <div class="content_select">
+                        <Select size="large" v-model:value="currentCard" :getPopupContainer="triggerNode => triggerNode.parentNode" >
+                            <Select.Option v-for="(card, idx) in availableCards" :key="idx" :value="idx">
+                                <CardNumber :value="card.accountNumber" />
+                            </Select.Option>
+                        </Select>
+                    </div>
 
                 </div>
                 <div class="w-full rounded-xl  px-6 py-4" style="background-color: rgb(229, 250, 235);
@@ -163,28 +166,42 @@ watchEffect(async () => {
 
 <style lang="less" scoped>
 :deep(.ant-select-selector) {
-  height: 60px !important;
-  line-height: 60px !important;
-  padding: 0 11px !important;
+    height: 60px !important;
+    line-height: 60px !important;
+    padding: 0 11px !important;
 }
 
 :deep(.ant-select-selection-search) {
-  height: 60px !important;
-  line-height: 60px !important;
+    height: 60px !important;
+    line-height: 60px !important;
 }
 
 :deep(.ant-select-selection-search-input) {
-  height: 60px !important;
-  line-height: 60px !important;
+    height: 60px !important;
+    line-height: 60px !important;
 }
 
 :deep(.ant-select-selection-item) {
-  line-height: 58px !important; /* height - 2px for borders */
-  height: 58px !important;
-  display: flex !important;
-  align-items: center !important;
+    line-height: 58px !important;
+    /* height - 2px for borders */
+    height: 58px !important;
+    display: flex !important;
+    align-items: center !important;
 }
 
 
+.content_select {
+    position: relative;
+    width: 100%;
 
+    ::v-deep(.ant-select-single.ant-select-lg){
+        width: 100% !important;
+    }
+    ::v-deep(.ant-select-dropdown) {
+        left: 0px !important;
+        top: 63px !important;
+        width: 100% !important;
+
+    }
+}
 </style>

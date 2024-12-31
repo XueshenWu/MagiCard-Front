@@ -68,7 +68,7 @@ watchEffect(async () => {
             <Tabs class="grow flex-grow " v-model:activeKey="activeKey" tabBarStyle=" ">
                 <TabPane class="h-full" v-for="(card, idx) in cardList" :key="idx">
                     <template #tab>
-                        <div class="h-full text-3xl font-semibold flex items-end">
+                        <div class="h-full text-2xl font-semibold flex items-end">
                             <CreditCardOutlined />
                            <div> {{ String(card['cardNo']).slice(-4) }}</div>
                         </div>

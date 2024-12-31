@@ -12,17 +12,17 @@ const { title, features, paragraphs, src } = {
 </script>
 
 <template>
-    <div class="bg-white text-sm border-sky-300 border rounded-xl flex flex-col relative py-4 px-2">
+    <div class="bg-white text-sm border-sky-300 border rounded-xl flex flex-col relative py-8 px-6">
         <img :src="src" alt="feature" class="absolute h-[360px] aspect-auto  " />
 
         <div class=" text-lg font-bold">
             {{ title }}
         </div>
 
-        <div class="grid grid-cols-2 gap-y-2 mt-36 font-bold z-10">
+        <div class="grid grid-cols-2 gap-y-2 mt-36 font-bold z-10 text-[#585858]">
             <p v-for="f in features">{{ f }}</p>
         </div>
-        <div class="grid grid-cols-2 gap-y-1 gap-x-2 mt-4 text-xs">
+        <div class="grid grid-cols-2 gap-y-1 gap-x-2 mt-4 text-xs text-[#585858]">
             <p v-for="p in paragraphs">{{ p }}</p>
         </div>
     </div>
