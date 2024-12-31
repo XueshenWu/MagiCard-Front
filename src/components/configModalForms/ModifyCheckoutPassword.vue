@@ -29,7 +29,7 @@ onMounted(async () => {
             formRef.value.validateFields().then(() => {
                 const captchaResult = captcha.getValidate();
                 console.log('Form values:', formState);
-                // Add your API call here with formState and captchaResult
+       
                 formRef.value.resetFields();
             });
         });
