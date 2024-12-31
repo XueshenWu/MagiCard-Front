@@ -1,7 +1,7 @@
 <script setup>
 import { Input } from 'ant-design-vue';
 import { ref, computed } from 'vue';
-import CustomModal from '../CustomModal.vue';
+import GeneralModal from '../Modal/GeneralModal.vue';
 
 const email = ref('');
 const emailError = ref('');
@@ -40,7 +40,7 @@ const handleCancel = () => {
 </script>
 
 <template>
-    <CustomModal v-model:open="open" width="420px">
+    <GeneralModal v-model:open="open" width="420px">
 
 
         <div class="flex flex-col items-center justify-center gap-y-6  px-8">
@@ -65,5 +65,5 @@ const handleCancel = () => {
             </div>
         </div>
         <template #footer></template>
-    </CustomModal>
+    </GeneralModal>
 </template>

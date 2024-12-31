@@ -2,6 +2,8 @@
 import { Dropdown, Menu, MenuItem, MenuDivider, Modal } from 'ant-design-vue';
 import { ref } from 'vue';
 import { EllipsisOutlined } from '@ant-design/icons-vue';
+import GeneralModal from '../Modal/GeneralModal.vue';
+
 
 const openFreezeModal = ref(false);
 const openDeleteModal = ref(false);
@@ -26,11 +28,11 @@ const openDeleteModal = ref(false);
             </Menu>
         </template>
     </Dropdown>
-   <Modal v-model:open='openFreezeModal' width="440px" :centered="true">
-        <div class="flex flex-col items-center justify-center gap-y-8">
+   <GeneralModal v-model:open='openFreezeModal' width="640px" :centered="true">
+        <div class="flex flex-col items-center justify-center gap-y-12 p-6">
 
-            <p class="text-xl">谨慎操作</p>
-            <div class=" tracking-wider text-center  px-4 flex flex-col items-center text-sm gap-y-4 justify-start">
+            <p class="text-3xl">谨慎操作</p>
+            <div class=" tracking-wider text-center  px-4 flex flex-col items-center text-xl gap-y-4 justify-start">
                 <p class="">
                     冻结后该卡片将无法使用，且所有关联的服务将暂时停止。
                 </p>
@@ -42,22 +44,22 @@ const openDeleteModal = ref(false);
 
         </div>
         <template #footer>
-            <div class="flex flex-row items-center justify-center gap-x-4 mt-8">
+            <div class="flex flex-row items-center justify-center gap-x-4 mt-8 mb-6 p-2">
                 <button @click="openFreezeModal = false"
-                    class="px-10 py-2 w-36  rounded-lg bg-slate-200 hover:bg-slate-300 duration-100">取消</button>
+                    class=" text-2xl px-10 py-3 w-56  rounded-lg bg-slate-200 hover:bg-slate-300 duration-100">取消</button>
                 <button @click="openFreezeModal = false"
-                    class="px-10 py-2 w-36  rounded-lg bg-red-500 hover:bg-red-400 duration-100 text-white">确认冻结</button>
+                    class="text-2xl px-10 py-3 w-56  rounded-lg bg-red-500 hover:bg-red-400 duration-100 text-white">确认冻结</button>
 
             </div>
         </template>
 
-    </Modal>
+   </GeneralModal>
 
-    <Modal v-model:open='openDeleteModal' width="440px" :centered="true">
-        <div class="flex flex-col items-center justify-center gap-y-8">
+    <GeneralModal v-model:open='openDeleteModal' width="640px" :centered="true">
+        <div class="flex flex-col items-center justify-center gap-y-8 p-8">
 
-            <p class="text-xl">谨慎操作</p>
-            <div class=" tracking-wider text-center  px-4 flex flex-col items-center text-sm gap-y-4 justify-start">
+            <p class="text-3xl">谨慎操作</p>
+            <div class=" tracking-wider text-center  px-4 flex flex-col items-center text-xl gap-y-4 justify-start">
                 <p class="">
                     删除后该卡片将永久移除，无法恢复！请确保您已备份所需信息。
                 </p>
@@ -69,15 +71,15 @@ const openDeleteModal = ref(false);
 
         </div>
         <template #footer>
-            <div class="flex flex-row items-center justify-center gap-x-4 mt-8">
+            <div class="text-lg flex flex-row items-center justify-center gap-x-4 mt-8">
                 <button @click="openDeleteModal = false"
-                    class="px-10 py-2 w-36  rounded-lg bg-slate-200 hover:bg-slate-300 duration-100">取消</button>
+                    class="px-10 py-4 w-56  rounded-2xl bg-slate-200 hover:bg-slate-300 duration-100">取消</button>
                 <button @click="openDeleteModal = false"
-                    class="px-10 py-2 w-36  rounded-lg bg-red-500 hover:bg-red-400 duration-100 text-white">确认删除</button>
+                    class="px-10 py-4 w-56  rounded-2xl bg-red-500 hover:bg-red-400 duration-100 text-white">确认删除</button>
 
             </div>
         </template>
 
-    </Modal>
+    </GeneralModal>
 
 </template>

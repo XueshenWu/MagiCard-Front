@@ -1,21 +1,36 @@
 <template>
-    <Modal v-model:open="innerOpen" :width="width" :centered="centered" :class="modalClass" @cancel="handleClose"
-        @close="handleClose" :title="title">
+
+
+    <Modal 
+
+    wrapClassName="" getContainer="#scale-container" :mask="false" v-model:open="innerOpen" :width="width" :centered="centered"
+        :class="modalClass" @cancel="handleClose" @close="handleClose" :title="title">
+
         <slot>
             <div class="p-4 text-center"></div>
         </slot>
         <template #footer>
             <slot name="footer">
-                
+
             </slot>
         </template>
     </Modal>
+
 
 </template>
 
 <script setup>
 import { Modal } from 'ant-design-vue';
-import { watch, ref } from 'vue'
+
+import { watch, ref, onMounted } from 'vue'
+
+import { inject } from 'vue';
+
+const {
+    turnOnLight,
+    turnOffLight
+} = inject('lightSwitch');
+
 const props = defineProps({
     open: {
         type: Boolean,
@@ -47,19 +62,23 @@ const innerOpen = ref(props.open)
 watch(
     () => props.open,
     (newVal) => {
-        innerOpen.value = newVal
+        innerOpen.value = newVal;
+        (newVal) ? turnOffLight() : turnOnLight()
     }
 )
 
 function handleClose() {
-    innerOpen.value = false
+    innerOpen.value = false;
+
     emit('update:open', false)
-    emit('close'); 
+    emit('close');
 }
 </script>
 
-<style lang="less" scoped>
-:deep(.ant-modal .ant-modal-content) {
+<style lang="less">
+.ant-modal .ant-modal-content {
     border-radius: 25px !important;
 }
+
+
 </style>

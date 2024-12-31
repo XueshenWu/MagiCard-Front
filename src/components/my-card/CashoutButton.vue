@@ -1,6 +1,7 @@
 <script setup>
 import { Modal } from 'ant-design-vue';
 import { ref } from 'vue';
+import GeneralModal from '../Modal/GeneralModal.vue';
 
 
 const open = ref(false);
@@ -15,21 +16,21 @@ const { availableBalance, className } = defineProps(['availableBalance', 'classN
 
 
 
-    <button @click="open = true" :class="className??`bg-slate-200 px-8 py-3 rounded-xl hover:bg-slate-300 duration-100`">
+    <button @click="open = true" :class="className??` bg-slate-200 px-8 py-3 rounded-xl hover:bg-slate-300 duration-100`">
         提现
     </button>
-    <Modal v-model:open='open' width="400px" :centered="true">
-        <div class="flex flex-col items-center justify-center gap-y-4">
+    <GeneralModal v-model:open='open' width="560px" :centered="true">
+        <div class="flex flex-col items-center justify-center gap-y-12">
 
-            <p class="text-xl">提现</p>
-            <p class="text-xs">您可提现的金额为</p>
-            <p class="font-bold text-3xl">${{ Number(availableBalance).toFixed(2) }}</p>
-            <button :class='`mt-4 px-10 py-2  rounded-lg   ${availableBalance === 0 ? "disabled cursor-not-allowed bg-gray-100 text-gray-400" : " duration-100 bg-blue-500 hover:bg-blue-400 text-white"}`'>全部提现</button>
+            <p class="text-3xl">提现</p>
+            <p class="text-[16px]">您可提现的金额为</p>
+            <p class="font-bold text-4xl">${{ Number(availableBalance).toFixed(2) }}</p>
+            <button :class='`w-80 mt-4   py-4 text-xl rounded-lg   ${availableBalance === 0 ? "disabled cursor-not-allowed bg-gray-100 text-gray-400" : " duration-100 bg-blue-500 hover:bg-blue-400 text-white"}`'>全部提现</button>
 
         </div>
         <template #footer>
             
         </template>
 
-    </Modal>
+    </GeneralModal>
 </template>

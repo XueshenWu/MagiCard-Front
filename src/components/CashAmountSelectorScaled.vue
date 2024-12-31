@@ -1,7 +1,7 @@
 <script setup>
-import { InputNumber } from 'ant-design-vue';
-import { watch, ref } from 'vue';
 
+import { watch, ref } from 'vue';
+import NumberInput from './NumberInput.vue';
 
 const { quickSelect, className } = defineProps([
     'quickSelect', 'className'
@@ -36,19 +36,18 @@ watch(rechargeAmount, (val) => {
 
 <template>
     <div class="flex flex-col gap-y-4 items-start ">
-        <div :class="`flex flex-row items-center justify-between gap-x-4 w-full cash-amount-entry-container`" >
+        <div :class="`flex flex-row items-center justify-between gap-x-4 w-full cash-amount-entry-container`">
             <div v-for="(item, idx) in quickSelect" :key="idx"
-                :class="`cash-amount-entry w-24 text-lg font-semibold text-center cursor-pointer px-6 py-2 border  ${rechargeAmount === Number(item) ? ' border-blue-400' : ''} cursor-pointer rounded-lg duration-100`"
+                :class="` w-full h-14  text-2xl font-bold text-center cursor-pointer px-6 py-2 border  ${rechargeAmount === Number(item) ? ' border-blue-400' : ''} cursor-pointer rounded-lg duration-100`"
                 @click="rechargeAmount = item">
                 ${{ item }}
             </div>
         </div>
         <div>
-            <InputNumber placeholder="输入在$5到$60之间的金额" :status="valid ? '' : 'error'" v-model:value="rechargeAmount" size="large" :class='`w-64 `'>
-                <template #prefix>
-                    <span class="text-gray-400 text-lg font-semibold">$</span>
-                </template>
-            </InputNumber>
+            <NumberInput placeholder="输入在$5到$60之间的金额" :status="valid ? '' : 'error'" v-model:modelValue="rechargeAmount"
+                size="large" :class='`w-80 *:h-14 text-lg`'>
+              
+            </NumberInput>
             <div v-show="!valid" class="text-red-500 text-xs">
                 自定义金额必须在$5到$60之间
             </div>

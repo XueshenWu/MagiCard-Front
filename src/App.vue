@@ -76,16 +76,30 @@ onMounted(() => {
 <!-- App.vue -->
 <script setup>
 import { RouterLink, RouterView, useRoute } from 'vue-router';
-import { Button } from 'ant-design-vue';
+import { message } from 'ant-design-vue';
 import Navbar from './components/layout/Navbar.vue';
-import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref, provide } from 'vue';
 import Header from './components/layout/Header.vue';
 
 const route = useRoute();
 const path = computed(() => route.path);
 const headerHeight = ref(0); // 16 * 4 = 64px (h-16)
+const lightOff = ref(false);
+
+provide('lightSwitch', {
+    turnOnLight: () => lightOff.value = false,
+    turnOffLight: () => lightOff.value = true
+});
+
 
 onMounted(() => {
+
+
+    message.config({
+        getContainer: ()=> document.getElementById('scale-container'),
+        maxCount:2
+    })
+
     const updateScale = () => {
         const viewport = {
             width: window.innerWidth || document.documentElement.clientWidth,
@@ -129,8 +143,8 @@ onMounted(() => {
     
     <!-- Main content wrapper -->
     <div id="content-wrapper" class="w-full overflow-x-hidden" :style="{ paddingTop: headerHeight + 'px' }">
-        <div id="scale-container" class="origin-top-left absolute left-0">
-            <div id="app" class="flex flex-col min-h-screen">
+        <div id="scale-container" :class="`origin-top-left absolute left-0 `">
+            <div id="app" :class="`flex flex-col min-h-screen ${lightOff? 'brightness-50':'brightness-100'}`">
                 <div id="body" 
                     style="background: linear-gradient(180deg, rgba(228,246,255,1) 0%, rgba(255,255,255,1) 100%);"
                     class="w-full flex-1 flex flex-row items-start px-48 py-16 gap-x-6">

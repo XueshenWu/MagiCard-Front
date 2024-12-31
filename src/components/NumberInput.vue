@@ -8,7 +8,7 @@
         :placeholder="placeholder"
         :maxlength="maxLength"
         :class="[
-          'w-full px-11 py-2 border rounded-lg outline-none transition-all duration-200',
+          'w-full text-lg px-11 py-2 border rounded-lg outline-none transition-all duration-200',
           'focus:ring-2 focus:ring-blue-200',
           'placeholder:text-gray-400',
           status === 'error'
@@ -19,9 +19,9 @@
         step="1"
         min="0"
       />
-      <div class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+      <div class="absolute left-5 top-[39px] -translate-y-1/2 pointer-events-none">
         <slot name="prefix">
-          <span class="text-gray-400">$</span>
+          <span class="text-gray-400 text-2xl">$</span>
         </slot>
       </div>
     </div>

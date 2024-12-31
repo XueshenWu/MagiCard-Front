@@ -5,6 +5,7 @@ import { Input, Modal, Button, message } from 'ant-design-vue';
 import { CopyOutlined, EditOutlined } from '@ant-design/icons-vue';
 import { useRouter } from 'vue-router';
 import useClipboard from 'vue-clipboard3';
+import GeneralModal from '../Modal/GeneralModal.vue';
 
 const invitationInfo = ref(null);
 const open = ref(false);
@@ -80,7 +81,7 @@ const copyInviteCode = async () => {
                     <div class="flex gap-x-4">
                         <img src="/invitation/change_code.png" class="w-5 h-5 cursor-pointer" @click="open = true">
 
-                        <Modal width="280px" title="修改邀请码" v-model:open="open" :centered="true">
+                        <GeneralModal width="280px" title="修改邀请码" v-model:open="open" :centered="true">
                             <div class="flex flex-col gap-y-2">
                                 <div class="text-gray-500 text-xs">
                                     邀请码
@@ -94,7 +95,7 @@ const copyInviteCode = async () => {
                                     <Button class="w-24" @click="open = false">取消</Button>
                                 </div>
                             </template>
-                        </Modal>
+                        </GeneralModal>
                         <img src="/copy.png" class="w-5 h-5 cursor-pointer" @click="copyInviteCode">
                     </div>
                 </div>
@@ -105,7 +106,7 @@ const copyInviteCode = async () => {
                 </button>
             </div>
 
-            <Modal v-model:open='openBonusCashout' width="400px" :centered="true">
+            <GeneralModal v-model:open='openBonusCashout' width="400px" :centered="true">
                 <div class="flex flex-col items-center justify-center gap-y-4">
                     <p class="text-xl">邀请奖励余额</p>
                     <p class="text-xs">你可提现的奖励金额为</p>
@@ -117,7 +118,7 @@ const copyInviteCode = async () => {
                             :class="`px-10 py-2 w-36 text-sm rounded-lg ${invitationInfo['balance'] <= 0 ? 'bg-gray-100 cursor-not-allowed text-gray-400' : 'bg-blue-500 hover:bg-blue-400 text-white'} duration-100 `">确认提现</button>
                     </div>
                 </template>
-            </Modal>
+            </GeneralModal>
         </div>
     </template>
 </template>

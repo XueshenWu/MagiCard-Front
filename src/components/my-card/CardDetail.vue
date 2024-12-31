@@ -8,7 +8,7 @@ import useClipboard from 'vue-clipboard3';
 import { message } from 'ant-design-vue';
 import CardNumber from '../CardNumber.vue';
 import DateDisply from './DateDisply.vue';
-import { ref } from 'vue';
+import { ref} from 'vue';
 
 
 const openCheckoutCodeModal = ref(false);
