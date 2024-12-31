@@ -68,9 +68,16 @@ const handleMenuClick = ({ key }) => {
     </Dropdown>
 
 
-    <ModifyEmail v-model:openModifyEmailModal="openModifyEmailModal"/>
-    
-    <ModifyCheckoutPassword v-model:openModifyCheckoutPasswordModal="openModifyCheckoutPasswordModal"/>
-    <ResetPassword v-model:openResetPasswordModal="openResetPasswordModal"/>
+    <ModifyEmail v-model:openModifyEmailModal="openModifyEmailModal" />
+
+    <ModifyCheckoutPassword v-model:openModifyCheckoutPasswordModal="openModifyCheckoutPasswordModal" />
+    <ResetPassword v-model:openResetPasswordModal="openResetPasswordModal" />
 
 </template>
+
+<style scoped lang="less">
+div /deep/ .ant-btn-default {
+    border-color: transparent !important;
+    background-color: #eeeeee !important;
+}
+</style>

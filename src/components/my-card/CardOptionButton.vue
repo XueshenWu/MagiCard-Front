@@ -11,7 +11,7 @@ const openDeleteModal = ref(false);
 
 <template>
     <Dropdown :triggger="['click']">
-        <button class="bg-slate-200 px-4 py-2 rounded-lg hover:bg-slate-300 duration-100">
+        <button class="bg-slate-200 px-5 py-3 rounded-lg hover:bg-slate-300 duration-100">
             <EllipsisOutlined />
         </button>
         <template #overlay>

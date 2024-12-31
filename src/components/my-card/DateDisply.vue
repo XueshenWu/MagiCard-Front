@@ -2,22 +2,22 @@
     <div class="inline-flex items-center gap-x-2">
         <span>
             <span>{{ month }}</span>
-            <span class="text-gray-400 font-light">月</span>
-            <span class="text-gray-400 font-light">/</span>
+            <span class="text-[#ACACAC] font-normal">月</span>
+            <span class="text-[#ACACAC] font-normal">/</span>
             <span>{{ year.substring(2) }}</span>
-            <span class="text-gray-400 font-light">年</span>
+            <span class="text-[#ACACAC] font-normal">年</span>
         </span>
 
         <span>
             <span class="ml-1">
-                <span class="text-gray-400 font-light">(</span>
-                <span class="text-gray-400 font-light">或</span>
+                <span class="text-[#ACACAC] font-normal">(</span>
+                <span class="text-[#ACACAC] font-normal">或</span>
                 <span>{{ month }}</span>
-                <span class="text-gray-400 font-light">月</span>
-                <span class="text-gray-400 font-light">/</span>
+                <span class="text-[#ACACAC] font-normal">月</span>
+                <span class="text-[#ACACAC] font-normal">/</span>
                 <span>{{ year }}</span>
-                <span class="text-gray-400 font-light">年</span>
-                <span class="text-gray-400 font-light">)</span>
+                <span class="text-[#ACACAC] font-normal">年</span>
+                <span class="text-[#ACACAC] font-normal">)</span>
             </span>
         </span>
 

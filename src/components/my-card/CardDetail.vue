@@ -1,5 +1,4 @@
 <script setup>
-import { ArrowDownOutlined, EllipsisOutlined } from '@ant-design/icons-vue';
 import CashoutButton from './CashoutButton.vue';
 import CardOptionButton from './CardOptionButton.vue';
 import CardHelp from './CardHelp.vue';
@@ -9,7 +8,6 @@ import useClipboard from 'vue-clipboard3';
 import { message } from 'ant-design-vue';
 import CardNumber from '../CardNumber.vue';
 import DateDisply from './DateDisply.vue';
-import NumberBoxInput from '../NumberBoxInput.vue';
 import { ref } from 'vue';
 
 
@@ -109,13 +107,13 @@ const copyAddressDetails = async () => {
                     <div class="flex flex-row items-center justify-between">
                         <img src="/logo.png" alt="logo" class="w-9 h-7" />
                         <div
-                            class="flex flex-row items-center justify-center gap-x-4 text-sky-500 [&>a]:cursor-pointer">
+                            class="flex flex-row items-center justify-center gap-x-4 text-[#3189ef] [&>a]:cursor-pointer">
                             <CardHelp />
                             <a @click="copyCardDetails" class="text-lg tracking-widest">
                                 复制全部
                             </a>
                             <a class="grid place-content-center">
-                                <ArrowDownOutlined />
+                                <img src="/download.png" class="w-5 h-5"</img>
                             </a>
                         </div>
                     </div>
@@ -126,7 +124,7 @@ const copyAddressDetails = async () => {
                                 <!-- <div class="font-bold text-lg">{{ cardData['cardNo'] }}</div> -->
                                 <CardNumber :value="cardData['cardNo']" class="font-semibold text-3xl" />
                             </div>
-                            <a class="cursor-pointer text-lg tracking-widest text-blue-500" @click="copy(cardData['cardNo'])">
+                            <a class="cursor-pointer text-lg tracking-widest text-[#3189ef]" @click="copy(cardData['cardNo'])">
                                 复制
                             </a>
                         </div>
@@ -135,7 +133,7 @@ const copyAddressDetails = async () => {
                                 <div class=" text-gray-500 text-lg">安全码/CVC/CVV</div>
                                 <div class="font-semibold text-3xl">* * *</div>
                             </div>
-                            <a class="cursor-pointer text-lg tracking-widest text-blue-500" @click="copy(cardData['cvv'])">
+                            <a class="cursor-pointer text-lg tracking-widest text-[#3189ef]" @click="copy(cardData['cvv'])">
                                 复制
                             </a>
                             
@@ -147,7 +145,7 @@ const copyAddressDetails = async () => {
                                    <DateDisply :dateStr="cardData['issueDate']" />
                                 </div>
                             </div>
-                            <a class="cursor-pointer text-blue-500 tracking-widest text-lg"
+                            <a class="cursor-pointer text-[#3189ef] tracking-widest text-lg"
                                 @click="copy(`${String(cardData['issueDate']).split('-')[1]}月/${String(cardData['issueDate']).split('-')[0]}年`)">
                                 复制
                             </a>
@@ -157,7 +155,7 @@ const copyAddressDetails = async () => {
                                 <div class="text-lg text-gray-500">姓名</div>
                                 <div class="font-bold text-3xl">{{ cardData["userName"] }}</div>
                             </div>
-                            <a class="cursor-pointer text-blue-500 tracking-widest text-lg" @click="copy(cardData['userName'])">
+                            <a class="cursor-pointer text-[#3189ef] tracking-widest text-lg" @click="copy(cardData['userName'])">
                                 复制
                             </a>
                         </div>
@@ -172,13 +170,13 @@ const copyAddressDetails = async () => {
                             <div class="text-lg">账单地址</div>
                         </div>
                         <div
-                            class="flex flex-row items-center justify-center gap-x-4 text-sky-500 [&>a]:cursor-pointer">
+                            class="flex flex-row items-center justify-center gap-x-4 text-[#3189ef] [&>a]:cursor-pointer">
                             <CardHelp />
                             <a @click="copyAddressDetails" class="text-lg tracking-widest">
                                 复制全部
                             </a>
                             <a class="grid place-content-center">
-                                <ArrowDownOutlined />
+                                <img src="/download.png" class="w-5 h-5"</img>
                             </a>
                         </div>
                     </div>
@@ -188,7 +186,7 @@ const copyAddressDetails = async () => {
                                 <div class="text-lg text-gray-500">地址1</div>
                                 <div class="font-semibold text-3xl">{{ cardData["addressLine1"] }}</div>
                             </div>
-                            <a class="cursor-pointer text-blue-500 tracking-widest text-lg" @click="copy(cardData['addressLine1'])">
+                            <a class="cursor-pointer text-[#3189ef] tracking-widest text-lg" @click="copy(cardData['addressLine1'])">
                                 复制
                             </a>
                         </div>
@@ -197,7 +195,7 @@ const copyAddressDetails = async () => {
                                 <div class="text-lg text-gray-500">城市</div>
                                 <div class="font-semibold text-3xl">{{ cardData["city"] }}</div>
                             </div>
-                            <a class="cursor-pointer text-blue-500 tracking-widest text-lg" @click="copy(cardData['city'])">
+                            <a class="cursor-pointer text-[#3189ef] tracking-widest text-lg" @click="copy(cardData['city'])">
                                 复制
                             </a>
                         </div>
@@ -206,7 +204,7 @@ const copyAddressDetails = async () => {
                                 <div class="text-lg text-gray-500">邮编</div>
                                 <div class="font-semibold text-3xl">{{ cardData["postalCode"] }}</div>
                             </div>
-                            <a class="cursor-pointer text-blue-500 tracking-widest text-lg" @click="copy(cardData['postalCode'])">
+                            <a class="cursor-pointer text-[#3189ef] tracking-widest text-lg" @click="copy(cardData['postalCode'])">
                                 复制
                             </a>
                         </div>
@@ -218,7 +216,7 @@ const copyAddressDetails = async () => {
                                     {{ cardData["stateCnName"] }}
                                 </div>
                             </div>
-                            <a class="cursor-pointer text-blue-500 text-lg tracking-widest"
+                            <a class="cursor-pointer text-[#3189ef] text-lg tracking-widest"
                                 @click="copy(`${cardData['stateName']}${cardData['stateCnName'] ? ' / ' + cardData['stateCnName'] : ''}`)">
                                 复制
                             </a>

@@ -3,14 +3,14 @@ import { ref, watchEffect } from 'vue';
 import { invitationInfoResp } from '../../mock/invitationInfo';
 import { Input, Modal, Button, message } from 'ant-design-vue';
 import { CopyOutlined, EditOutlined } from '@ant-design/icons-vue';
-import CashoutButton from './CashoutButton.vue';
+import { useRouter } from 'vue-router';
 import useClipboard from 'vue-clipboard3';
 
 const invitationInfo = ref(null);
 const open = ref(false);
 const openBonusCashout = ref(false);
 const { toClipboard } = useClipboard();
-
+const router = useRouter();
 async function getinvitationInfo() {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
@@ -41,7 +41,7 @@ const copyInviteCode = async () => {
     <template v-else>
         <div class=" border-t pt-12 border-gray-300 flex flex-row justify-between items-center w-full">
             <div class="flex flex-col items-start gap-y-4 text-sm">
-                <div class="text-blue-500 flex items-center text-3xl tracking-wider ">
+                <div class="text-[#3189ef] flex items-center text-3xl tracking-wider ">
                     邀请朋友成功加入, 每位奖励2美金<img class="w-6 h-6" src="/coinsack.svg" alt="coin sack" />!
                 </div>
                 <div class="flex flex-row items-center gap-x-2 *:text-lg">
@@ -53,9 +53,9 @@ const copyInviteCode = async () => {
                         invitationInfo['balance'].toFixed(2) }}</span>
                     </div>
 
-                    <a class="text-blue-500 cursor-pointer">
+                    <div class="text-[#3189ef] cursor-pointer" @click="() => router.replace('/invite-record')">
                         查看邀请明细 >
-                    </a>
+                    </div>
                 </div>
             </div>
 
@@ -78,7 +78,7 @@ const copyInviteCode = async () => {
 
 
                     <div class="flex gap-x-4">
-                        <EditOutlined @click="open = true" class="text-blue-500 cursor-pointer" />
+                        <img src="/invitation/change_code.png" class="w-5 h-5 cursor-pointer" @click="open = true">
 
                         <Modal width="280px" title="修改邀请码" v-model:open="open" :centered="true">
                             <div class="flex flex-col gap-y-2">
@@ -95,12 +95,11 @@ const copyInviteCode = async () => {
                                 </div>
                             </template>
                         </Modal>
-
-                        <CopyOutlined @click="copyInviteCode" class="text-blue-500 cursor-pointer" />
+                        <img src="/copy.png" class="w-5 h-5 cursor-pointer" @click="copyInviteCode">
                     </div>
                 </div>
                 <button @click="openBonusCashout = true"
-                    className="bg-blue-500 rounded-xl  px-12 py-3 text-2xl text-white hover:bg-blue-400 "
+                    className="bg-[#3b82f6] rounded-xl  px-12 py-3 text-2xl text-white hover:bg-blue-400 "
                     :availableBalance="invitationInfo['balance']">
                     去提现
                 </button>
