@@ -17,10 +17,10 @@ const rate = [
 </script>
 
 <template>
-    <div class="flex flex-row w-full items-start justify-between h-full ">
+    <div class="flex flex-row w-full items-center justify-between h-full ">
 
-        <div class="flex flex-col items-start justify-start w-1/2 gap-y-4 p-12 py-8">
-            <div class=" font-bold">
+        <div class="flex flex-col items-start justify-start w-[45%] gap-y-4 px-12">
+            <div class="text-2xl font-bold">
                 选择卡片年限
             </div>
             <!-- <div>
@@ -37,17 +37,17 @@ const rate = [
                     <span class="font-semibold ">$9.99</span>
                 </div>
             </div> -->
-            <div v-for="(item, idx) in rate" :key="idx">
+            <div v-for="(item, idx) in rate" :key="idx" class="w-full">
                 <div @click="currentPlan = idx"
-                    :class="`cursor-pointer tracking-wide text-sm flex border w-64 rounded-lg px-8 h-16 justify-between duration-75 items-center ${rate[currentPlan].duration === item.duration ? 'border-blue-500' : 'border-gray-100'}`">
-                    <span class=" first-letter:font-semibold">{{ item.duration }}年</span>
+                    :class="`cursor-pointer tracking-wide text-lg flex border w-full rounded-lg px-12 h-24 justify-between duration-75 items-center ${rate[currentPlan].duration === item.duration ? 'border-blue-500' : 'border-gray-100'}`">
+                    <span class="first-letter:font-semibold">{{ item.duration }}年</span>
                     <span class="font-semibold ">{{ item.price }}</span>
                 </div>
             </div>
 
 
         </div>
-        <div class="w-1/2 h-full flex flex-col items-center justify-start p-12 py-4 rounded-r-lg"
+        <div class="w-[45%] h-full flex flex-col items-center justify-start p-12 py-4 rounded-r-lg"
             style="background: linear-gradient(180deg, rgba(193,236,255,1) 0%, rgba(255,255,255,1) 100%);">
             <img src="/card-wildcard.webp" alt="card-wildcard" class="w-2/3" />
             <div class="flex flex-col items-center justify-center gap-y-2">

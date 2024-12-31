@@ -67,7 +67,7 @@ watchEffect(async () => {
 
     <template v-if="availableCards">
 
-        <div class="flex flex-row justify-between items-start px-36 py-12 pt-24 gap-x-12 h-full ">
+        <div class="flex flex-row justify-between items-start px-36  pt-24 gap-x-12 h-full ">
             <div class="flex flex-col gap-y-8">
                 <div id="amountSelection" class="flex flex-col gap-y-6">
                     <div class="gap-x-2 flex flex-row items-center justify-start text-xl tracking-wider">
