@@ -9,8 +9,11 @@ import useClipboard from 'vue-clipboard3';
 import { message } from 'ant-design-vue';
 import CardNumber from '../CardNumber.vue';
 import DateDisply from './DateDisply.vue';
+import NumberBoxInput from '../NumberBoxInput.vue';
+import { ref } from 'vue';
 
 
+const openCheckoutCodeModal = ref(false);
 
 const { cardData } = defineProps(['cardData']);
 const router = useRouter();
@@ -135,6 +138,7 @@ const copyAddressDetails = async () => {
                             <a class="cursor-pointer text-lg tracking-widest text-blue-500" @click="copy(cardData['cvv'])">
                                 复制
                             </a>
+                            
                         </div>
                         <div class="flex flex-row justify-between items-end">
                             <div class="flex flex-col items-start">

@@ -1,7 +1,7 @@
 <script setup>
 
 import { ref } from 'vue';
-import PasswordLoginForm from './PasswordLoginForm.vue';
+import PasswordLoginForm from './forms/PasswordLoginForm.vue';
 import OtpLoginForm from './forms/OtpLoginForm.vue';
 
 
