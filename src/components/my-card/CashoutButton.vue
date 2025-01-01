@@ -1,5 +1,4 @@
 <script setup>
-import { Modal } from 'ant-design-vue';
 import { ref } from 'vue';
 import GeneralModal from '../Modal/GeneralModal.vue';
 

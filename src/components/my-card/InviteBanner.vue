@@ -1,10 +1,10 @@
 <script setup>
 import { ref, watchEffect } from 'vue';
 import { invitationInfoResp } from '../../mock/invitationInfo';
-import { Input, Modal, Button, message } from 'ant-design-vue';
-import { CopyOutlined, EditOutlined } from '@ant-design/icons-vue';
+import { Input, Button, message } from 'ant-design-vue';
 import { useRouter } from 'vue-router';
 import useClipboard from 'vue-clipboard3';
+import GeneralModal from '../Modal/GeneralModal.vue';
 import GeneralModal from '../Modal/GeneralModal.vue';
 
 const invitationInfo = ref(null);

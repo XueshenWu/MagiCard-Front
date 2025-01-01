@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import { Modal } from 'ant-design-vue';
+import GeneralModal from '../Modal/GeneralModal.vue';
 
 const openHelpModal = ref(false);
 
@@ -9,7 +9,7 @@ const openHelpModal = ref(false);
 
 <template>
     <a @click="openHelpModal = true" class="text-[#3189ef] text-lg tracking-widest">如何使用</a>
-    <Modal v-model:open='openHelpModal' width="970px" :centered="true">
+    <GeneralModal v-model:open='openHelpModal' width="970px" :centered="false">
         <div class=" flex flex-col items-center justify-start">
             <div class="text-xl ">
                 使用帮助
@@ -35,6 +35,6 @@ const openHelpModal = ref(false);
         </div>
         <template #footer>
         </template>
-    </Modal>
+    </GeneralModal>
 
 </template>

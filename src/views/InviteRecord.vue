@@ -1,7 +1,6 @@
 <script setup>
 import { DownOutlined } from '@ant-design/icons-vue';
 import { ref } from 'vue';
-import { Modal } from 'ant-design-vue';
 import { message } from 'ant-design-vue';
 
 import useClipboard from 'vue-clipboard3';
@@ -256,7 +255,7 @@ const handleCloseWithdrewRewardAmount = () => {
                 <a-table :dataSource="dataSource" :columns="columns" class="w-full " bordered />
             </div>
         </div>
-        <GeneralModal v-model:open='open' width="600px" :centered="true">
+        <GeneralModal v-model:open='open' width="600px" :centered="false">
             <div class="flex flex-col items-center justify-center gap-y-4 w-full p-6">
                 <p class="text-3xl">修改邀请码</p>
                 <div class="flex flex-col w-full">
@@ -277,19 +276,8 @@ const handleCloseWithdrewRewardAmount = () => {
                 </div>
             </template>
         </GeneralModal>
-        <!-- <Modal v-model:open='openRewardShow' width="400px" :centered="true">
-            <div class="flex flex-col items-center justify-center gap-y-4">
 
-                <p class="text-xl">邀请奖励余额</p>
-                <p class="text-xs">你可提现的奖励金额为</p>
-                <p class="font-bold text-3xl">${{ Number(rewardAmount).toFixed(2) }}</p>
-                <button
-                    :class='`mt-4 px-10 py-2  rounded-lg   ${rewardAmount === 0 ? "disabled cursor-not-allowed bg-gray-100 text-gray-400" : " duration-100 bg-blue-500 hover:bg-blue-400 text-white"}`'>全部提现</button>
-            </div>
-            <template #footer>
-            </template>
-        </Modal> -->
-        <GeneralModal v-model:open='openRewardShow' width="520px" @close="handleCloseWithdrewRewardAmount">
+        <GeneralModal v-model:open='openRewardShow' width="520px" @close="handleCloseWithdrewRewardAmount" :centered="false">
             <template #default>
                 <div class="flex flex-col items-center justify-center gap-y-4 pt-6 px-8">
                     <p class="text-3xl">邀请奖励余额</p>

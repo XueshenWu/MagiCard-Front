@@ -1,5 +1,4 @@
 <script setup>
-import { Modal } from 'ant-design-vue';
 import { ref } from 'vue';
 
 import CashAmountSelector from '../CashAmountSelectorScaled.vue';
@@ -21,7 +20,7 @@ const imgList = new Array(18).fill(0).map((_, idx) => `/subscriptionIcons/downlo
         class="bg-blue-500 text-white px-8 py-3 rounded-xl hover:bg-blue-400 duration-100">
         充值
     </button>
-    <GeneralModal v-model:open="openRechargeModal" width="1060px" :centered="true">
+    <GeneralModal v-model:open="openRechargeModal" width="1060px" :centered="false">
         <div class="flex flex-col gap-y-8 p-4">
             <div class="text-xl">
                 选择充值后去消费的产品

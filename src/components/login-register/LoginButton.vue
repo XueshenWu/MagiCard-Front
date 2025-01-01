@@ -1,8 +1,8 @@
 <script setup>
 import { Button } from 'ant-design-vue';
-import { Modal } from 'ant-design-vue';
 import { ref, provide } from 'vue';
 import CardContainer from './CardContainer.vue';
+import GeneralModal from '../Modal/GeneralModal.vue';
 
 const openModal = ref(false);
 
@@ -28,7 +28,7 @@ const handleOk = () => {
          class="bg-black text-white text-xs px-4  h-7 rounded-xl hover:bg-slate-800 duration-150">
          登录/注册
       </button>
-      <Modal v-model:open="openModal" width="400px" :centered="true" :get-container="()=>$refs.replayModal">
+      <GeneralModal v-model:open="openModal" width="400px" :centered="true" :get-container="()=>$refs.replayModal">
          <template #footer>
 
 
@@ -38,7 +38,7 @@ const handleOk = () => {
          </template>
 
          <CardContainer />
-      </Modal>
+      </GeneralModal>
    </div>
 
 </template>
