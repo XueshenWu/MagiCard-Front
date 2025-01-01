@@ -71,10 +71,10 @@ const rules = {
 </script>
 
 <template>
-    <GeneralModal v-model:open="open">
-        <div class="flex flex-col items-center justify-center gap-y-6 px-8">
+    <GeneralModal v-model:open="open" width="600px">
+        <div class="flex flex-col items-center justify-center gap-y-6 px-8 py-8">
             <div>
-                <div class="text-xl">
+                <div class="text-3xl">
                     修改支付密码
                 </div>
             </div>
@@ -86,16 +86,16 @@ const rules = {
                 @finish="onFinish"
             >
                 <div class="flex flex-col items-center justify-start gap-y-4 w-full">
-                    <div>
+                    <div class="text-lg text-gray-500">
                         输入您的原支付密码
                     </div>
                     <FormItem name="checkoutpwd_old">
-                        <NumberBoxInput v-model:value="formState.checkoutpwd_old" />
+                        <NumberBoxInput class="" v-model:value="formState.checkoutpwd_old" />
                     </FormItem>
                 </div>
 
                 <div class="flex flex-col items-center justify-start gap-y-4 w-full">
-                    <div>
+                    <div class="text-lg text-gray-500">
                         输入新支付密码
                     </div>
                     <FormItem name="checkoutpwd_new">
@@ -104,7 +104,7 @@ const rules = {
                 </div>
 
                 <div class="flex flex-col items-center justify-start gap-y-4 w-full">
-                    <div>
+                    <div class="text-lg text-gray-500">
                         确认新支付密码
                     </div>
                     <FormItem name="checkoutpwd_confirm">
@@ -116,7 +116,7 @@ const rules = {
                     <button 
                         type="submit"
                         html-type="submit"
-                        class="w-full bg-blue-500 text-white rounded-lg py-2 hover:bg-blue-400 duration-100"
+                        class="w-full bg-blue-500 text-white rounded-xl text-xl py-2 h-14 hover:bg-blue-400 duration-100"
                     >
                         确认修改
                     </button>

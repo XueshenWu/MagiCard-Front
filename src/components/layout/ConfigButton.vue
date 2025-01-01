@@ -6,41 +6,20 @@ import { ref } from 'vue';
 import ModifyEmail from '../configModalForms/ModifyEmail.vue';
 import ModifyCheckoutPassword from '../configModalForms/ModifyCheckoutPassword.vue';
 import ResetPassword from '../configModalForms/ResetPassword.vue';
+import ApplyMonthlyStatement from '../configModalForms/ApplyMonthlyStatement.vue';
 
-
+const openModifyPhoneNumberModal = ref(false);
 const openModifyEmailModal = ref(false);
 const openModifyCheckoutPasswordModal = ref(false);
 const openResetPasswordModal = ref(false);
+const openApplyMonthlyStatementModal = ref(false);
 
 const handleMenuClick = ({ key }) => {
-    switch (key) {
-        case '1':
-            console.log('修改手机号');
-            break;
-        case '2':
-            console.log('修改邮箱');
-            openModifyEmailModal.value = true;
-            break;
-        case '3':
-            console.log('修改支付密码');
-            openModifyCheckoutPasswordModal.value = true;
-            break;
-        case '4':
-            console.log('修改登录密码');
-            openResetPasswordModal.value = true;
-            break;
-        case '5':
-            console.log('申请月结单');
-            break;
-        case '6':
-            console.log('投诉建议');
-            break;
-        case '7':
-            console.log('退出登录');
-            break;
-        default:
-            break;
-    }
+    openModifyPhoneNumberModal.value = key === '1';
+    openModifyEmailModal.value = key === '2';
+    openModifyCheckoutPasswordModal.value = key === '3';
+    openResetPasswordModal.value = key === '4';
+    openApplyMonthlyStatementModal.value = key === '5';
 };
 
 
@@ -67,11 +46,12 @@ const handleMenuClick = ({ key }) => {
 
     </Dropdown>
 
-
+    
     <ModifyEmail v-model:openModifyEmailModal="openModifyEmailModal" />
 
     <ModifyCheckoutPassword v-model:openModifyCheckoutPasswordModal="openModifyCheckoutPasswordModal" />
     <ResetPassword v-model:openResetPasswordModal="openResetPasswordModal" />
+    <ApplyMonthlyStatement v-model:openApplyMonthlyStatementModal="openApplyMonthlyStatementModal" />
 
 </template>
 

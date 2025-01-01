@@ -40,27 +40,26 @@ const handleCancel = () => {
 </script>
 
 <template>
-    <GeneralModal v-model:open="open" width="420px">
+    <GeneralModal v-model:open="open" width="520px">
 
 
-        <div class="flex flex-col items-center justify-center gap-y-6  px-8">
-            <div class="text-xl">
+        <div class="flex flex-col items-center justify-center gap-y-6 p-8">
+            <div class="text-3xl">
                 修改邮箱
             </div>
 
             <div class="flex flex-col items-start justify-start w-full">
-                <Input v-model:value="email" placeholder="请输入邮箱地址" class="w-full" size="large" :error="emailError"
+                <Input v-model:value="email" placeholder="请输入邮箱地址" class="w-full h-14 " size="large" :error="emailError"
                     @change="validateEmail" />
 
 
                 <div class="text-red-500 text-xs">{{ emailError }}</div>
             </div>
-            <div class="flex justify-between gap-x-4 w-full">
-                <button  
-                style="background-color: rgb(238, 238, 238);"
-                class=" w-full   py-2 rounded-md" @click="handleCancel">取消</button>
+            <div class="flex justify-between gap-x-4 w-full text-xl *:py-3 ">
+                <button style="background-color: rgb(238, 238, 238);" class=" w-full   py-2 rounded-xl"
+                    @click="handleCancel">取消</button>
                 <button
-                    :class="['w-full py-2 rounded-md ', isValidEmail ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-500 cursor-not-allowed']"
+                    :class="['w-full py-2 rounded-xl ', isValidEmail ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-500 cursor-not-allowed']"
                     type="primary" @click="handleSubmit">确认修改</button>
             </div>
         </div>
