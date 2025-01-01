@@ -44,7 +44,7 @@ const props = defineProps({
     },
     centered: {
         type: Boolean,
-        default: true
+        default: false
     },
     modalClass: {
         type: String,

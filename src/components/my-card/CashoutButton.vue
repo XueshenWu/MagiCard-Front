@@ -18,7 +18,7 @@ const { availableBalance, className } = defineProps(['availableBalance', 'classN
     <button @click="open = true" :class="className??` bg-slate-200 px-8 py-3 rounded-xl hover:bg-slate-300 duration-100`">
         提现
     </button>
-    <GeneralModal v-model:open='open' width="560px" :centered="true">
+    <GeneralModal v-model:open='open' width="560px" :centered="false">
         <div class="flex flex-col items-center justify-center gap-y-12">
 
             <p class="text-3xl">提现</p>

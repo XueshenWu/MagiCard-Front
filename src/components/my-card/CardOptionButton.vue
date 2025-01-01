@@ -28,7 +28,7 @@ const openDeleteModal = ref(false);
             </Menu>
         </template>
     </Dropdown>
-   <GeneralModal v-model:open='openFreezeModal' width="640px" :centered="true">
+   <GeneralModal v-model:open='openFreezeModal' width="640px" :centered="false">
         <div class="flex flex-col items-center justify-center gap-y-12 p-6">
 
             <p class="text-3xl">谨慎操作</p>
@@ -55,7 +55,7 @@ const openDeleteModal = ref(false);
 
    </GeneralModal>
 
-    <GeneralModal v-model:open='openDeleteModal' width="640px" :centered="true">
+    <GeneralModal v-model:open='openDeleteModal' width="640px" :centered="false">
         <div class="flex flex-col items-center justify-center gap-y-8 p-8">
 
             <p class="text-3xl">谨慎操作</p>

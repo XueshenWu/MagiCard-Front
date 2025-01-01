@@ -28,7 +28,7 @@ const handleOk = () => {
          class="bg-black text-white text-xs px-4  h-7 rounded-xl hover:bg-slate-800 duration-150">
          登录/注册
       </button>
-      <GeneralModal v-model:open="openModal" width="400px" :centered="true" :get-container="()=>$refs.replayModal">
+      <GeneralModal v-model:open="openModal" width="400px" :centered="false" :get-container="()=>$refs.replayModal">
          <template #footer>
 
 

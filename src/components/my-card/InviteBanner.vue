@@ -5,7 +5,6 @@ import { Input, Button, message } from 'ant-design-vue';
 import { useRouter } from 'vue-router';
 import useClipboard from 'vue-clipboard3';
 import GeneralModal from '../Modal/GeneralModal.vue';
-import GeneralModal from '../Modal/GeneralModal.vue';
 
 const invitationInfo = ref(null);
 const open = ref(false);
@@ -83,7 +82,7 @@ const newInviteCode = ref('');
                     <div class="flex gap-x-4">
                         <img src="/invitation/change_code.png" class="w-5 h-5 cursor-pointer" @click="open = true">
 
-                        <GeneralModal width="540px" v-model:open="open" :centered="true">
+                        <GeneralModal width="540px" v-model:open="open" :centered="false">
                             <div class="p-8 flex flex-col gap-y-2 items-center justify-center">
                                 <div class="text-3xl">
                                     修改邀请码
@@ -118,7 +117,7 @@ const newInviteCode = ref('');
                 </button>
             </div>
 
-            <GeneralModal v-model:open='openBonusCashout' width="530px" :centered="true">
+            <GeneralModal v-model:open='openBonusCashout' width="530px" :centered="false">
                 <div class="flex flex-col items-center justify-center gap-y-4 pt-8 px-8">
                     <p class="text-3xl">邀请奖励余额</p>
                     <p class="text-lg">你可提现的奖励金额为</p>
