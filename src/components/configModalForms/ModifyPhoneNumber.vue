@@ -1,157 +1,174 @@
 <script setup>
-
-import PhoneNumberInput from '../PhoneNumberInput.vue';
-import { ref, onMounted, reactive, inject } from 'vue';
-import { useRouter } from 'vue-router';
-import Agreement from '../login-register/Agreement.vue';
-import { Form, FormItem, Input, message, Modal } from 'ant-design-vue';
+import { reactive, ref, onMounted } from 'vue';
+import { Form, FormItem, Input, message } from 'ant-design-vue';
+import GeneralModal from '../Modal/GeneralModal.vue';
 
 
 
-const captchaReady = ref(false)
-const captchaObj = ref(null)
-const formRef = ref(null)
+const step = ref(1);
 
-const open = ref(false)
+const formRef = ref(null);
+const captchaReady = ref(false);
+const captchaObj = ref(null);
+const open = defineModel('openModifyPhoneNumberModal');
 
+const phoneNumber = ref('13800000000');
 
+const handleSendOtp = () => {
+    if (captchaReady.value) {
+        captchaObj.value.showCaptcha();
+    }
+};
 
 const formState = reactive({
-    phoneNumber: '',
-    otp: '',
-    newPhoneNumber: '',
+    otp_old: '',
+    phoneNumber_new: '',
+    otp_new: '',
 })
+
+const toStep2 = () => {
+    step.value = 2;
+}
+
 
 
 
 onMounted(async () => {
-    await import('../../../utils/gt4.js')
+    await import('../../utils/gt4.js')
     window.initGeetest4({
-        captchaId: "3f236c8add769bd4a2b93f2fc6f74b35",
+        captchaId: "7ca96590f151feb5236f2a3227dc99db",
         product: "bind",
     }, function (captcha) {
-
-        captchaObj.value = captcha
+        captchaObj.value = captcha;
 
         captcha.onReady(function () {
-            captchaReady.value = true
-        })
+            captchaReady.value = true;
+        });
 
         captcha.onSuccess(function () {
-            console.log('send otp')
-            message.success('验证码发送成功')
-
-        })
-    })
-})
-
-
-const validatePhoneNumberSync = (value) => {
-    const phoneRegex = /^1[3-9]\d{9}$/;
-    return phoneRegex.test(value)
-};
-
-const validatePhoneNumber = async (_rule, value) => {
-    if (!value) {
-        return Promise.resolve();
-    }
-    const res = validatePhoneNumberSync(value)
-    if (!res) {
-        return Promise.reject('请输入有效的手机号码');
-    }
-    return Promise.resolve();
-};
-
-const validateOtp = async (_rule, value) => {
-    if (!value) {
-        return Promise.resolve();
-    }
-    if (value.length !== 6) {
-        return Promise.reject('请输入6位验证码');
-    }
-
-    return Promise.resolve();
-};
-
-const validateAgreement = async (_rule, value) => {
-    if (!value) {
-        return Promise.reject('请阅读并同意协议');
-    }
-    return Promise.resolve();
-};
-
-const rules = {
-    phoneNumber: [
-        { required: true, message: '请输入手机号码', trigger: ['change', 'blur'] },
-        { validator: validatePhoneNumber, trigger: ['change', 'blur'] }
-    ],
-    otp: [
-        { required: true, message: '请输入短信验证码', trigger: ['change', 'blur'] },
-        { validator: validateOtp, trigger: ['change', 'blur'] }
-    ],
-    checkedAgreement: [
-        { required: true, message: '请阅读并同意协议', trigger: ['change'] },
-        { validator: validateAgreement, trigger: ['change'] }
-    ]
-};
-
-const onFinish = () => {
-    formRef.value
-        .validate()
-        .then(() => {
-            login()
-        })
-        .catch(() => {
-            console.log('error')
-        })
-
-}
-
-const onFinishFailed = () => {
-    console.log('failed')
-}
-
-const handleSendOtp = () => {
-
-    const res = validatePhoneNumberSync(formState.phoneNumber)
-    if (!res) {
-        message.error('请输入有效的手机号码')
-        return
-    }else{
-        captchaObj.value.showCaptcha()
-    }
-  
-}
-
+            console.log('send otp');
+            message.success('验证码发送成功');
+        });
+    });
+});
 
 </script>
 
+
 <template>
-    <Form ref="formRef" @finish="onFinish" @finishFailed="onFinishFailed" :model="formState" :rules="rules"
-        autocomplete="on">
-        <FormItem name="phoneNumber">
-            <PhoneNumberInput v-model:phoneNumber="formState.phoneNumber" />
-        </FormItem>
-        <FormItem name="otp">
-            <div class="flex items-center justify-between gap-x-2 h-12">
-                <Input placeholder="请输入短信验证码" class="h-10 w-48" v-model:value="formState.otp" />
-                <a class="text-blue-500 text-xs" @click="handleSendOtp">
-                    获取验证码
+    <GeneralModal v-model:open="open" width="610px">
+        <div class="p-8 gap-y-12  flex flex-col items-center justify-center">
 
-                </a>
+            <div class="text-center flex flex-col gap-y-4">
+                <div class="text-3xl">
+                    修改手机号
+                </div>
+                <div class="text-lg text-gray-500">
+                    {{ step === 1 ? '请先验证当前登录手机号' : '请验证新手机号' }}
+                </div>
+
             </div>
+            <Form>
+
+                <div class="w-[438px] space-y-8">
 
 
-        </FormItem>
-        <FormItem>
-            <div class="flex flex-col gap-y-2">
-                <a-button class="w-full" size="large" type="primary" html-type="submit">登录</a-button>
-                <slot />
-            </div>
-        </FormItem>
+                    <template v-if="step === 1">
+                        <div class="flex flex-col items-start w-full gap-y-4">
+                            <div class="text-gray-500">
+                                手机号
+                            </div>
+                            <div
+                                class=" h-16 cursor-not-allowed py-4 w-full flex flex-row justify-between rounded-xl border text-xl border-gray-300 ">
+                                <div class="text-gray-300 font-bold text-center px-6 border-r border-gray-400">
+                                    +86
+                                </div>
+                                <div class="w-full px-8 font-semibold ">
+                                    {{ phoneNumber }}
+                                </div>
+                            </div>
 
-        <FormItem name="checkedAgreement">
-            <Agreement v-model:checkedAgreement="formState.checkedAgreement" />
-        </FormItem>
-    </Form>
+                        </div>
+
+                        <FormItem>
+                            <div class="text-gray-500 mb-4">
+
+                                验证码
+                            </div>
+                            <div class="flex flex-row items-center justify-between w-full gap-x-4">
+                                <Input v-model:value="formState.otp_old" placeholder="请输入验证码" size="large"
+                                    class="w-60 h-14" />
+                                <a @click="handleSendOtp" class="text-blue-500 text-lg">
+                                    获取验证码
+                                </a>
+                            </div>
+                        </FormItem>
+                    </template>
+
+                    <template v-if="step === 2">
+                        <FormItem>
+                            <div class="flex flex-col items-start justify-center w-full gap-y-4 ">
+                                <div class="text-gray-500">
+                                    手机号
+                                </div>
+                                <div
+                                    class=" h-16 py-4 w-full flex flex-row items-center justify-between rounded-xl border text-xl border-gray-300 ">
+                                    <div class="text-gray-300 font-bold text-center px-6 border-r border-gray-400">
+                                        +86
+                                    </div>
+                                    <div class=" font-semibold p-3 px-8 rounded outline-none w-full focus:outline-none focus:ring-0 "
+                                        contenteditable>
+                                        {{ phoneNumber }}
+                                    </div>
+
+                                </div>
+
+
+
+                            </div>
+                        </FormItem>
+
+
+                        <FormItem>
+                            <div class="text-gray-500 mb-4">
+
+                                验证码
+                            </div>
+                            <div class="flex flex-row items-center justify-between w-full gap-x-4">
+                                <Input v-model:value="formState.otp_new" placeholder="请输入验证码" size="large"
+                                    class="w-60 h-14" />
+                                <a @click="handleSendOtp" class="text-blue-500 text-lg">
+                                    获取验证码
+                                </a>
+                            </div>
+                        </FormItem>
+                    </template>
+
+                    <div class="flex flex-row justify-between w-full text-xl gap-x-4 ">
+                        <button v-show="step === 1" @click="open = false"
+                            class=" py-4 w-full bg-gray-200 rounded-xl">取消</button>
+                        <button @click="toStep2" v-show="step === 1"
+                            class=" py-4 w-full text-white bg-blue-500 rounded-xl">
+                            下一步
+                        </button>
+                        <button v-show="step === 2" @click="step = 1"
+                            class="text-white py-4 w-full bg-blue-500 rounded-xl">
+                            上一步
+                        </button>
+                        <button @click="open = false" v-show="step === 2"
+                            class="text-white py-4 w-full bg-blue-500 rounded-xl">
+                            完成
+                        </button>
+                    </div>
+                </div>
+            </Form>
+
+
+        </div>
+
+
+
+    </GeneralModal>
+
+
 </template>

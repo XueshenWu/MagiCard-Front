@@ -7,6 +7,8 @@ import ModifyEmail from '../configModalForms/ModifyEmail.vue';
 import ModifyCheckoutPassword from '../configModalForms/ModifyCheckoutPassword.vue';
 import ResetPassword from '../configModalForms/ResetPassword.vue';
 import ApplyMonthlyStatement from '../configModalForms/ApplyMonthlyStatement.vue';
+import ModifyPhoneNumber from '../configModalForms/ModifyPhoneNumber.vue';
+
 
 const openModifyPhoneNumberModal = ref(false);
 const openModifyEmailModal = ref(false);
@@ -20,6 +22,7 @@ const handleMenuClick = ({ key }) => {
     openModifyCheckoutPasswordModal.value = key === '3';
     openResetPasswordModal.value = key === '4';
     openApplyMonthlyStatementModal.value = key === '5';
+
 };
 
 
@@ -46,7 +49,7 @@ const handleMenuClick = ({ key }) => {
 
     </Dropdown>
 
-    
+    <ModifyPhoneNumber v-model:openModifyPhoneNumberModal="openModifyPhoneNumberModal" />
     <ModifyEmail v-model:openModifyEmailModal="openModifyEmailModal" />
 
     <ModifyCheckoutPassword v-model:openModifyCheckoutPasswordModal="openModifyCheckoutPasswordModal" />
