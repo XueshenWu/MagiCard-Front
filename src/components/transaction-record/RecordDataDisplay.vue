@@ -188,5 +188,6 @@ img {
 
 ::v-deep(.ant-table-wrapper .ant-table-thead > tr > th) {
     background-color: white;
+    font-size: large;
 }
 </style>

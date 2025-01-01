@@ -33,6 +33,8 @@ const copyInviteCode = async () => {
     }
 };
 
+const newInviteCode = ref('');
+
 </script>
 <template>
     <template v-if="!invitationInfo">
@@ -81,18 +83,28 @@ const copyInviteCode = async () => {
                     <div class="flex gap-x-4">
                         <img src="/invitation/change_code.png" class="w-5 h-5 cursor-pointer" @click="open = true">
 
-                        <GeneralModal width="280px" title="修改邀请码" v-model:open="open" :centered="true">
-                            <div class="flex flex-col gap-y-2">
-                                <div class="text-gray-500 text-xs">
-                                    邀请码
+                        <GeneralModal width="540px" v-model:open="open" :centered="true">
+                            <div class="p-8 flex flex-col gap-y-2 items-center justify-center">
+                                <div class="text-3xl">
+                                    修改邀请码
                                 </div>
-                                <Input v-model="invitationInfo['inviteCode']" />
+                                <div class="flex flex-col items-start gap-y-4 w-full">
+                                    <div class="text-gray-500 text-lg">
+                                        邀请码
+                                    </div>
+                                    <Input allowClear v-model:value="newInviteCode"
+                                        class="h-14 text-lg font-semibold" />
+                                </div>
                             </div>
 
                             <template #footer>
-                                <div class="flex justify-center items-center gap-x-4">
-                                    <Button class="w-24" type="primary" @click="open = false">确定</Button>
-                                    <Button class="w-24" @click="open = false">取消</Button>
+                                <div class="flex justify-center items-center gap-x-4 my-4">
+                                    <button
+                                    @click="open = false"
+                                        class="text-lg py-3 w-48 rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors duration-200">取消</button>
+                                    <button
+                                    @click="open = false"
+                                        :class="`text-lg py-3 w-48 rounded-xl transition-colors duration-200 ${(newInviteCode ?? '').length > 0 ? ' bg-blue-500 text-white hover:bg-blue-400' : 'bg-gray-200 cursor-not-allowed text-gray-500'}`">确认</button>
                                 </div>
                             </template>
                         </GeneralModal>
@@ -106,16 +118,16 @@ const copyInviteCode = async () => {
                 </button>
             </div>
 
-            <GeneralModal v-model:open='openBonusCashout' width="400px" :centered="true">
-                <div class="flex flex-col items-center justify-center gap-y-4">
-                    <p class="text-xl">邀请奖励余额</p>
-                    <p class="text-xs">你可提现的奖励金额为</p>
-                    <p class="font-bold text-3xl">${{ Number(invitationInfo['balance']).toFixed(2) }}</p>
+            <GeneralModal v-model:open='openBonusCashout' width="530px" :centered="true">
+                <div class="flex flex-col items-center justify-center gap-y-4 pt-8 px-8">
+                    <p class="text-3xl">邀请奖励余额</p>
+                    <p class="text-lg">你可提现的奖励金额为</p>
+                    <p class="font-bold text-4xl">${{ Number(invitationInfo['balance']).toFixed(2) }}</p>
                 </div>
                 <template #footer>
-                    <div class="flex flex-row items-center justify-center gap-x-4 mt-8">
+                    <div class="flex flex-row items-center justify-center gap-x-4 mt-12 px-8 pb-8 ">
                         <button @click="openBonusCashout = false"
-                            :class="`px-10 py-2 w-36 text-sm rounded-lg ${invitationInfo['balance'] <= 0 ? 'bg-gray-100 cursor-not-allowed text-gray-400' : 'bg-blue-500 hover:bg-blue-400 text-white'} duration-100 `">确认提现</button>
+                            :class="`text-xl w-72 py-4   rounded-xl ${invitationInfo['balance'] <= 0 ? 'bg-gray-100 cursor-not-allowed text-gray-400' : 'bg-blue-500 hover:bg-blue-400 text-white'} duration-100 `">全部提现</button>
                     </div>
                 </template>
             </GeneralModal>

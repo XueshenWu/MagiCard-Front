@@ -65,8 +65,8 @@ const items = steps.map(item => ({
             </div>
         </div>
 
-        <a-steps progress-dot size="small" :current="current" :items="items" />
-        <div class="steps-action flex justify-end items-center gap-x-4 *:w-28 w-full py-4 pr-12">
+        <a-steps progress-dot size="large" class="" :current="current" :items="items" />
+        <div class="steps-action flex justify-end items-center gap-x-4 *:w-64 *:text-xl *:h-12 w-full py-4 pr-12">
             <a-button class="bg-gray-100 border-none" v-if="current >= 0" style="margin-left: 8px"
                 @click="prev">上一步</a-button>
 

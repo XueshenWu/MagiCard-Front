@@ -39,7 +39,7 @@ const rate = [
             </div> -->
             <div v-for="(item, idx) in rate" :key="idx" class="w-full">
                 <div @click="currentPlan = idx"
-                    :class="`cursor-pointer tracking-wide text-lg flex border w-full rounded-lg px-12 h-24 justify-between duration-75 items-center ${rate[currentPlan].duration === item.duration ? 'border-blue-500' : 'border-gray-100'}`">
+                    :class="`cursor-pointer tracking-wide text-2xl flex border w-full rounded-lg px-12 h-24 justify-between duration-75 items-center ${rate[currentPlan].duration === item.duration ? 'border-blue-500' : 'border-gray-100'}`">
                     <span class="first-letter:font-semibold">{{ item.duration }}年</span>
                     <span class="font-semibold ">{{ item.price }}</span>
                 </div>
@@ -51,12 +51,12 @@ const rate = [
             style="background: linear-gradient(180deg, rgba(193,236,255,1) 0%, rgba(255,255,255,1) 100%);">
             <img src="/card-wildcard.webp" alt="card-wildcard" class="w-2/3" />
             <div class="flex flex-col items-center justify-center gap-y-2">
-                <div class="font-semibold text-sm">
+                <div class="font-semibold text-normal">
                     开卡费用
                 </div>
                 <div >
-                    <span class="font-bold text-2xl">$</span>
-                    <span class="font-bold text-3xl">{{ rate[currentPlan].price }}</span>
+                    <span class="font-bold text-3xl">$</span>
+                    <span class="font-bold text-4xl">{{ rate[currentPlan].price }}</span>
                 </div>
             </div>
 

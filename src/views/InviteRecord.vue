@@ -253,30 +253,30 @@ const handleCloseWithdrewRewardAmount = () => {
                 </div>
             </div>
             <div class="rounded-lg overflow-hidden shadow-sm w-[90%] ">
-                <a-table :dataSource="dataSource" :columns="columns" class="w-full" bordered />
+                <a-table :dataSource="dataSource" :columns="columns" class="w-full " bordered />
             </div>
         </div>
-        <Modal v-model:open='open' width="600px" :centered="true">
+        <GeneralModal v-model:open='open' width="600px" :centered="true">
             <div class="flex flex-col items-center justify-center gap-y-4 w-full p-6">
-                <p class="text-2xl">修改邀请码</p>
+                <p class="text-3xl">修改邀请码</p>
                 <div class="flex flex-col w-full">
-                    <div class="py-4">邀请码</div>
+                    <div class="py-4 text-lg">邀请码</div>
                     <div class="h-16">
-                        <a-input v-model:value="inviteCode" placeholder="请填写邀请码" class="h-full" />
+                        <a-input allowClear v-model:value="inviteCode" placeholder="请填写邀请码" class="h-full" />
                     </div>
                 </div>
             </div>
             <template #footer>
-                <div class="flex justify-between gap-4 w-full">
-                    <button class="py-2 px-4 rounded-lg bg-[#eeeeee] text-black w-full" @click="open = false">
+                <div class="flex justify-between gap-4 w-full text-xl px-4 pb-4">
+                    <button class="py-4 px-4 rounded-xl bg-[#eeeeee] text-black w-full" @click="open = false">
                         取消
                     </button>
-                    <button class="py-2 px-4 rounded-lg bg-[#3189ef] text-white w-full">
+                    <button :class="`py-4 px-4 rounded-xl   w-full ${inviteCode?.length>0?'bg-[#3189ef] hover:bg-blue-400  text-white':'bg-[#eeeeee] cursor-not-allowed '}`">
                         确定
                     </button>
                 </div>
             </template>
-        </Modal>
+        </GeneralModal>
         <!-- <Modal v-model:open='openRewardShow' width="400px" :centered="true">
             <div class="flex flex-col items-center justify-center gap-y-4">
 
@@ -289,18 +289,18 @@ const handleCloseWithdrewRewardAmount = () => {
             <template #footer>
             </template>
         </Modal> -->
-        <GeneralModal v-model:open='openRewardShow' width="400px" @close="handleCloseWithdrewRewardAmount">
+        <GeneralModal v-model:open='openRewardShow' width="520px" @close="handleCloseWithdrewRewardAmount">
             <template #default>
-                <div class="flex flex-col items-center justify-center gap-y-4">
-                    <p class="text-xl">邀请奖励余额</p>
-                    <p class="text-xs">你可提现的奖励金额为</p>
-                    <p class="font-bold text-3xl">${{ Number(rewardAmount).toFixed(2) }}</p>
+                <div class="flex flex-col items-center justify-center gap-y-4 pt-6 px-8">
+                    <p class="text-3xl">邀请奖励余额</p>
+                    <p class="text-normal">你可提现的奖励金额为</p>
+                    <p class="font-bold text-4xl">${{ Number(rewardAmount).toFixed(2) }}</p>
                 </div>
             </template>
             <template #footer>
-                <div class="flex items-center justify-center">
+                <div class="flex items-center justify-center pb-6 px-8 mt-8">
                     <button
-                        :class='`mt-4 px-10 py-2  rounded-lg   ${rewardAmount === 0 ? "disabled cursor-not-allowed bg-gray-100 text-gray-400" : " duration-100 bg-blue-500 hover:bg-blue-400 text-white"}`'>全部提现</button>
+                        :class='` text-xl mt-4 w-72 py-4  rounded-xl   ${rewardAmount === 0 ? "disabled cursor-not-allowed bg-gray-100 text-gray-400" : " duration-100 bg-blue-500 hover:bg-blue-400 text-white"}`'>全部提现</button>
                 </div>
             </template>
         </GeneralModal>
@@ -310,6 +310,14 @@ const handleCloseWithdrewRewardAmount = () => {
 <style scoped>
 ::v-deep(.ant-table-wrapper .ant-table-thead > tr > th) {
     background-color: white;
+    font-size: large;
+}
+
+
+::v-deep(.ant-table-wrapper .ant-table-cell ) {
+    background-color: white;
+    font-size: medium;
+    text-align: center;
 }
 
 ::v-deep(.ant-input) {
