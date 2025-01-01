@@ -133,7 +133,7 @@ onMounted(async () => {
                             <button 
                                 type="submit"
                                 html-type="submit"
-                                class="w-72 py-2 hover:bg-blue-400 duration-100 rounded-md bg-blue-500 text-white"
+                                class="w-72 h-12 py-2 hover:bg-blue-400 duration-100 rounded-md bg-blue-500 text-white"
                             >
                                 确认
                             </button>
@@ -147,6 +147,6 @@ onMounted(async () => {
 </template>
 <style scoped>
 ::v-deep(.ant-input-affix-wrapper-lg){
-    padding: 20px 30px  !important;
+    padding: 12px 30px  !important;
 }
 </style>
