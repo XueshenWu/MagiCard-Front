@@ -7,6 +7,7 @@ import { CreditCardOutlined } from '@ant-design/icons-vue';
 import CardDetail from '../components/my-card/CardDetail.vue';
 import InviteBanner from '../components/my-card/InviteBanner.vue';
 import CardHistory from '../components/my-card/CardHistory.vue';
+import GeneralModal from '../components/Modal/GeneralModal.vue';
 
 
 
@@ -14,7 +15,7 @@ import CardHistory from '../components/my-card/CardHistory.vue';
 
 
 
-
+const openHelpModal = ref(false);
 
 
 async function getCardList() {
@@ -70,7 +71,7 @@ watchEffect(async () => {
                     <template #tab>
                         <div class="h-full text-2xl font-semibold flex items-end">
                             <CreditCardOutlined />
-                           <div> {{ String(card['cardNo']).slice(-4) }}</div>
+                            <div> {{ String(card['cardNo']).slice(-4) }}</div>
                         </div>
                     </template>
 
@@ -99,9 +100,25 @@ watchEffect(async () => {
                         ${{ userInfo.limit }}
                     </span>
                 </div>
-                <a class="text-blue-500" href="#">
+                <a 
+                    @click="openHelpModal = true"
+                class="text-blue-500" href="#">
                     提升额度
                 </a>
+                <GeneralModal v-model:open="openHelpModal" width="600px" :centered="false">
+                    <template #footer>
+                        <div class="flex justify-center">
+                            
+                        </div>
+                    </template>
+                    <div class="flex flex-col items-center justify-center">
+                        <div class="text-3xl font-semibold">
+                            请扫描下方二维码联系客服
+                        </div>
+                        <img src="/QR_Wechat.webp" alt="wechat" class="" />
+
+                    </div>
+                </GeneralModal>
             </div>
             <div v-else>
                 加载中...
@@ -113,7 +130,7 @@ watchEffect(async () => {
         <div id="invite" class="mt-6 w-full">
             <InviteBanner />
         </div>
-  
+
         <div id="history" class="w-full">
             <CardHistory />
         </div>

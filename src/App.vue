@@ -97,7 +97,7 @@ onMounted(() => {
 
     message.config({
         getContainer: () => document.getElementById('scale-container'),
-        maxCount: 2
+        maxCount: 4
     })
 
     const updateScale = () => {

@@ -87,7 +87,6 @@ onMounted(async () => {
                                     {{ phoneNumber }}
                                 </div>
                             </div>
-
                         </div>
 
                         <FormItem>

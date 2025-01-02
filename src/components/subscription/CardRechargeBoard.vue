@@ -90,15 +90,11 @@ watchEffect(async () => {
                         </div>
                     </div>
                     <div class="flex flex-col">
-                        <!-- <InputNumber  :status="valid ? '' : 'error'"  class=" w-full "
-                            v-model:value="rechargeAmount">
-                            <template #prefix><span class="text-gray-400">$</span>
-                            </template>
-</InputNumber> -->
+
                         <NumberInput className="h-14 text-xl" maxLength="4" placeholder="自定义金额"
                             :status="valid ? '' : 'error'" v-model="rechargeAmount">
                             <template #prefix>
-                                <span class="text-gray-400">$</span>
+                                <div class="text-gray-400  h-11">$</div>
                             </template>
                         </NumberInput>
                         <div class="text-red-500 " v-show="!valid">
