@@ -124,41 +124,43 @@ const handleSendOtp = () => {
     if (!res) {
         message.error('请输入有效的手机号码')
         return
-    }else{
+    } else {
         captchaObj.value.showCaptcha()
     }
-  
+
 }
 
 
 </script>
 
 <template>
-    <Form ref="formRef" @finish="onFinish" @finishFailed="onFinishFailed" :model="formState" :rules="rules"
-        autocomplete="on">
-        <FormItem name="phoneNumber">
-            <PhoneNumberInput v-model:phoneNumber="formState.phoneNumber" />
-        </FormItem>
-        <FormItem name="otp">
-            <div class="flex items-center justify-between gap-x-2 h-12">
-                <Input placeholder="请输入短信验证码" class="h-10 w-48" v-model:value="formState.otp" />
-                <a class="text-blue-500 text-xs" @click="handleSendOtp">
-                    获取验证码
+    <Form class="w-full" ref="formRef" @finish="onFinish" @finishFailed="onFinishFailed" :model="formState"
+        :rules="rules" autocomplete="on">
+        <div class="w-full space-y-8 px-12">
+            <FormItem name="phoneNumber" class="w-full">
+                <PhoneNumberInput v-model:phoneNumber="formState.phoneNumber" />
+            </FormItem>
+            <FormItem name="otp">
+                <div class="flex items-center justify-between gap-x-2 h-12">
+                    <Input placeholder="请输入短信验证码" class="h-14 w-60" v-model:value="formState.otp" />
+                    <a class="text-blue-500 text-lg" @click="handleSendOtp">
+                        获取验证码
 
-                </a>
-            </div>
+                    </a>
+                </div>
 
 
-        </FormItem>
-        <FormItem>
-            <div class="flex flex-col gap-y-2">
-                <a-button class="w-full" size="large" type="primary" html-type="submit">登录</a-button>
-                <slot />
-            </div>
-        </FormItem>
+            </FormItem>
+            <FormItem>
+                <div class="flex flex-col gap-y-2">
+                    <a-button class="w-full *:text-xl " size="large" type="primary" html-type="submit">登录</a-button>
+                    <slot />
+                </div>
+            </FormItem>
 
-        <FormItem name="checkedAgreement">
-            <Agreement v-model:checkedAgreement="formState.checkedAgreement" />
-        </FormItem>
+            <FormItem name="checkedAgreement">
+                <Agreement v-model:checkedAgreement="formState.checkedAgreement" />
+            </FormItem>
+        </div>
     </Form>
 </template>

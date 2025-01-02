@@ -13,7 +13,8 @@ const modalStore = reactive({
     loginModalOpen:false,
     setLoginModalOpen: (value) => {
         loginModalOpen.value = value
-    }
+    },
+    registerRefId: null,
 })
 
 export {modalStore}

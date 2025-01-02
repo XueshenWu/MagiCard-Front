@@ -116,17 +116,17 @@ const onFinishFailed = () => {
 </script>
 
 <template>
-    <Form ref="formRef" @finish="onFinish" @finishFailed="onFinishFailed" :model="formState" :rules="rules"
+    <Form class="text-lg w-full space-y-12" ref="formRef" @finish="onFinish" @finishFailed="onFinishFailed" :model="formState" :rules="rules"
         autocomplete="on">
         <FormItem name="phoneNumber">
-            <PhoneNumberInput v-model:phoneNumber="formState.phoneNumber" />
+            <PhoneNumberInput class="h-14" v-model:phoneNumber="formState.phoneNumber" />
         </FormItem>
         <FormItem name="password">
             <PasswordInput v-model:password="formState.password" />
         </FormItem>
         <FormItem>
             <div class="flex flex-col gap-y-2">
-                <a-button class="w-full" size="large" type="primary" html-type="submit">登录</a-button>
+                <a-button class="w-full *:text-xl" size="large" type="primary" html-type="submit">登录</a-button>
                 <slot />
             </div>
         </FormItem>

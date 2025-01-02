@@ -124,41 +124,43 @@ onMounted(async () => {
 
 
 <template>
-    <div class="flex flex-col items-center justify-center h-full gap-y-4">
-        <div class="text-xl font-light">
+    <div class="flex flex-col items-center justify-center h-full gap-y-8 w-full px-12 py-6">
+        <div class="text-3xl font-light">
             输入手机号及验证码
         </div>
 
         <Form ref="formRef" @finish="onFinish" @finishFailed="onFinishFailed" :model="formState" :rules="rules"
             autocomplete="on" class="flex flex-col items-center  w-full">
-            <FormItem name="phoneNumber" class="w-full">
-                <PhoneNumberInput v-model:phoneNumber="formState.phoneNumber" />
-            </FormItem>
+            <div class="space-y-12 w-full">
+                <FormItem name="phoneNumber" class="w-full">
+                    <PhoneNumberInput v-model:phoneNumber="formState.phoneNumber" />
+                </FormItem>
 
-            <FormItem name="otp" class="w-full">
-                <div class="flex items-center justify-between gap-x-2  h-12 w-full">
-                    <Input placeholder="请输入短信验证码" class="h-10 w-48" v-model:value="formState.otp" />
-                    <a class="text-blue-500 text-xs" @click="handleSendOtp">
-                        获取验证码
+                <FormItem name="otp" class="w-full">
+                    <div class="flex items-center justify-between gap-x-2  h-12 w-full">
+                        <Input placeholder="请输入短信验证码" class="h-14 w-60" v-model:value="formState.otp" />
+                        <a class="text-blue-500 text-lg" @click="handleSendOtp">
+                            获取验证码
 
-                    </a>
-                </div>
+                        </a>
+                    </div>
 
-            </FormItem>
+                </FormItem>
 
-            <FormItem class="w-full">
-                <button @click="onFinish"
-                    class="w-full bg-blue-500 hover:bg-blue-400 duration-100 text-white rounded-md py-2">
-                    提交注册
-                </button>
-            </FormItem>
+                <FormItem class="w-full">
+                    <button @click="onFinish"
+                        class="w-full text-xl bg-blue-500 hover:bg-blue-400 duration-100 text-white rounded-xl py-3">
+                        提交注册
+                    </button>
+                </FormItem>
 
-            <FormItem name="checkedAgreement" class="w-full">
-                <Agreement v-model:checkedAgreement="formState.checkedAgreement" />
-            </FormItem>
+                <FormItem name="checkedAgreement" class="w-full">
+                    <Agreement v-model:checkedAgreement="formState.checkedAgreement" />
+                </FormItem>
+            </div>
         </Form>
 
-        <div class="text-[9px] font-light [&>*:nth-child(odd)]:text-blue-500 items-start flex flex-col gap-y-1">
+        <div class="text-md font-light [&>*:nth-child(odd)]:text-blue-500 items-start flex flex-col gap-y-1">
             <p>
                 我的个人信息是如何被处理的？
             </p>

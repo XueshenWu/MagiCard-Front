@@ -157,6 +157,8 @@ const copyAddressDetails = async () => {
     }
 };
 
+// TODO: invite link get on main page
+
 const downLoadCardDetails = async () => {
 
 

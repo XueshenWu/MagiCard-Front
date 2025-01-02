@@ -11,7 +11,7 @@ const viewType = ref('register')
 
 
 <template>
-    <div class="py-6 flex flex-col items-center justify-center gap-y-8">
+    <div class="py-6 flex flex-col items-center justify-center gap-y-8 w-full">
         <LoginCard v-if="viewType === 'login'" />
         <RegisterForm v-else />
         <div class="flex flex-row w-full items-center justify-end ">

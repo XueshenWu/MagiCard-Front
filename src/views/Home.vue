@@ -3,6 +3,21 @@
 import FeatureBoard from '../components/layout/FeatureBoard.vue';
 import FeatureBoardX from '../components/layout/FeatureBoardX.vue';
 import SubscribeButton from '../components/layout/SubscribeButton.vue';
+import { useRoute } from 'vue-router';
+import { modalStore } from '../states/modalStore';
+
+const route = useRoute();
+
+const refId = route.query.refId;
+
+if(refId!==undefined){
+    modalStore.loginModalOpen = true;
+}else{
+    modalStore.registerRefId = refId;
+}
+
+
+
 
 const features = [
     {
