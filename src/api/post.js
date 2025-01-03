@@ -6,7 +6,7 @@ const router = useRouter()
 
 export default async (url, body, token = true) => {
 
-    if (token === true && !tokenStore.toten) {
+    if (token === true && !tokenStore.value.token) {
         message.error("请先登录")
         router.replace("/login")
         return
@@ -17,7 +17,7 @@ export default async (url, body, token = true) => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": token ? tokenStore.token : ""
+                "Authorization": token ? tokenStore.value.token : ""
             },
             body: JSON.stringify(body)
         })
