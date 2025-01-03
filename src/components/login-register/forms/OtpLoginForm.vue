@@ -4,7 +4,8 @@ import PhoneNumberInput from '../../PhoneNumberInput.vue';
 import { ref, onMounted, reactive, inject } from 'vue';
 import { useRouter } from 'vue-router';
 import Agreement from '../Agreement.vue';
-import { Form, FormItem, Input, message, Modal } from 'ant-design-vue';
+import { Form, FormItem, Input, Modal } from 'ant-design-vue';
+import { message } from '../../Message.js';
 
 
 

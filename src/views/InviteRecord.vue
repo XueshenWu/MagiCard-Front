@@ -1,7 +1,7 @@
 <script setup>
 import { DownOutlined } from '@ant-design/icons-vue';
 import { ref } from 'vue';
-import { message } from 'ant-design-vue';
+import { message } from "../components/Message.js"
 
 import useClipboard from 'vue-clipboard3';
 import GeneralModal from '../components/Modal/GeneralModal.vue';

@@ -3,7 +3,8 @@ import { ref, reactive, onMounted, inject } from 'vue'
 import { useRouter } from 'vue-router'
 import PhoneNumberInput from '../../PhoneNumberInput.vue'
 import Agreement from '../Agreement.vue'
-import { Form, FormItem, Input, message } from 'ant-design-vue'
+import { Form, FormItem, Input} from 'ant-design-vue'
+import { message } from '../../Message.js'
 
 const formRef = ref(null)
 const router = useRouter()

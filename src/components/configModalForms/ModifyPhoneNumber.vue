@@ -1,8 +1,8 @@
 <script setup>
 import { reactive, ref, onMounted } from 'vue';
-import { Form, FormItem, Input, message } from 'ant-design-vue';
+import { Form, FormItem, Input } from 'ant-design-vue';
 import GeneralModal from '../Modal/GeneralModal.vue';
-
+import { message } from '../Message.js';
 
 
 const step = ref(1);

@@ -95,10 +95,14 @@ provide('lightSwitch', {
 onMounted(() => {
 
 
-    message.config({
-        getContainer: () => document.getElementById('scale-container'),
-        maxCount: 4
-    })
+    // message.config({
+    //     getContainer: () => document.getElementById('scale-container'),
+    //     maxCount: 4
+    // })
+
+ 
+
+
 
     const updateScale = () => {
         const viewport = {
@@ -190,4 +194,9 @@ body {
 </style>
 
 
+<style>
 
+
+
+
+</style>

@@ -5,7 +5,7 @@ import CardHelp from './CardHelp.vue';
 import RechargeButton from './RechargeButton.vue';
 import { useRouter } from 'vue-router';
 import useClipboard from 'vue-clipboard3';
-import { message } from 'ant-design-vue';
+import { message } from '../Message';
 import CardNumber from '../CardNumber.vue';
 import DateDisply from './DateDisply.vue';
 import html2canvas from 'html2canvas';

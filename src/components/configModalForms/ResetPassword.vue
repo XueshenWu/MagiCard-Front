@@ -3,7 +3,7 @@ import GeneralModal from '../Modal/GeneralModal.vue';
 import { Form, FormItem } from 'ant-design-vue';
 import { InputPassword, Input } from 'ant-design-vue';
 import { ref, onMounted, reactive } from 'vue';
-import { message } from 'ant-design-vue';
+import { message } from "../Message.js"
 
 const open = defineModel('openResetPasswordModal');
 const phoneNumber = ref('13800000000');

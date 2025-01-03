@@ -4,7 +4,7 @@ import SelectionBoard from '../components/subscription/SelectionBoard.vue';
 import CardRechargeBoard from '../components/subscription/CardRechargeBoard.vue';
 import GeneralModal from '../components/Modal/GeneralModal.vue';
 import CheckoutResult from '../components/CheckoutResult.vue';
-
+import {message} from '../components/Message.js';
 
 
 const price = ref(0);

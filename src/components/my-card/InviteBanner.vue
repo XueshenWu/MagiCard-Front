@@ -1,10 +1,13 @@
 <script setup>
-import { ref, watchEffect } from 'vue';
+import { h, ref, watchEffect } from 'vue';
 import { invitationInfoResp } from '../../mock/invitationInfo';
-import { Input, Button, message } from 'ant-design-vue';
+import { Input, Button } from 'ant-design-vue';
 import { useRouter } from 'vue-router';
 import useClipboard from 'vue-clipboard3';
 import GeneralModal from '../Modal/GeneralModal.vue';
+
+import { CheckCircleOutlined } from '@ant-design/icons-vue';
+import { message } from '../Message';
 
 const invitationInfo = ref(null);
 const open = ref(false);
@@ -26,6 +29,7 @@ watchEffect(async () => {
 const copyInviteCode = async () => {
     try {
         await toClipboard(invitationInfo.value.inviteCode);
+       
         message.success('复制成功');
     } catch (error) {
         message.error('复制失败');

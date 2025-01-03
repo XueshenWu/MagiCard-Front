@@ -1,9 +1,12 @@
 <script setup>
 import { ref } from 'vue';
 import GeneralModal from '../Modal/GeneralModal.vue';
-import { Form, FormItem, Select, message } from 'ant-design-vue';
+import { Form, FormItem, Select } from 'ant-design-vue';
 import CardNumber from '../CardNumber.vue';
+import { message } from '../Message';
+
 const open = defineModel('openApplyMonthlyStatementModal', { type: Boolean });
+
 const month = ref(1);
 const year = ref(2023);
 const email = ref('example@mail.com')
