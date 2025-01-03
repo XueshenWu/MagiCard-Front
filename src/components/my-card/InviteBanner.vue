@@ -28,8 +28,9 @@ watchEffect(async () => {
 
 const copyInviteCode = async () => {
     try {
-        await toClipboard(invitationInfo.value.inviteCode);
-       
+        
+        await toClipboard(`http://localhost:5173?refId=${invitationInfo.value.inviteCode}`);
+
         message.success('复制成功');
     } catch (error) {
         message.error('复制失败');
@@ -102,11 +103,9 @@ const newInviteCode = ref('');
 
                             <template #footer>
                                 <div class="flex justify-center items-center gap-x-4 my-4">
-                                    <button
-                                    @click="open = false"
+                                    <button @click="open = false"
                                         class="text-lg py-3 w-48 rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors duration-200">取消</button>
-                                    <button
-                                    @click="open = false"
+                                    <button @click="open = false"
                                         :class="`text-lg py-3 w-48 rounded-xl transition-colors duration-200 ${(newInviteCode ?? '').length > 0 ? ' bg-blue-500 text-white hover:bg-blue-400' : 'bg-gray-200 cursor-not-allowed text-gray-500'}`">确认</button>
                                 </div>
                             </template>
