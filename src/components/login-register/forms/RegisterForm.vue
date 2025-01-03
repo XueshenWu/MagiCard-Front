@@ -116,6 +116,25 @@ onMounted(async () => {
         })
 
         captcha.onSuccess(function () {
+
+            fetch('http://192.168.193.75:8085/v1/user/smsCode',{
+                method:"POST",
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    phone:formState.phoneNumber,
+                    geeTest: captcha.getValidate(),
+                    action: 'register'
+
+                })
+            }).then(res=>{
+                return res.json()
+               
+            }).then(data=>{
+                console.log(data)
+            })
+
             console.log('send otp')
             message.success('验证码发送成功')
         })
