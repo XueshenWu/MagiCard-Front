@@ -1,10 +1,8 @@
 <template>
 
 
-    <Modal 
-
-    wrapClassName="" getContainer="#scale-container" :mask="false" v-model:open="innerOpen" :width="width" :centered="centered"
-        :class="modalClass" @cancel="handleClose" @close="handleClose" :title="title">
+    <Modal  wrapClassName=" " getContainer="#scale-container" :mask="false" v-model:open="innerOpen" :width="width"
+        :centered="centered" :class="modalClass" @cancel="handleClose" @close="handleClose" :title="title">
 
         <slot>
             <div class="p-4 text-center"></div>
@@ -77,6 +75,4 @@ function handleClose() {
 .ant-modal .ant-modal-content {
     border-radius: 25px !important;
 }
-
-
 </style>

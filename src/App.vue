@@ -149,6 +149,7 @@ onMounted(() => {
 
         <div id="content-wrapper" class="scrollbar-hide w-full h-fit overflow-x-hidden " :style="{ paddingTop: headerHeight + 'px' }">
             <div id="scale-container" :class="`origin-top-left absolute left-0 `">
+               
                 <div id="app" :class="`flex flex-col min-h-[1080px]  ${lightOff ? 'brightness-50' : 'brightness-100'}`">
                     <div id="body"
                         style="background: linear-gradient(180deg, rgba(228,246,255,1) 0%, rgba(255,255,255,1) 100%);"
