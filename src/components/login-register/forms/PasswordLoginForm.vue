@@ -4,7 +4,10 @@ import PhoneNumberInput from '../../PhoneNumberInput.vue';
 import { ref, onMounted, reactive, inject } from 'vue';
 import { useRouter } from 'vue-router';
 import Agreement from '../Agreement.vue';
-import { Form, FormItem } from 'ant-design-vue';
+import { Form, FormItem, message } from 'ant-design-vue';
+import { convertGt } from '../../../utils/converGt.js';
+import post from '../../../api/post.js';
+import URL from '../../../api/api-list.js';
 
 
 const captchaReady = ref(false)
@@ -22,9 +25,22 @@ const formState = reactive({
 const login = async (captchaValidateResult) => {
     console.log(`formState ${formState}\n captchaValidateResult ${captchaValidateResult}`)
     console.log(`formState ${JSON.stringify(formState)}\n captchaValidateResult ${JSON.stringify(captchaValidateResult)}`)
-    router.replace('/cards')
-    closeModal()
-   
+
+    const body = {
+        phone: formState.phoneNumber,
+        password: formState.password,
+        geeTest: convertGt(captchaValidateResult)
+    }
+    const data = await post(URL.user.passwordLogin, body, false)
+    if (!data.err) {
+        router.replace('/cards')
+        closeModal()
+    }else{
+        message.error('登录失败') 
+    }
+
+
+
 
 }
 
@@ -116,8 +132,8 @@ const onFinishFailed = () => {
 </script>
 
 <template>
-    <Form class="text-lg w-full space-y-12" ref="formRef" @finish="onFinish" @finishFailed="onFinishFailed" :model="formState" :rules="rules"
-        autocomplete="on">
+    <Form class="text-lg w-full space-y-12" ref="formRef" @finish="onFinish" @finishFailed="onFinishFailed"
+        :model="formState" :rules="rules" autocomplete="on">
         <FormItem name="phoneNumber">
             <PhoneNumberInput class="h-14" v-model:phoneNumber="formState.phoneNumber" />
         </FormItem>

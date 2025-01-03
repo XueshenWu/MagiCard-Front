@@ -5,8 +5,10 @@ import { ref, onMounted, reactive, inject } from 'vue';
 import { useRouter } from 'vue-router';
 import Agreement from '../Agreement.vue';
 import { Form, FormItem, Input, Modal } from 'ant-design-vue';
-import { message } from '../../Message.js';
+import { message } from '../../Message.js'
+import { convertGt } from '../../../utils/converGt.js';
 
+import URL from '../../../api/api-list.js';
 
 
 const captchaReady = ref(false)
@@ -26,8 +28,26 @@ const formState = reactive({
 const login = async () => {
 
     console.log(`formState ${JSON.stringify(formState)}\n`)
-    router.replace('/cards')
-    closeModal()
+
+
+    const body = {
+        phone: formState.phoneNumber,
+        code: formState.otp
+    }
+    const data = await post(URL.user.smsLogin, body, false)
+    if (!data.err) {
+
+        //TODO: save token
+
+        message.success('登录成功')
+        closeModal()
+        router.replace('/cards')
+    } else {
+        message.error('登录失败')
+    }
+
+
+   
 
 
 }
@@ -45,9 +65,23 @@ onMounted(async () => {
             captchaReady.value = true
         })
 
-        captcha.onSuccess(function () {
-            console.log('send otp')
-            message.success('验证码发送成功')
+        captcha.onSuccess(async function () {
+
+            const captchaResult = captcha.getValidate()
+            const body = {
+                phone: formState.phoneNumber,
+                action: "login",
+                geeTest: convertGt(captchaResult)
+            }
+
+            const data = await post(URL.user.smsLogin, body, false)
+            if (!data.err) {
+                message.success('验证码发送成功')
+
+            } else {
+                message.error('验证码发送失败')
+            }
+
 
         })
     })

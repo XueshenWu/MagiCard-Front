@@ -3,6 +3,9 @@ import { reactive, ref, onMounted } from 'vue';
 import { Form, FormItem, Input } from 'ant-design-vue';
 import GeneralModal from '../Modal/GeneralModal.vue';
 import { message } from '../Message.js';
+import post from '../../api/post.js';
+import URL from '../../api/api-list.js';
+import {convertGt} from '../../utils/converGt.js'
 
 
 const step = ref(1);
@@ -16,7 +19,16 @@ const phoneNumber = ref('13800000000');
 
 const handleSendOtp = () => {
     if (captchaReady.value) {
-        captchaObj.value.showCaptcha();
+
+        const _phonenumber = step.value === 1 ? phoneNumber.value : formState.phoneNumber_new;
+
+        if (!validatePhoneNumber(_phonenumber)) {
+            message.error('请输入正确的手机号');
+            return;
+        } else {
+            captchaObj.value.showCaptcha();
+        }
+
     }
 };
 
@@ -26,7 +38,44 @@ const formState = reactive({
     otp_new: '',
 })
 
-const toStep2 = () => {
+const handleChange = (e) => {
+    formState.phoneNumber_new = e.target.value;
+}
+
+const finishModify = async () =>{
+    const body = {
+        smsCode: formState.otp_new,
+        newPhoneNumber: formState.phoneNumber_new,
+    }
+
+    const data = await post(URL.user.changePhoneNumber, body)
+    if (!data.err) {
+        message.success('修改成功');
+        open = false;
+    } else {
+        message.error('修改失败');
+    }
+}
+
+const validatePhoneNumber = (phonenumber) => {
+    return /^1[3456789]\d{9}$/.test(phonenumber)
+}
+
+const toStep2 = async () => {
+
+    const body = {
+        smsCode: formState.otp_old,
+        phoneNumber: phoneNumber.value,
+    }
+
+    const data = await post(URL.user.checkCurrentNumber, body)
+    if (!data.err) {
+        step.value = 2;
+    } else {
+        message.error(data.msg);
+    }
+
+
     step.value = 2;
 }
 
@@ -45,9 +94,22 @@ onMounted(async () => {
             captchaReady.value = true;
         });
 
-        captcha.onSuccess(function () {
-            console.log('send otp');
-            message.success('验证码发送成功');
+        captcha.onSuccess(async function () {
+
+            const gtResult = captchaObj.getValidate();
+            const body = {
+                phone: phoneNumber.value,
+                geeTest: convertGt(gtResult),
+                action: 'login'
+            };
+            //TODO:action type tbd
+
+            const data = await post(URL.user.smsCode, body, true);
+            if (!data.err) {
+                message.success('验证码发送成功');
+            } else {
+                message.error('验证码发送失败');
+            }
         });
     });
 });
@@ -115,7 +177,7 @@ onMounted(async () => {
                                     <div class="text-gray-300 font-bold text-center px-6 border-r border-gray-400">
                                         +86
                                     </div>
-                                    <div class=" font-semibold p-3 px-8 rounded outline-none w-full focus:outline-none focus:ring-0 "
+                                    <div @change="handleChange" class=" font-semibold p-3 px-8 rounded outline-none w-full focus:outline-none focus:ring-0 "
                                         contenteditable>
                                         {{ phoneNumber }}
                                     </div>
@@ -154,7 +216,7 @@ onMounted(async () => {
                             class="text-white py-4 w-full bg-blue-500 rounded-xl">
                             上一步
                         </button>
-                        <button @click="open = false" v-show="step === 2"
+                        <button @click="finishModify" v-show="step === 2"
                             class="text-white py-4 w-full bg-blue-500 rounded-xl">
                             完成
                         </button>

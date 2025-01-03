@@ -8,7 +8,7 @@ import { modalStore } from '../../states/modalStore';
 
 
 const closeModal = () => {
-   setLoginModalOpen(false);
+   modalStore.loginModalOpen = false;
 }
 
 

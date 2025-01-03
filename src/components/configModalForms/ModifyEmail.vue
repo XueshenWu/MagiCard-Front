@@ -2,6 +2,8 @@
 import { Input } from 'ant-design-vue';
 import { ref, computed } from 'vue';
 import GeneralModal from '../Modal/GeneralModal.vue';
+import post from '../../api/post';
+import URL from '../../api/api-list';
 
 const email = ref('');
 const emailError = ref('');
@@ -25,10 +27,24 @@ const validateEmail = () => {
     return true;
 };
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
     if (validateEmail()) {
-        // Submit logic here
+        
         console.log('Email is valid:', email.value);
+
+        const body = {
+            email: email.value
+        };
+
+        const res = post(URL.user.modifyEmail, body)
+        if (!res.err) {
+            console.log('Email modified successfully');
+            open.value = false;
+        } else {
+            console.log('Email modification failed');
+            open.value = false;
+        }
+
     }
 };
 

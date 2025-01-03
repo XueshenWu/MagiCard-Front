@@ -1,13 +1,14 @@
 <script setup>
 import { Button, Dropdown, Menu } from 'ant-design-vue';
 import { DownOutlined } from '@ant-design/icons-vue';
-import { ref } from 'vue';
+import { provide, ref } from 'vue';
 
 import ModifyEmail from '../configModalForms/ModifyEmail.vue';
 import ModifyCheckoutPassword from '../configModalForms/ModifyCheckoutPassword.vue';
 import ResetPassword from '../configModalForms/ResetPassword.vue';
 import ApplyMonthlyStatement from '../configModalForms/ApplyMonthlyStatement.vue';
 import ModifyPhoneNumber from '../configModalForms/ModifyPhoneNumber.vue';
+import ResetCheckoutPassword from '../configModalForms/ResetCheckoutPassword.vue';
 
 
 const openModifyPhoneNumberModal = ref(false);
@@ -15,6 +16,13 @@ const openModifyEmailModal = ref(false);
 const openModifyCheckoutPasswordModal = ref(false);
 const openResetPasswordModal = ref(false);
 const openApplyMonthlyStatementModal = ref(false);
+const openResetCheckoutPasswordModal = ref(false);
+
+const switchSelected = (i)=>{
+    handleMenuClick({key: i});
+}
+
+provide('switchSelected', switchSelected);
 
 const handleMenuClick = ({ key }) => {
     openModifyPhoneNumberModal.value = key === '1';
@@ -22,6 +30,7 @@ const handleMenuClick = ({ key }) => {
     openModifyCheckoutPasswordModal.value = key === '3';
     openResetPasswordModal.value = key === '4';
     openApplyMonthlyStatementModal.value = key === '5';
+    openResetCheckoutPasswordModal.value = key === '9';
 
 };
 
@@ -56,7 +65,7 @@ const handleMenuClick = ({ key }) => {
     <ModifyCheckoutPassword v-model:openModifyCheckoutPasswordModal="openModifyCheckoutPasswordModal" />
     <ResetPassword v-model:openResetPasswordModal="openResetPasswordModal" />
     <ApplyMonthlyStatement v-model:openApplyMonthlyStatementModal="openApplyMonthlyStatementModal" />
-
+    <ResetCheckoutPassword v-model:open="openResetCheckoutPasswordModal" />
 </template>
 
 <style scoped lang="less">

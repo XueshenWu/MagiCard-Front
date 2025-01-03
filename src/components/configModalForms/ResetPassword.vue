@@ -4,6 +4,9 @@ import { Form, FormItem } from 'ant-design-vue';
 import { InputPassword, Input } from 'ant-design-vue';
 import { ref, onMounted, reactive } from 'vue';
 import { message } from "../Message.js"
+import post from '../../api/post.js';
+import URL from '../../api/api-list.js';
+import {convertGt} from '../../utils/converGt.js'
 
 const open = defineModel('openResetPasswordModal');
 const phoneNumber = ref('13800000000');
@@ -45,19 +48,22 @@ const handleSendOtp = () => {
     }
 };
 
-const onFinish = () => {
-    formRef.value.validateFields().then(() => {
-        console.log('Form values:', formState);
-        // Add your API call here
-        // const submitData = {
-        //     newPassword: formState.password_new,
-        //     otp: formState.otp,
-        //     phoneNumber: phoneNumber.value,
-        //     captchaResult: captchaObj.value?.getValidate()
-        // };
+const onFinish = async () => {
+    const formState_validated = await formRef.value.validateFields()
+
+    const body = {
+        smsCode: formState_validated.otp,
+        newPassword: formState_validated.password_new,
+    }
+
+    const data = await post(URL.user.resetPassword, body, true);
+    if(!data.err) {
         message.success('密码重置成功');
         open.value = false;
-    });
+    } else {
+        message.error('密码重置失败');
+    }
+
 };
 
 onMounted(async () => {
@@ -72,9 +78,23 @@ onMounted(async () => {
             captchaReady.value = true;
         });
 
-        captcha.onSuccess(function () {
-            console.log('send otp');
-            message.success('验证码发送成功');
+        captcha.onSuccess(async function () {
+
+            const gtResult = captchaObj.getValidate();
+
+            const body = {
+                phone: phoneNumber.value,
+                geeTest: convertGt(gtResult),
+                action: 'login'
+            };
+            const data = post(URL.user.smsCode, body, true);
+            if(!data.err) {
+                message.success('验证码发送成功');
+            } else {
+                message.error('验证码发送失败');
+            }
+
+            //TODO:action type tbd
         });
     });
 });

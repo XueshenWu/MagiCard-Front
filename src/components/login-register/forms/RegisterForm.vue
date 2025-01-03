@@ -3,8 +3,13 @@ import { ref, reactive, onMounted, inject } from 'vue'
 import { useRouter } from 'vue-router'
 import PhoneNumberInput from '../../PhoneNumberInput.vue'
 import Agreement from '../Agreement.vue'
-import { Form, FormItem, Input} from 'ant-design-vue'
+import { Form, FormItem, Input } from 'ant-design-vue'
 import { message } from '../../Message.js'
+import { convertGt } from '../../../utils/converGt.js'
+import post from '../../../api/post.js'
+import URL from '../../../api/api-list.js'
+import { modalStore } from '../../../states/modalStore.js'
+
 
 const formRef = ref(null)
 const router = useRouter()
@@ -85,7 +90,21 @@ const onFinishFailed = () => {
 
 const register = async () => {
     console.log(`formState ${JSON.stringify(formState)}`)
-    router.replace('/cards')
+
+
+    const body = {
+        phone: formState.phoneNumber,
+        code: formState.otp,
+        inviteCode: modalStore.registerRefId
+    }
+
+
+    const data = await post(URL.user.register, body, false)
+    if (!data.err) {
+        router.replace('/')
+        message.success('注册成功!')
+    }
+
     formRef.value.resetFields()
     closeModal()
 
@@ -115,28 +134,29 @@ onMounted(async () => {
             captchaReady.value = true
         })
 
-        captcha.onSuccess(function () {
+        captcha.onSuccess(async function () {
 
-            fetch('http://192.168.193.75:8085/v1/user/smsCode',{
-                method:"POST",
-                headers:{
-                    'Content-Type':'application/json'
-                },
-                body:JSON.stringify({
-                    phone:formState.phoneNumber,
-                    geeTest: captcha.getValidate(),
-                    action: 'register'
 
-                })
-            }).then(res=>{
-                return res.json()
-               
-            }).then(data=>{
-                console.log(data)
-            })
 
-            console.log('send otp')
-            message.success('验证码发送成功')
+
+            const gtResult = captcha.getValidate()
+
+
+            const body = {
+                phone: formState.phoneNumber,
+                geeTest: convertGt(gtResult),
+                action: 'register'
+            }
+
+            const data = post(URL.user.smsCode, body, false)
+            if (!data.err) {
+                message.success('验证码发送成功')
+                
+            }
+            else {
+                message.error('验证码发送失败')
+            }
+
         })
     })
 })
