@@ -29,7 +29,8 @@ const handleMenuClick = ({ key }) => {
 </script>
 
 <template>
-    <Dropdown>
+   
+    <Dropdown class="w-[5.36vw] h-[2.24vw] flex items-center justify-center text-[1.06vw]" overlayClassName="">
         <template #overlay>
             <Menu @click='handleMenuClick'>
                 <Menu.Item key="1">修改手机号</Menu.Item>
@@ -62,5 +63,13 @@ const handleMenuClick = ({ key }) => {
 div /deep/ .ant-btn-default {
     border-color: transparent !important;
     background-color: #eeeeee !important;
+}
+
+
+
+:v-deep(.ant-dropdown-trigger){
+    height: 2.24vw !important;
+    width: 5.36vw !important;
+    border: 1px solid red !important;
 }
 </style>
