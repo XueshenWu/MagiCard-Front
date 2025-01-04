@@ -8,18 +8,20 @@ import GeneralModal from '../Modal/GeneralModal.vue';
 
 import { CheckCircleOutlined } from '@ant-design/icons-vue';
 import { message } from '../Message';
+import get from '../../api/get';
+import URL from '../../api/api-list';
 
 const invitationInfo = ref(null);
 const open = ref(false);
 const openBonusCashout = ref(false);
 const { toClipboard } = useClipboard();
 const router = useRouter();
+
+
+
 async function getinvitationInfo() {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve(invitationInfoResp.data);
-        }, 50);
-    });
+    const res = await get(URL.invitation.summary, null, true)
+    return res.data;
 }
 
 watchEffect(async () => {
@@ -53,11 +55,11 @@ const newInviteCode = ref('');
                 </div>
                 <div class="flex flex-row items-center gap-x-2 *:text-lg">
                     <div class="border-r-2 border-gray-200 pr-4">
-                        奖励金额总数: <span class="font-semibold">${{ invitationInfo['shareUseTips'].toFixed(2) }}</span>
+                        奖励金额总数: <span class="font-semibold">${{ invitationInfo.totalRewardAmount.toFixed(2) }}</span>
                     </div>
 
                     <div class="border-r-2  border-gray-200 pr-4">邀请奖励余额: <span class="font-semibold">${{
-                        invitationInfo['balance'].toFixed(2) }}</span>
+                        invitationInfo.rewardBalance.toFixed(2) }}</span>
                     </div>
 
                     <div class="text-[#3189ef] cursor-pointer" @click="() => router.replace('/invite-record')">
@@ -78,7 +80,7 @@ const newInviteCode = ref('');
 
 
                         <div class="font-bold text-black text-2xl">
-                            {{ invitationInfo['inviteCode'] }}
+                            {{ invitationInfo.inviteCode }}
                         </div>
                     </div>
 

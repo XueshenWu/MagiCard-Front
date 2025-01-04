@@ -9,6 +9,7 @@ import { message } from '../../Message.js'
 import { convertGt } from '../../../utils/converGt.js';
 
 import URL from '../../../api/api-list.js';
+import post from '../../../api/post.js';
 
 
 const captchaReady = ref(false)
@@ -17,6 +18,8 @@ const formRef = ref(null)
 const router = useRouter()
 
 
+
+const loginState = inject('loginState')
 
 const closeModal = inject('closeLoginRegisterModal');
 const formState = reactive({
@@ -34,11 +37,11 @@ const login = async () => {
         phone: formState.phoneNumber,
         code: formState.otp
     }
-    const data = await post(URL.user.smsLogin, body, false)
-    if (!data.err) {
+    const res = await post(URL.user.smsLogin, body, false)
+    if (!res.err) {
 
-        //TODO: save token
-
+        localStorage.setItem('token', res.data.token)
+        loginState.value = false
         message.success('登录成功')
         closeModal()
         router.replace('/cards')
@@ -47,7 +50,7 @@ const login = async () => {
     }
 
 
-   
+
 
 
 }
@@ -74,7 +77,7 @@ onMounted(async () => {
                 geeTest: convertGt(captchaResult)
             }
 
-            const data = await post(URL.user.smsLogin, body, false)
+            const data = await post(URL.user.smsCode, body, false)
             if (!data.err) {
                 message.success('验证码发送成功')
 

@@ -11,7 +11,7 @@ import URL from '../../../api/api-list.js'
 import { modalStore } from '../../../states/modalStore.js'
 import { useRoute } from 'vue-router'
 
-
+const loginState = inject('loginState')
 
 const {
     turnOnLight,
@@ -119,6 +119,7 @@ const register = async () => {
 
     formRef.value.resetFields()
     turnOnLight()
+    loginState.value = false
     closeModal()
 
 

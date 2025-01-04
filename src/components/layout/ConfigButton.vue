@@ -24,12 +24,19 @@ const switchSelected = (i)=>{
 
 provide('switchSelected', switchSelected);
 
+
+
 const handleMenuClick = ({ key }) => {
     openModifyPhoneNumberModal.value = key === '1';
     openModifyEmailModal.value = key === '2';
     openResetCheckoutPasswordModal.value = key === '3';
     openResetPasswordModal.value = key === '4';
     openApplyMonthlyStatementModal.value = key === '5';
+
+    if(key === '7'){
+        localStorage.removeItem('token');
+        window.location.reload();
+    }
 
 };
 

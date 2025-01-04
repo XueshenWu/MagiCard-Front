@@ -1,23 +1,151 @@
 <script setup>
 import { DownOutlined } from '@ant-design/icons-vue';
-import { ref } from 'vue';
+import { computed, ref, watchEffect } from 'vue';
 import { message } from "../components/Message.js"
+import URL from '../api/api-list.js';
 
 import useClipboard from 'vue-clipboard3';
 import GeneralModal from '../components/Modal/GeneralModal.vue';
-const open = ref(false);
-const openRewardShow = ref(false);
-let rewardAmount = ref(0.00);
-let inviteCode = ref("ASIU23");
-let inviteCodeModal = ref("");
+import get from '../api/get.js';
+import { Table } from 'ant-design-vue';
+import { watch } from 'vue';
+import post from '../api/post.js';
 
-let inviteStatistics = ref({
+
+// const open = ref(false);
+// const openRewardShow = ref(false);
+// let rewardAmount = ref(0.00);
+// let inviteCode = ref("ASIU23");
+// let inviteCodeModal = ref("");
+
+const inviteStatistics = ref({
     rewardBalance: 0,
     monthlyReferrals: 0,
     totalReferrals: 0,
     rechargedUsers: 0,
-    totalRewardAmount: 0
+    totalRewardAmount: 0,
+    inviteCode: ""
 });
+
+const status_to_number = {
+    按状态筛选: undefined,
+    仅注册: 1,
+    未支付: 2,
+    已支付: 3
+}
+
+const date_to_number = (t) => {
+
+    if (t === "按月筛选" || t === "全部") {
+        return undefined;
+    }
+    const [year, month] = t.match(/(\d{4})年(\d{1,2})月/).slice(1, 3);
+    return `${year}-${month.padStart(2, '0')}`;
+}
+
+const selectByStatus = ref("按状态筛选");
+const selectByMonth = ref("按月筛选");
+
+const pageSize = 10;
+
+const total = ref(0);
+
+const current = ref(1);
+const dataSource = ref([
+    {
+        queryDate: '2024-12-28 07:24',
+        status: "已支付",
+        invitedPhoneNumber: '151****1712',
+        rewardAmount: '+$2.00',
+    }
+]);
+
+
+const update = async ([current, selectByStatus, selectByMonth]) => {
+    const res = await post(URL.invitation.invitationList, {
+        pageSize: pageSize,
+        pageNum: current,
+        invitationType: status_to_number[selectByStatus],
+        month: date_to_number(selectByMonth)
+
+    }, true)
+    if (res.err) {
+        message.error('获取邀请信息失败')
+    } else {
+        dataSource.value = res.rows.map((item) => {
+
+            const formattedDate = new Date(item.queryDate);
+            const year = formattedDate.getFullYear();
+            const month = String(formattedDate.getMonth() + 1).padStart(2, '0');
+            const day = String(formattedDate.getDate()).padStart(2, '0');
+            const hours = String(formattedDate.getHours()).padStart(2, '0');
+            const minutes = String(formattedDate.getMinutes()).padStart(2, '0');
+            const formattedDateString = `${year}-${month}-${day} ${hours}:${minutes}`;
+
+            return {
+                queryDate: formattedDateString,
+                status: item.status,
+                invitedPhoneNumber: item.invitedPhoneNumber,
+                rewardAmount: item.rewardAmount,
+            }
+        });
+        total.value = res.total;
+    }
+}
+
+
+watch([current, selectByStatus, selectByMonth], (val) => update(val), { immediate: true })
+
+
+// watch([current, selectByStatus], async (val) => {
+//     const res = await post(URL.invitation.invitationList, {
+//         pageSize: pageSize,
+//         pageNum: val[0],
+//         invitationType: status_to_number[val[1]]
+
+//     }, true)
+//     if (res.err) {
+//         message.error('获取邀请信息失败')
+//     } else {
+//         dataSource.value = res.rows.map((item) => {
+
+//             const formattedDate = new Date(item.queryDate);
+//             const year = formattedDate.getFullYear();
+//             const month = String(formattedDate.getMonth() + 1).padStart(2, '0');
+//             const day = String(formattedDate.getDate()).padStart(2, '0');
+//             const hours = String(formattedDate.getHours()).padStart(2, '0');
+//             const minutes = String(formattedDate.getMinutes()).padStart(2, '0');
+//             const formattedDateString = `${year}-${month}-${day} ${hours}:${minutes}`;
+
+//             return {
+//                 queryDate: formattedDateString,
+//                 status: item.status,
+//                 invitedPhoneNumber: item.invitedPhoneNumber,
+//                 rewardAmount: item.rewardAmount,
+//             }
+//         });
+//         total.value = res.total;
+//     }
+// }, { immediate: true })
+
+
+
+
+
+
+
+watchEffect(async () => {
+    const res = (await get(URL.invitation.summary, null, true))
+    if (res.err) {
+        message.error('获取邀请信息失败')
+    } else {
+        inviteStatistics.value = res.data;
+    }
+});
+
+
+
+
 const statusMap = {
     all: '全部',
     registered: '仅注册',
@@ -59,8 +187,14 @@ function generatePreviousMonths() {
 }
 const months = ref(generatePreviousMonths());
 
-let selectByStatus = ref("按状态筛选");
-let selectByMonth = ref("按月筛选");
+
+
+
+
+const invitationTypeNumber = computed(selectByStatus, () => {
+    return status_to_number[selectByStatus.value]
+}, { immediate: true })
+
 const onClickStatus = ({ key }) => {
     selectByStatus.value = statusMap[key];
 };
@@ -69,33 +203,14 @@ const onClickTime = ({ key }) => {
     selectByMonth.value = months.value[key];
 };
 
-const dataSource = [
-    {
-        rewardTime: '2024-12-28 07:24',
-        status: "已支付",
-        inviteePhoneNumber: '151****1712',
-        rewardAmount: '+$2.00',
-    },
-    {
-        rewardTime: '2024-12-28 07:24',
-        status: "已支付",
-        inviteePhoneNumber: '151****1712',
-        rewardAmount: '+$2.00',
-    },
-    {
-        rewardTime: '2024-12-28 07:24',
-        status: "已支付",
-        inviteePhoneNumber: '151****1712',
-        rewardAmount: '+$2.00',
-    }
-];
+
 
 const columns = [
     {
         title: '日期',
-        dataIndex: 'rewardTime',
-        key: 'rewardTime',
-        sorter: true
+        dataIndex: 'queryDate',
+        key: 'queryDate',
+        sorter: (a, b) => a.queryDate.localeCompare(b.queryDate),
     },
     {
         title: '状态',
@@ -104,7 +219,7 @@ const columns = [
     },
     {
         title: '被邀请人',
-        dataIndex: 'inviteePhoneNumber',
+        dataIndex: 'invitedPhoneNumber',
         key: 'inviteePhoneNumber',
     },
     {
@@ -153,12 +268,12 @@ const handleCloseWithdrewRewardAmount = () => {
                 </div>
                 <div class="flex flex-row justify-between  py-5">
                     <div class="flex flex-row">
-                        <div class="text-3xl font-semibold text-black">{{ inviteCode }}</div>
+                        <div class="text-3xl font-semibold text-black">{{ inviteStatistics.inviteCode }}</div>
                         <img src="/invitation/change_code.png" class="w-7 h-7 ml-2 mt-1 cursor-pointer"
                             @click="handleOpenChangeInvitationCode">
                     </div>
                     <div>
-                        <button @click="() => copy(inviteCode)"
+                        <button @click="() => copy(inviteStatistics.inviteCode)"
                             class="bg-[#eeeeee] text-black px-8 py-3 rounded-lg duration-100 cursor-pointer text-xl font-normal">
                             复制链接
                         </button>
@@ -247,12 +362,18 @@ const handleCloseWithdrewRewardAmount = () => {
 
                         <img :style="{ transform: `rotate(${rotateDegree}deg)`, transition: 'transform 0.5s ease' }"
                             :class='` w-4 h-4`' src="/invitation/refresh.png" alt="refresh" />
-                        <span class="text-lg">刷新</span>
+                        <span @click="() => update([current, selectByStatus, selectByMonth])" class="text-lg">刷新</span>
                     </div>
                 </div>
             </div>
             <div class="rounded-lg overflow-hidden shadow-sm w-[90%] ">
-                <a-table :dataSource="dataSource" :columns="columns" class="w-full " bordered />
+                <Table @change="(pagination, filters, sorter, { action, currentDataSource }) => {
+                    current = pagination.current
+                }" :pagination="{
+                    current: current,
+                    pageSize: pageSize,
+                    total: total,
+                }" :dataSource="dataSource" :columns="columns" class="w-full " bordered />
             </div>
         </div>
         <GeneralModal v-model:open='open' width="600px" :centered="false">
@@ -270,14 +391,16 @@ const handleCloseWithdrewRewardAmount = () => {
                     <button class="py-4 px-4 rounded-xl bg-[#eeeeee] text-black w-full" @click="open = false">
                         取消
                     </button>
-                    <button :class="`py-4 px-4 rounded-xl   w-full ${inviteCode?.length>0?'bg-[#3189ef] hover:bg-blue-400  text-white':'bg-[#eeeeee] cursor-not-allowed '}`">
+                    <button
+                        :class="`py-4 px-4 rounded-xl   w-full ${inviteCode?.length > 0 ? 'bg-[#3189ef] hover:bg-blue-400  text-white' : 'bg-[#eeeeee] cursor-not-allowed '}`">
                         确定
                     </button>
                 </div>
             </template>
         </GeneralModal>
 
-        <GeneralModal v-model:open='openRewardShow' width="520px" @close="handleCloseWithdrewRewardAmount" :centered="false">
+        <GeneralModal v-model:open='openRewardShow' width="520px" @close="handleCloseWithdrewRewardAmount"
+            :centered="false">
             <template #default>
                 <div class="flex flex-col items-center justify-center gap-y-4 pt-6 px-8">
                     <p class="text-3xl">邀请奖励余额</p>
@@ -302,7 +425,7 @@ const handleCloseWithdrewRewardAmount = () => {
 }
 
 
-::v-deep(.ant-table-wrapper .ant-table-cell ) {
+::v-deep(.ant-table-wrapper .ant-table-cell) {
     background-color: white;
     font-size: medium;
     text-align: center;

@@ -4,8 +4,20 @@ import { Button } from 'ant-design-vue';
 import { RouterLink } from 'vue-router';
 import ConfigButton from './ConfigButton.vue';
 import LoginButton from '../login-register/LoginButton.vue';
+import { provide, ref, watchEffect } from 'vue';
 
-const token = localStorage.getItem('token');
+
+const login = ref();
+
+watchEffect(() => {
+    login.value = localStorage.getItem('token') ? false:true
+})
+
+
+provide('loginState', login)
+
+
+
 
 
 </script>
@@ -22,7 +34,7 @@ const token = localStorage.getItem('token');
         </RouterLink>
     </div>
     <div class="w-[5.36vw] h-[2.24vw]">
-        <ConfigButton v-if="token !== null" />
+        <ConfigButton v-if="!login" />
         <LoginButton v-else />
     </div>
 </div>

@@ -16,6 +16,10 @@ const URL = {
         modifyEmail:`${BASE_URL}/v1/user/modifyEmail`,
         checkCurrentNumber:`${BASE_URL}/v1/user/checkCurrentNumber`,
         userInfo:`${BASE_URL}/v1/user/userInfo`,
+    },
+    invitation:{
+        summary:`${BASE_URL}/v1/invitation/summary`,
+        invitationList:`${BASE_URL}/v1/invitation/List`,
     }
 }
 

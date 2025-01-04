@@ -55,6 +55,9 @@ const post = async (url, body, token = true) => {
                 message.error("请求的地址不存在")
                 router.replace('/')
                 break
+            case 500:
+                message.error(res.msg)
+                break
             default:
                 message.error('出现未知错误，请稍后再试')
                 return { err: true, data: null }

@@ -17,6 +17,8 @@ const formRef = ref(null)
 const router = useRouter()
 const closeModal = inject('closeLoginRegisterModal');
 
+const loginState = inject('loginState')
+
 const gtPromise = ref(null)
 
 
@@ -39,7 +41,7 @@ const login = async (captchaValidateResult, formState) => {
     if (!res.err) {
      
         localStorage.setItem('token', res.data.token)
-
+        loginState.value = false
         router.replace('/cards')
 
     } else {
