@@ -1,9 +1,12 @@
 <script setup>
-import { tokenStore } from '../../states/tokenStore';
+
 import { Button } from 'ant-design-vue';
 import { RouterLink } from 'vue-router';
 import ConfigButton from './ConfigButton.vue';
 import LoginButton from '../login-register/LoginButton.vue';
+
+const token = localStorage.getItem('token');
+
 
 </script>
 
@@ -19,7 +22,7 @@ import LoginButton from '../login-register/LoginButton.vue';
         </RouterLink>
     </div>
     <div class="w-[5.36vw] h-[2.24vw]">
-        <ConfigButton v-if="tokenStore.token !== null" />
+        <ConfigButton v-if="token !== null" />
         <LoginButton v-else />
     </div>
 </div>

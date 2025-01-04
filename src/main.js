@@ -13,8 +13,6 @@ import NotFound from './views/NotFound.vue'
 import OpenCard from './views/OpenCard.vue'
 import Record from './views/Record.vue'
 import InviteRecord from './views/InviteRecord.vue'
-import { tokenStore } from './states/tokenStore'
-import { modalStore } from './states/modalStore'
 
 const routes = [
     { path: "/", component: Home },
@@ -32,23 +30,7 @@ const router = createRouter({
     routes
 })
 
-router.beforeEach((to, from)=>{
 
-    console.log(to.path)
-    console.log(tokenStore.token)
-    console.log(tokenStore)
-    if(to.path === '/' && !!tokenStore.value.token){
-        return '/cards'
-    }
-
-    if(to.path !== '/' && !tokenStore.value.token){
-
-        modalStore.loginModalOpen = true
-        return '/'
-        
-    }
-    return true
-})
 
 
 

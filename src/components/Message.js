@@ -15,7 +15,7 @@ export const message = {
     },
     error: (content) => {
         ant_message.error({
-            content: "",
+            content: " ",
             icon: h(MessageIcon, { success: false, content }),
         })
     },

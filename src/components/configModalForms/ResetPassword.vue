@@ -2,11 +2,21 @@
 import GeneralModal from '../Modal/GeneralModal.vue';
 import { Form, FormItem } from 'ant-design-vue';
 import { InputPassword, Input } from 'ant-design-vue';
-import { ref, onMounted, reactive } from 'vue';
+import { ref, onMounted, reactive, watchEffect } from 'vue';
 import { message } from "../Message.js"
 import post from '../../api/post.js';
 import URL from '../../api/api-list.js';
-import {convertGt} from '../../utils/converGt.js'
+import { convertGt } from '../../utils/converGt.js'
+import { watch } from 'less';
+
+
+
+const userInfo = ref(null);
+
+watchEffect(async () => {
+    userInfo.value = await post(URL.user.userInfo, {}, true);
+})
+
 
 const open = defineModel('openResetPasswordModal');
 const phoneNumber = ref('13800000000');
@@ -57,7 +67,7 @@ const onFinish = async () => {
     }
 
     const data = await post(URL.user.resetPassword, body, true);
-    if(!data.err) {
+    if (!data.err) {
         message.success('密码重置成功');
         open.value = false;
     } else {
@@ -88,7 +98,7 @@ onMounted(async () => {
                 action: 'login'
             };
             const data = post(URL.user.smsCode, body, true);
-            if(!data.err) {
+            if (!data.err) {
                 message.success('验证码发送成功');
             } else {
                 message.error('验证码发送失败');
@@ -106,21 +116,15 @@ onMounted(async () => {
             <div class="text-4xl">
                 重置登陆密码
             </div>
-            <Form 
-                ref="formRef" 
-                :model="formState" 
-                :rules="rules" 
-                autocomplete="on"
-                @finish="onFinish"
-                name="password_reset_form"
-            >
+            <Form ref="formRef" :model="formState" :rules="rules" autocomplete="on" @finish="onFinish"
+                name="password_reset_form">
                 <div class="flex flex-col items-center justify-center w-full gap-y-2">
                     <div class="flex flex-col items-center justify-center w-full gap-y-2">
                         <div class="text-[#595a61] py-3 text-xl">
                             请输入您的新登陆密码
                         </div>
                         <FormItem name="password_new">
-                            <InputPassword class="w-72"  v-model:value="formState.password_new" size="large" />
+                            <InputPassword class="w-72" v-model:value="formState.password_new" size="large" />
                         </FormItem>
                     </div>
                     <div class="flex flex-col items-center justify-start w-full gap-y-2">
@@ -150,11 +154,8 @@ onMounted(async () => {
                             </div>
                         </FormItem>
                         <FormItem>
-                            <button 
-                                type="submit"
-                                html-type="submit"
-                                class="w-72 h-12 py-2 hover:bg-blue-400 duration-100 rounded-md bg-blue-500 text-white"
-                            >
+                            <button type="submit" html-type="submit"
+                                class="w-72 h-12 py-2 hover:bg-blue-400 duration-100 rounded-md bg-blue-500 text-white">
                                 确认
                             </button>
                         </FormItem>
@@ -166,7 +167,7 @@ onMounted(async () => {
     </GeneralModal>
 </template>
 <style scoped>
-::v-deep(.ant-input-affix-wrapper-lg){
-    padding: 12px 30px  !important;
+::v-deep(.ant-input-affix-wrapper-lg) {
+    padding: 12px 30px !important;
 }
 </style>

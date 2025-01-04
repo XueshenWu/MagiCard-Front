@@ -8,9 +8,8 @@ import { ref } from "vue"
  */
 
 const tokenStore = ref({
-    token:"token",
+    token:localStorage.getItem('token') ?? null,
     setToken(token){
-        this.token = token
         localStorage.setItem('token',token)
     },
 })

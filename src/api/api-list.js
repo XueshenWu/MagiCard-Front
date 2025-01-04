@@ -15,6 +15,7 @@ const URL = {
         modifyPhoneNumber:`${BASE_URL}/v1/user/modifyPhoneNumber`,
         modifyEmail:`${BASE_URL}/v1/user/modifyEmail`,
         checkCurrentNumber:`${BASE_URL}/v1/user/checkCurrentNumber`,
+        userInfo:`${BASE_URL}/v1/user/userInfo`,
     }
 }
 

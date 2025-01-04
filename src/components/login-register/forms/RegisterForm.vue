@@ -9,12 +9,22 @@ import { convertGt } from '../../../utils/converGt.js'
 import post from '../../../api/post.js'
 import URL from '../../../api/api-list.js'
 import { modalStore } from '../../../states/modalStore.js'
+import { useRoute } from 'vue-router'
 
+
+
+const {
+    turnOnLight,
+    turnOffLight
+} = inject('lightSwitch');
 
 const formRef = ref(null)
 const router = useRouter()
 const captchaReady = ref(false)
 const captchaObj = ref(null)
+const route = useRoute()
+
+
 
 
 const closeModal = inject('closeLoginRegisterModal');
@@ -89,23 +99,26 @@ const onFinishFailed = () => {
 }
 
 const register = async () => {
-    console.log(`formState ${JSON.stringify(formState)}`)
+    // console.log(`formState ${JSON.stringify(formState)}`)
 
 
     const body = {
         phone: formState.phoneNumber,
         code: formState.otp,
-        inviteCode: modalStore.registerRefId
+        inviteCode: route.query.refId ?? ""
     }
 
 
-    const data = await post(URL.user.register, body, false)
-    if (!data.err) {
+    const res = await post(URL.user.register, body, false)
+    if (!res.err) {
         router.replace('/')
+
+        localStorage.setItem('token', res.data.token)
         message.success('注册成功!')
     }
 
     formRef.value.resetFields()
+    turnOnLight()
     closeModal()
 
 
@@ -151,7 +164,7 @@ onMounted(async () => {
             const data = post(URL.user.smsCode, body, false)
             if (!data.err) {
                 message.success('验证码发送成功')
-                
+
             }
             else {
                 message.error('验证码发送失败')
@@ -188,7 +201,7 @@ onMounted(async () => {
                 </FormItem>
 
                 <FormItem class="w-full">
-                    <button @click="onFinish"
+                    <button htmlType="submit"
                         class="w-full text-xl bg-blue-500 hover:bg-blue-400 duration-100 text-white rounded-xl py-3">
                         提交注册
                     </button>

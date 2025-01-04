@@ -1,14 +1,18 @@
 <script setup>
 import { Button } from 'ant-design-vue';
-import { ref, provide, nextTick } from 'vue';
+import { ref, provide, nextTick, inject } from 'vue';
 import CardContainer from './CardContainer.vue';
 import GeneralModal from '../Modal/GeneralModal.vue';
 import { modalStore } from '../../states/modalStore';
-
+const {
+    turnOnLight,
+    turnOffLight
+} = inject('lightSwitch');
 
 
 const closeModal = () => {
    modalStore.loginModalOpen = false;
+   turnOnLight();
 }
 
 

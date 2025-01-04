@@ -8,8 +8,8 @@ const {success, content} = defineProps(['content', 'success'])
 
 <template>
     <div class="flex flex-row items-center justify-center text-[1vw] gap-x-4">
-        <img v-if="success" src="/service-compatibility/support.png" alt="message icon" class="w-[1vw] h-[1vw]" />
-        <img v-else src="/service-compatibility/not-support.png" alt="message icon" class="w-[1vw] h-[1vw]" />
+        <img v-if="success" src="/public/service-compatibility/support.png" alt="message icon" class="w-[1vw] h-[1vw]" />
+        <img v-else src="/public/service-compatibility/not-support.png" alt="message icon" class="w-[1vw] h-[1vw]" />
         <div>
             {{ content }}
 

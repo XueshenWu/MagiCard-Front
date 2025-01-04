@@ -75,16 +75,21 @@ onMounted(() => {
 
 <!-- App.vue -->
 <script setup>
-import { RouterLink, RouterView, useRoute } from 'vue-router';
+import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router';
 import { message } from 'ant-design-vue';
 import Navbar from './components/layout/Navbar.vue';
 import { computed, onMounted, onUnmounted, ref, provide } from 'vue';
 import Header from './components/layout/Header.vue';
 
+import { modalStore } from './states/modalStore';
+
 const route = useRoute();
 const path = computed(() => route.path);
 const headerHeight = ref(0); // 16 * 4 = 64px (h-16)
 const lightOff = ref(false);
+const router = useRouter();
+
+
 
 provide('lightSwitch', {
     turnOnLight: () => lightOff.value = false,
@@ -100,7 +105,7 @@ onMounted(() => {
     //     maxCount: 4
     // })
 
- 
+
 
 
 
@@ -143,13 +148,14 @@ onMounted(() => {
 
 <template>
 
-    <div  class="scrollbar-hide ">
+    <div class="scrollbar-hide ">
         <Header :class="`fixed top-0 left-0 w-full z-50  ${lightOff ? 'brightness-50' : 'brightness-100'}`" />
 
 
-        <div id="content-wrapper" class="scrollbar-hide w-full h-fit overflow-x-hidden " :style="{ paddingTop: headerHeight + 'px' }">
+        <div id="content-wrapper" class="scrollbar-hide w-full h-fit overflow-x-hidden "
+            :style="{ paddingTop: headerHeight + 'px' }">
             <div id="scale-container" :class="`origin-top-left absolute left-0 `">
-               
+
                 <div id="app" :class="`flex flex-col min-h-[1080px]  ${lightOff ? 'brightness-50' : 'brightness-100'}`">
                     <div id="body"
                         style="background: linear-gradient(180deg, rgba(228,246,255,1) 0%, rgba(255,255,255,1) 100%);"
@@ -189,15 +195,12 @@ body {
 
 /* For IE, Edge and Firefox */
 .scrollbar-hide {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
 }
 </style>
 
 
-<style>
-
-
-
-
-</style>
+<style></style>

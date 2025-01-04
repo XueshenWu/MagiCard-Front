@@ -31,7 +31,7 @@ onMounted(async () => {
         captcha.onSuccess(function () {
             formRef.value.validateFields().then(() => {
                 const captchaResult = captcha.getValidate();
-                console.log('Form values:', formState);
+              
                 
                 formRef.value.resetFields();
             });

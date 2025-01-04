@@ -1,7 +1,7 @@
 <script setup>
 import PasswordInput from '../PasswordInput.vue';
 import PhoneNumberInput from '../../PhoneNumberInput.vue';
-import { ref, onMounted, reactive, inject } from 'vue';
+import { ref, onMounted, reactive, inject, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
 import Agreement from '../Agreement.vue';
 import { Form, FormItem, message } from 'ant-design-vue';
@@ -10,11 +10,15 @@ import post from '../../../api/post.js';
 import URL from '../../../api/api-list.js';
 
 
+
 const captchaReady = ref(false)
 const captchaObj = ref(null)
 const formRef = ref(null)
 const router = useRouter()
 const closeModal = inject('closeLoginRegisterModal');
+
+const gtPromise = ref(null)
+
 
 const formState = reactive({
     phoneNumber: '',
@@ -22,25 +26,26 @@ const formState = reactive({
     checkedAgreement: false
 })
 
-const login = async (captchaValidateResult) => {
-    console.log(`formState ${formState}\n captchaValidateResult ${captchaValidateResult}`)
-    console.log(`formState ${JSON.stringify(formState)}\n captchaValidateResult ${JSON.stringify(captchaValidateResult)}`)
+const login = async (captchaValidateResult, formState) => {
+
 
     const body = {
         phone: formState.phoneNumber,
         password: formState.password,
         geeTest: convertGt(captchaValidateResult)
     }
-    const data = await post(URL.user.passwordLogin, body, false)
-    if (!data.err) {
+    const res = await post(URL.user.passwordLogin, body, false)
+
+    if (!res.err) {
+     
+        localStorage.setItem('token', res.data.token)
+
         router.replace('/cards')
-        closeModal()
-    }else{
-        message.error('登录失败') 
+
+    } else {
+        message.error('登录失败')
     }
-
-
-
+    closeModal()
 
 }
 
@@ -60,9 +65,12 @@ onMounted(async () => {
         captcha.onSuccess(function () {
             formRef.value.resetFields();
             const captchaResult = captcha.getValidate()
-            login(captchaResult)
+            gtPromise.value.resolve(captchaResult)
+        })
 
-
+        captcha.onFail(function () {
+            gtPromise.value.reject()
+            console.log('onFail')
         })
     })
 })
@@ -112,15 +120,27 @@ const rules = {
     ]
 };
 
-const onFinish = () => {
-    formRef.value
-        .validate()
-        .then(() => {
-            captchaObj.value.showCaptcha()
-        })
-        .catch(() => {
-            console.log('error')
-        })
+const onFinish = async () => {
+
+
+    const _formState = await formRef.value.validate()
+    const gtResult = await new Promise(async (resolve, reject) => {
+        gtPromise.value = { resolve, reject }
+        await nextTick()
+        captchaObj.value.showCaptcha()
+
+    })
+
+    if (gtResult === null) {
+        return
+    }
+
+
+    await login(gtResult, _formState)
+    gtResult.value = null
+    gtPromise.value = null
+    await nextTick()
+
 
 }
 

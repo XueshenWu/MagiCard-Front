@@ -65,7 +65,7 @@ watch(
 
 function handleClose() {
     innerOpen.value = false;
-
+    turnOnLight()
     emit('update:open', false)
     emit('close');
 }

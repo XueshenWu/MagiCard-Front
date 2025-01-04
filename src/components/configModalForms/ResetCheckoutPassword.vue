@@ -61,8 +61,10 @@ const handleSendOtp = () => {
 
 
 const onFinish = async () => {
-    //TODO: fill the body
-    const body = {}
+    const body = {
+        smsCode:formState.otp,
+        newPassword: formState.checkoutpwd_new,
+    }
     const data = await post(URL.user.resetPaymentPassword, body)
     if (!data.err) {
         message.success('修改成功');
