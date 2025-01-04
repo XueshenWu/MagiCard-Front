@@ -1,11 +1,11 @@
 <script setup>
-import { reactive, ref, onMounted } from 'vue';
+import { reactive, ref, onMounted, watchEffect } from 'vue';
 import { Form, FormItem, Input } from 'ant-design-vue';
 import GeneralModal from '../Modal/GeneralModal.vue';
 import { message } from '../Message.js';
 import post from '../../api/post.js';
 import URL from '../../api/api-list.js';
-import {convertGt} from '../../utils/converGt.js'
+import { convertGt } from '../../utils/converGt.js'
 
 
 const step = ref(1);
@@ -15,12 +15,19 @@ const captchaReady = ref(false);
 const captchaObj = ref(null);
 const open = defineModel('openModifyPhoneNumberModal');
 
-const phoneNumber = ref('13800000000');
+const userInfo = ref(null);
+
+watchEffect(async () => {
+    userInfo.value = (await post(URL.user.userInfo, {}, true)).data
+})
+
+
+
 
 const handleSendOtp = () => {
     if (captchaReady.value) {
 
-        const _phonenumber = step.value === 1 ? phoneNumber.value : formState.phoneNumber_new;
+        const _phonenumber = step.value === 1 ? userInfo.value.phoneNumber : formState.phoneNumber_new;
 
         if (!validatePhoneNumber(_phonenumber)) {
             message.error('请输入正确的手机号');
@@ -42,7 +49,7 @@ const handleChange = (e) => {
     formState.phoneNumber_new = e.target.value;
 }
 
-const finishModify = async () =>{
+const finishModify = async () => {
     const body = {
         smsCode: formState.otp_new,
         newPhoneNumber: formState.phoneNumber_new,
@@ -65,7 +72,7 @@ const toStep2 = async () => {
 
     const body = {
         smsCode: formState.otp_old,
-        phoneNumber: phoneNumber.value,
+        phoneNumber: userInfo.value.phoneNumber,
     }
 
     const data = await post(URL.user.checkCurrentNumber, body)
@@ -96,13 +103,13 @@ onMounted(async () => {
 
         captcha.onSuccess(async function () {
 
-            const gtResult = captchaObj.getValidate();
+            const gtResult = captcha.getValidate();
             const body = {
-                phone: phoneNumber.value,
+                phone: step.value === 1 ? userInfo.value.phoneNumber : formState.phoneNumber_new,
                 geeTest: convertGt(gtResult),
                 action: 'login'
             };
-            //TODO:action type tbd
+        
 
             const data = await post(URL.user.smsCode, body, true);
             if (!data.err) {
@@ -118,7 +125,7 @@ onMounted(async () => {
 
 
 <template>
-    <GeneralModal v-model:open="open" width="610px">
+    <GeneralModal v-if="userInfo" v-model:open="open" width="610px">
         <div class="p-8 gap-y-12  flex flex-col items-center justify-center">
 
             <div class="text-center flex flex-col gap-y-4">
@@ -146,7 +153,7 @@ onMounted(async () => {
                                     +86
                                 </div>
                                 <div class="w-full px-8 font-semibold ">
-                                    {{ phoneNumber }}
+                                    {{ userInfo.phoneNumber }}
                                 </div>
                             </div>
                         </div>
@@ -177,9 +184,10 @@ onMounted(async () => {
                                     <div class="text-gray-300 font-bold text-center px-6 border-r border-gray-400">
                                         +86
                                     </div>
-                                    <div @change="handleChange" class=" font-semibold p-3 px-8 rounded outline-none w-full focus:outline-none focus:ring-0 "
+                                    <div @change="handleChange"
+                                        class=" font-semibold p-3 px-8 rounded outline-none w-full focus:outline-none focus:ring-0 "
                                         contenteditable>
-                                        {{ phoneNumber }}
+                                        {{ formState.phoneNumber_new }}
                                     </div>
 
                                 </div>
@@ -230,6 +238,9 @@ onMounted(async () => {
 
 
     </GeneralModal>
+    <div v-else>
+        加载中...
+    </div>
 
 
 </template>

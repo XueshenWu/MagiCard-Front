@@ -17,19 +17,21 @@ const post = async (url, body, token = true) => {
 
     try {
 
+        const headers = {
+            "Content-Type": "application/json",
+            "Authorization": token ? localStorage.getItem('token') : ""
+        }
+
         const resp = await fetch(url, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": token ? localStorage.getItem('token') : ""
-            },
+            headers,
             body: JSON.stringify(body)
         })
         console.log(`
             ---------------POST Request----------------
             url: ${url},
             body: ${JSON.stringify(body)},
-            headers: ${JSON.stringify(resp.headers)},
+            headers: ${JSON.stringify(headers)},
             -------------------------------------------
             `)
 

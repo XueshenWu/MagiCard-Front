@@ -27,10 +27,9 @@ provide('switchSelected', switchSelected);
 const handleMenuClick = ({ key }) => {
     openModifyPhoneNumberModal.value = key === '1';
     openModifyEmailModal.value = key === '2';
-    openModifyCheckoutPasswordModal.value = key === '3';
+    openResetCheckoutPasswordModal.value = key === '3';
     openResetPasswordModal.value = key === '4';
     openApplyMonthlyStatementModal.value = key === '5';
-    openResetCheckoutPasswordModal.value = key === '9';
 
 };
 
@@ -59,13 +58,13 @@ const handleMenuClick = ({ key }) => {
 
     </Dropdown>
 
-    <ModifyPhoneNumber v-model:openModifyPhoneNumberModal="openModifyPhoneNumberModal" />
-    <ModifyEmail v-model:openModifyEmailModal="openModifyEmailModal" />
-
-    <ModifyCheckoutPassword v-model:openModifyCheckoutPasswordModal="openModifyCheckoutPasswordModal" />
-    <ResetPassword v-model:openResetPasswordModal="openResetPasswordModal" />
-    <ApplyMonthlyStatement v-model:openApplyMonthlyStatementModal="openApplyMonthlyStatementModal" />
-    <ResetCheckoutPassword v-model:open="openResetCheckoutPasswordModal" />
+    <ModifyPhoneNumber v-if="openModifyPhoneNumberModal" v-model:openModifyPhoneNumberModal="openModifyPhoneNumberModal" />
+    <ModifyEmail v-if="openModifyEmailModal" v-model:openModifyEmailModal="openModifyEmailModal" /> 
+    <ResetCheckoutPassword v-if="openResetCheckoutPasswordModal" v-model:open="openResetCheckoutPasswordModal" />
+    <!-- <ModifyCheckoutPassword v-if="openModifyCheckoutPasswordModal" v-model:openModifyCheckoutPasswordModal="openModifyCheckoutPasswordModal" /> -->
+    <ResetPassword v-if="openResetPasswordModal" v-model:openResetPasswordModal="openResetPasswordModal" />
+    <ApplyMonthlyStatement v-if="openApplyMonthlyStatementModal" v-model:openApplyMonthlyStatementModal="openApplyMonthlyStatementModal" />
+    
 </template>
 
 <style scoped lang="less">

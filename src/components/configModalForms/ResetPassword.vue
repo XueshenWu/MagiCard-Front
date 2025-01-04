@@ -7,19 +7,21 @@ import { message } from "../Message.js"
 import post from '../../api/post.js';
 import URL from '../../api/api-list.js';
 import { convertGt } from '../../utils/converGt.js'
-import { watch } from 'less';
+
+
+
 
 
 
 const userInfo = ref(null);
 
 watchEffect(async () => {
-    userInfo.value = await post(URL.user.userInfo, {}, true);
+    userInfo.value = (await post(URL.user.userInfo, {}, true)).data
 })
 
 
 const open = defineModel('openResetPasswordModal');
-const phoneNumber = ref('13800000000');
+
 const formRef = ref(null);
 const captchaReady = ref(false);
 const captchaObj = ref(null);
@@ -66,7 +68,7 @@ const onFinish = async () => {
         newPassword: formState_validated.password_new,
     }
 
-    const data = await post(URL.user.resetPassword, body, true);
+    const data = await post(URL.user.resetLoginPassword, body, true);
     if (!data.err) {
         message.success('密码重置成功');
         open.value = false;
@@ -90,16 +92,18 @@ onMounted(async () => {
 
         captcha.onSuccess(async function () {
 
-            const gtResult = captchaObj.getValidate();
+            const gtResult = captcha.getValidate();
+
+           
 
             const body = {
-                phone: phoneNumber.value,
+                phone: userInfo.value.phoneNumber,
                 geeTest: convertGt(gtResult),
                 action: 'login'
             };
             const data = post(URL.user.smsCode, body, true);
             if (!data.err) {
-                message.success('验证码发送成功');
+                // message.success('验证码发送成功');
             } else {
                 message.error('验证码发送失败');
             }
@@ -111,60 +115,67 @@ onMounted(async () => {
 </script>
 
 <template>
-    <GeneralModal v-model:open="open" width="600px">
-        <div class="flex flex-col items-center justify-center gap-y-6 w-full px-8 pt-6">
-            <div class="text-4xl">
-                重置登陆密码
-            </div>
-            <Form ref="formRef" :model="formState" :rules="rules" autocomplete="on" @finish="onFinish"
-                name="password_reset_form">
-                <div class="flex flex-col items-center justify-center w-full gap-y-2">
+    <template v-if="!userInfo ">
+        <div>
+            Loading...
+        </div>
+    </template>
+    <template v-else>
+        <GeneralModal v-model:open="open" width="600px">
+            <div class="flex flex-col items-center justify-center gap-y-6 w-full px-8 pt-6">
+                <div class="text-4xl">
+                    {{ userInfo.loginPassword ? '重置密码' : '设置密码' }}
+                </div>
+                <Form ref="formRef" :model="formState" :rules="rules" autocomplete="on" @finish="onFinish"
+                    name="password_reset_form">
                     <div class="flex flex-col items-center justify-center w-full gap-y-2">
-                        <div class="text-[#595a61] py-3 text-xl">
-                            请输入您的新登陆密码
+                        <div class="flex flex-col items-center justify-center w-full gap-y-2">
+                            <div class="text-[#595a61] py-3 text-xl">
+                                请输入您的新登陆密码
+                            </div>
+                            <FormItem name="password_new">
+                                <InputPassword class="w-72" v-model:value="formState.password_new" size="large" />
+                            </FormItem>
                         </div>
-                        <FormItem name="password_new">
-                            <InputPassword class="w-72" v-model:value="formState.password_new" size="large" />
-                        </FormItem>
-                    </div>
-                    <div class="flex flex-col items-center justify-start w-full gap-y-2">
-                        <div class="text-[#595a61] py-3 text-xl">
-                            请再次输入您的新登陆密码
+                        <div class="flex flex-col items-center justify-start w-full gap-y-2">
+                            <div class="text-[#595a61] py-3 text-xl">
+                                请再次输入您的新登陆密码
+                            </div>
+                            <FormItem name="password_confirm">
+                                <InputPassword class="w-72" v-model:value="formState.password_confirm" size="large" />
+                            </FormItem>
                         </div>
-                        <FormItem name="password_confirm">
-                            <InputPassword class="w-72" v-model:value="formState.password_confirm" size="large" />
-                        </FormItem>
-                    </div>
-                    <div class="flex flex-col items-start justify-start w-full gap-y-2">
-                        <div class="flex items-center gap-x-4 text-[#595a61] py-3 text-xl">
-                            <span>请输入验证码</span>
-                            <span class="text-gray-400 text-xs">
-                                将发送至 +86 {{ phoneNumber }}
-                            </span>
-                        </div>
-                        <FormItem name="otp">
-                            <div class="flex items-center justify-between gap-x-6 h-12 w-full">
-                                <Input class="w-48" v-model:value="formState.otp" size="large" />
-                                <a class="text-blue-500 text-md" @click="handleSendOtp" v-if="captchaReady">
-                                    获取验证码
-                                </a>
-                                <span v-else class="text-gray-500 text-xs">
-                                    请稍候
+                        <div class="flex flex-col items-start justify-start w-full gap-y-2">
+                            <div class="flex items-center gap-x-4 text-[#595a61] py-3 text-xl">
+                                <span>请输入验证码</span>
+                                <span class="text-gray-400 text-xs">
+                                    将发送至 +86 {{ userInfo.phoneNumber }}
                                 </span>
                             </div>
-                        </FormItem>
-                        <FormItem>
-                            <button type="submit" html-type="submit"
-                                class="w-72 h-12 py-2 hover:bg-blue-400 duration-100 rounded-md bg-blue-500 text-white">
-                                确认
-                            </button>
-                        </FormItem>
+                            <FormItem name="otp">
+                                <div class="flex items-center justify-between gap-x-6 h-12 w-full">
+                                    <Input class="w-48" v-model:value="formState.otp" size="large" />
+                                    <a class="text-blue-500 text-md" @click="handleSendOtp" v-if="captchaReady">
+                                        获取验证码
+                                    </a>
+                                    <span v-else class="text-gray-500 text-xs">
+                                        请稍候
+                                    </span>
+                                </div>
+                            </FormItem>
+                            <FormItem>
+                                <button type="submit" html-type="submit"
+                                    class="w-72 h-12 py-2 hover:bg-blue-400 duration-100 rounded-md bg-blue-500 text-white">
+                                    确认
+                                </button>
+                            </FormItem>
+                        </div>
                     </div>
-                </div>
-            </Form>
-        </div>
-        <template #footer></template>
-    </GeneralModal>
+                </Form>
+            </div>
+            <template #footer></template>
+        </GeneralModal>
+    </template>
 </template>
 <style scoped>
 ::v-deep(.ant-input-affix-wrapper-lg) {

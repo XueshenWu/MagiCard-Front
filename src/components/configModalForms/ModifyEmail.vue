@@ -48,6 +48,7 @@ const handleSubmit = async () => {
         const res = post(URL.user.modifyEmail, body)
         if (!res.err) {
             console.log('Email modified successfully');
+           
             open.value = false;
         } else {
             console.log('Email modification failed');
