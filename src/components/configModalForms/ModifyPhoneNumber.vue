@@ -8,13 +8,13 @@ import URL from '../../api/api-list.js';
 import { convertGt } from '../../utils/converGt.js'
 
 
-const step = ref(1);
+const step = ref(2);
 
 const formRef = ref(null);
 const captchaReady = ref(false);
 const captchaObj = ref(null);
 const open = defineModel('openModifyPhoneNumberModal');
-
+const divInputRef = ref(null);
 const userInfo = ref(null);
 
 watchEffect(async () => {
@@ -27,8 +27,10 @@ watchEffect(async () => {
 const handleSendOtp = () => {
     if (captchaReady.value) {
 
-        const _phonenumber = step.value === 1 ? userInfo.value.phoneNumber : formState.phoneNumber_new;
-
+        const _phonenumber = step.value === 1 ? userInfo.value.phoneNumber : divInputRef.value.innerText.trim();
+        if (step.value !== 1) {
+            formState.phoneNumber_new = divInputRef.value.innerText.trim()
+        }
         if (!validatePhoneNumber(_phonenumber)) {
             message.error('请输入正确的手机号');
             return;
@@ -52,10 +54,10 @@ const handleChange = (e) => {
 const finishModify = async () => {
     const body = {
         smsCode: formState.otp_new,
-        newPhoneNumber: formState.phoneNumber_new,
+        phoneNumber: formState.phoneNumber_new,
     }
 
-    const data = await post(URL.user.changePhoneNumber, body)
+    const data = await post(URL.user.modifyPhoneNumber, body)
     if (!data.err) {
         message.success('修改成功');
         open = false;
@@ -107,9 +109,9 @@ onMounted(async () => {
             const body = {
                 phone: step.value === 1 ? userInfo.value.phoneNumber : formState.phoneNumber_new,
                 geeTest: convertGt(gtResult),
-                action: 'login'
+                action: 'changePhoneNumber'
             };
-        
+
 
             const data = await post(URL.user.smsCode, body, true);
             if (!data.err) {
@@ -184,7 +186,7 @@ onMounted(async () => {
                                     <div class="text-gray-300 font-bold text-center px-6 border-r border-gray-400">
                                         +86
                                     </div>
-                                    <div @change="handleChange"
+                                    <div ref="divInputRef" @change="handleChange"
                                         class=" font-semibold p-3 px-8 rounded outline-none w-full focus:outline-none focus:ring-0 "
                                         contenteditable>
                                         {{ formState.phoneNumber_new }}
