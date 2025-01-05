@@ -68,12 +68,8 @@ const handleApply = async () => {
 </script>
 
 <template>
-    <GeneralModal v-model:open="open" width="540px">
-
+    <GeneralModal v-model:open="open" width="540px" :centered="true" mainTitle="申请月结单">
         <div class="gap-y-8 px-8 pt-8 flex flex-col items-center justify-center w-full">
-            <div class="text-3xl">
-                申请月结单
-            </div>
             <div class="text-center">
                 <p>
                     生成的月结单包含选择当月消费的记录。
