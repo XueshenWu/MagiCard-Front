@@ -11,8 +11,11 @@ import DateDisply from './DateDisply.vue';
 import html2canvas from 'html2canvas';
 import NumberBoxInput from '../NumberBoxInput.vue';
 
-import { computed, nextTick, ref } from 'vue';
+import { computed, nextTick, ref, watchEffect } from 'vue';
 import GeneralModal from '../Modal/GeneralModal.vue';
+import get from '../../api/get';
+import post from '../../api/post';
+import URL from '../../api/api-list';
 
 
 const openCheckoutCodeModal = ref(false);
@@ -23,18 +26,34 @@ const trimed = ref(false);
 
 
 const getCVV = async () => {
-    return await new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve('632');
-        }, 50);
-    });
+    const res = await post(URL.card.verifyPassword, {
+        paymentPassword: checkoutCode.value,
+        cardId: cardId
+    })
+
+    if (!res.err) {
+        return res.data.cvv;
+    } else {
+        message.error(res.msg);
+    }
 }
+
+
 
 const cardDetailRef = ref(null);
 
 
 
-const { cardData } = defineProps(['cardData']);
+const { cardData, cardId } = defineProps(['cardData', 'cardId']);
+
+const parseDate = (dateStr) => {
+    const date = new Date(dateStr);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}年${month}月${day}日`;
+}
+
 
 const cvv = ref();
 const checkoutCode = ref("");
@@ -48,6 +67,7 @@ const finishCVVRequestModal = async () => {
     const _cvv = await getCVV();
     cvv.value = _cvv;
     openCheckoutCodeModal.value = false;
+    checkoutCode.value = "";
     await cb(_cvv)
     return _cvv;
 
@@ -78,19 +98,6 @@ const copyCVV = () => {
     }
 }
 
-function formateDate(dateStr) {
-
-    const [year, month] = dateStr.split('-');
-
-    const style1 = `${month}月/${year}年`;
-
-
-    const style2 = `${month}月/${year}年`;
-
-
-    return `${style1} (或${style2})`;
-}
-
 
 const copyCardDetails = async () => {
 
@@ -102,8 +109,8 @@ const copyCardDetails = async () => {
         try {
 
             await nextTick();
-            const details = `卡号: ${cardData.cardNo}
-有效期: ${String(cardData.issueDate).split('-')[1]}月/${String(cardData.issueDate).split('-')[0]}年
+            const details = `卡号: ${cardData.cardNumber}
+有效期: ${parseDate(cardData.membershipEndDate)}
 安全码: ${cvv.value}
 姓名: ${cardData.userName}`;
             await toClipboard(details);
@@ -143,13 +150,12 @@ const updateScale = (reset = false) => {
 
 
 
-
 const copyAddressDetails = async () => {
     try {
-        const address = `地址1: ${cardData.addressLine1}
+        const address = `地址1: ${cardData.address}
 城市: ${cardData.city}
 邮编: ${cardData.postalCode}
-州: ${cardData.stateName}${cardData.stateCnName ? ' / ' + cardData.stateCnName : ''}`;
+州: ${cardData.state}${cardData.stateCnName ? ' / ' + cardData.stateCnName : ''}`;
         await toClipboard(address);
         message.success('复制成功');
     } catch (error) {
@@ -162,7 +168,7 @@ const copyAddressDetails = async () => {
 const downLoadCardDetails = async () => {
 
 
-    if(!cvv.value){
+    if (!cvv.value) {
         cb = downLoadCardDetails;
         openCheckoutCodeModal.value = true;
         return;
@@ -172,7 +178,7 @@ const downLoadCardDetails = async () => {
     trimed.value = true;
     updateScale(true);
     await nextTick();
-    const canvas = await html2canvas(document.getElementById('cardDetail'), { backgroundColor: 'null', background:true });
+    const canvas = await html2canvas(document.getElementById('cardDetail'), { backgroundColor: 'null', background: true });
     const image = canvas.toDataURL('image/png');
     updateScale();
     trimed.value = false;
@@ -255,10 +261,10 @@ const downLoadAddressDetails = async () => {
                             <div class="flex flex-col items-start">
                                 <div class=" text-gray-500 text-lg">卡号</div>
                                 <!-- <div class="font-bold text-lg">{{ cardData['cardNo'] }}</div> -->
-                                <CardNumber :value="cardData['cardNo']" class="font-semibold text-3xl" />
+                                <CardNumber :value="cardData['cardNumber']" class="font-semibold text-3xl" />
                             </div>
                             <a v-if="!trimed" class="cursor-pointer text-lg tracking-widest text-[#3189ef]"
-                                @click="copy(cardData['cardNo'])">
+                                @click="copy(cardData['cardNumber'])">
                                 复制
                             </a>
                         </div>
@@ -298,7 +304,7 @@ const downLoadAddressDetails = async () => {
                             <div class="flex flex-col items-start">
                                 <div class="text-lg text-gray-500">有效期</div>
                                 <div class="font-semibold text-3xl">
-                                    <DateDisply :dateStr="cardData['issueDate']" />
+                                    <DateDisply :dateStr="cardData.membershipEndDate" />
                                 </div>
                             </div>
                             <a v-if="!trimed" class="cursor-pointer text-[#3189ef] tracking-widest text-lg"
@@ -332,9 +338,7 @@ const downLoadAddressDetails = async () => {
                             <a @click="copyAddressDetails" class="text-lg tracking-widest">
                                 复制全部
                             </a>
-                            <a 
-                                @click="downLoadAddressDetails"
-                            class="grid place-content-center">
+                            <a @click="downLoadAddressDetails" class="grid place-content-center">
                                 <img src="/download.png" class="w-5 h-5" />
                             </a>
                         </div>
@@ -343,10 +347,10 @@ const downLoadAddressDetails = async () => {
                         <div class="flex flex-row justify-between items-end">
                             <div class="flex flex-col items-start">
                                 <div class="text-lg text-gray-500">地址1</div>
-                                <div class="font-semibold text-3xl">{{ cardData["addressLine1"] }}</div>
+                                <div class="font-semibold text-3xl">{{ cardData["address"] }}</div>
                             </div>
                             <a v-if="!trimed" class="cursor-pointer text-[#3189ef] tracking-widest text-lg"
-                                @click="copy(cardData['addressLine1'])">
+                                @click="copy(cardData['address'])">
                                 复制
                             </a>
                         </div>
@@ -374,8 +378,9 @@ const downLoadAddressDetails = async () => {
                             <div class="flex flex-col items-start">
                                 <div class="text-lg text-gray-500">州</div>
                                 <div class="font-semibold text-3xl">
-                                    {{ cardData["stateName"] }} {{ cardData["stateCnName"] && '/' }}
-                                    {{ cardData["stateCnName"] }}
+                                    <!-- {{ cardData["stateName"] }} {{ cardData["stateCnName"] && '/' }}
+                                    {{ cardData["stateCnName"] }} -->
+                                     {{ cardData.state }}
                                 </div>
                             </div>
                             <a v-if="!trimed" class="cursor-pointer text-[#3189ef] text-lg tracking-widest"

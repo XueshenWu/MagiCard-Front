@@ -7,6 +7,7 @@ import Agreement from '../Agreement.vue';
 import { Form, FormItem, message } from 'ant-design-vue';
 import { convertGt } from '../../../utils/converGt.js';
 import post from '../../../api/post.js';
+import get from '../../../api/get.js';
 import URL from '../../../api/api-list.js';
 
 

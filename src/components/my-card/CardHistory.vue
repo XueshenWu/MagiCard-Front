@@ -2,40 +2,60 @@
 
 // TODO: Group records by date
 
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, nextTick } from 'vue';
 import _, { cloneWith } from 'lodash';
+import { Divider, Pagination, Tag } from 'ant-design-vue';
+import get from '../../api/get';
+import URL from '../../api/api-list';
 
 
 const current = ref(1);
 
 
-import { cardHistoryResp1, cardHistoryResp2 } from '../../mock/cardHistory';
-import { Divider, Pagination, Tag } from 'ant-design-vue';
 
-const cardHistory = ref();
+
+
+
+
+const cardHistory = ref({
+    data: [],
+    totalRecord: 0,
+    pageSize: LIMIT
+});
 const transactionMap = ref();
 
+const LIMIT = 5;
+
+const props = defineProps({
+    cardId: {
+        type: String,
+        required: true
+    }
+});
 
 
-async function getCardHistory(page) {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            if (page.value === 1 || page === undefined) {
-                resolve(cardHistoryResp1);
-            } else {
-                resolve(cardHistoryResp2);
-            }
-        }, 50);
-    });
-}
+
+watch([current, () => props.cardId], async ([currentValue, cardIdValue]) => {
 
 
-watch(current, async () => {
 
-    const data = (await getCardHistory(current)).data
-    cardHistory.value = data;
+
+
+
+
+    const res = await get(URL.transaction.card, [['cardId', cardIdValue], ['page', currentValue - 1], ['limit', LIMIT]]);
+    console.log('res', res)
+    if (res.err) {
+        return null
+    }
+    const data = res.data
+
+    cardHistory.value = data
+
+    await nextTick();
+
     const map =
-        _(data['rowList'])
+        _(data.data)
             .groupBy(item => new Date(item.transactionTime).toISOString().split('T')[0])
             .mapValues(group =>
                 _.orderBy(group, ['transactionTime'], ['desc'])
@@ -54,13 +74,14 @@ watch(current, async () => {
 
 
 const typeToImg = (txType) => {
+
     switch (txType) {
-        case 1:
-            return '/transaction/move-in.svg';
-        case 8:
-            return '/transaction/move-out.svg';
-        case 3:
-            return '/transaction/consume.svg';
+        case 'TransferIn':
+            return 'transaction/move-in.svg';
+        case 'TransferOut':
+            return 'transaction/move-out.svg';
+        case 'Consumption':
+            return 'transaction/consume.svg';
         default:
             return '';
     }
@@ -68,11 +89,11 @@ const typeToImg = (txType) => {
 
 const typeToString = (txType) => {
     switch (txType) {
-        case 1:
+        case 'TransferIn':
             return '充值';
-        case 8:
+        case 'TransferOut':
             return '提现';
-        case 3:
+        case 'Consumption':
             return '消费';
         default:
             return '';
@@ -81,11 +102,11 @@ const typeToString = (txType) => {
 
 const typeToSign = (txType) => {
     switch (txType) {
-        case 1:
+        case 'TransferIn':
             return '+';
-        case 8:
+        case 'TransferOut':
             return '-';
-        case 3:
+        case 'Consumption':
             return '-';
         default:
             return '';
@@ -95,7 +116,7 @@ const typeToSign = (txType) => {
 
 const typeToColor = (txType) => {
     switch (txType) {
-        case 1:
+        case 'TransferIn':
             return '#5daca1';
         default:
             return '#000000'
@@ -132,13 +153,14 @@ const typeToColor = (txType) => {
                             <div class="text-lg font-semibold tracking-wide"
                                 :style="{ color: typeToColor(transaction.type) }">{{
                                     typeToSign(transaction.type) }}${{
-                                    Number(transaction.orderAmount).toFixed(2) }}
-                                <span class="text-black font-normal ">{{ transaction.fee > 0 ?
+                                    Number(transaction.amount).toFixed(2) }}
+                                <span class="text-black font-normal ">{{ transaction.type === 'TransferIn' ?
                                     `(-$${Number(transaction.fee).toFixed(2)})` : '' }}</span>
                             </div>
-                            <div class="text-md font-semibold text-center rounded-md py-1 px-1  " v-if="transaction.status === 2"
-                                :style="`${transaction.status === 2 ? 'color: #5daca1;' : ''} background-color:#e8f6f0;`">
-                                {{ transaction.status === 2 ? '成功' : '失败' }}
+                            <div class="text-md font-semibold text-center rounded-md py-1 px-1  "
+                                v-if="transaction.status === 'Closed'"
+                                :style="`${transaction.status === 'Closed' ? 'color: #5daca1;' : ''} background-color:#e8f6f0;`">
+                                {{ transaction.status === 'Closed' ? '成功' : '失败' }}
                             </div>
                         </div>
 
@@ -147,8 +169,8 @@ const typeToColor = (txType) => {
                 </div>
             </div>
 
-            <Pagination v-model:current="current" :total="cardHistory['totalRecord']"
-                v-model:pageSize="cardHistory['pageSize']" />
+            <Pagination v-model:current="current" :total="cardHistory.total"
+                v-model:pageSize="LIMIT" />
 
         </div>
     </template>

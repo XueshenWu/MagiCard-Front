@@ -21,9 +21,10 @@
             </span>
         </span>
 
-  
+
 
     </div>
+
 </template>
 
 <script setup>
@@ -36,6 +37,35 @@ const props = defineProps({
     }
 })
 
-const year = computed(() => props.dateStr.split('-')[0])
-const month = computed(() => props.dateStr.split('-')[1])
+
+
+const year = computed(() => {
+    try {
+        return props.dateStr.split('-')[0]
+    } catch (e) {
+        return '2022'
+    }
+})
+
+const month = computed(() => {
+    try {
+        return props.dateStr.split('-')[1]
+    } catch (e) {
+        return '12'
+    }
+})
+
+// let year, month;
+// year = computed(() => '2022')
+// month = computed(() => '12')
+// FIXME: 此处完成 year 和 month 的计算
+
+// try {
+//     year = computed(() => props.dateStr.split('-')[0])
+//     month = computed(() => props.dateStr.split('-')[1])
+// } catch (e) {
+//     year = computed(() => '2022')
+//     month = computed(() => '12')
+// }
+
 </script>

@@ -8,31 +8,35 @@ import CardDetail from '../components/my-card/CardDetail.vue';
 import InviteBanner from '../components/my-card/InviteBanner.vue';
 import CardHistory from '../components/my-card/CardHistory.vue';
 import GeneralModal from '../components/Modal/GeneralModal.vue';
-
+import get from '../api/get';
+import URL from '../api/api-list';
 
 
 // TODO: vue3 节流防抖
 
 
 
+const parseDate = (dateStr) => {
+    const date = new Date(dateStr);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}年${month}月${day}日`;
+}
+
 const openHelpModal = ref(false);
 
+const cardData = ref(null);
 
 async function getCardList() {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve(cardListResp.data);
-        }, 50);
-    });
+    const res = await get(URL.card.cardList, null);
+    if (!res.err) {
+        return res.data;
+    } else {
+        return []
+    }
 }
 
-async function getDefaultCard() {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve(defaultCardResp.data);
-        }, 50);
-    });
-}
 
 async function getUserInfo() {
     return new Promise((resolve, reject) => {
@@ -46,16 +50,31 @@ async function getUserInfo() {
 }
 
 const cardList = ref();
-const currentCard = ref(null);
 const userInfo = ref(null);
 
 
-const activeKey = ref(0);
+const activeKey = ref();
 
 watchEffect(async () => {
-    cardList.value = await getCardList();
-    currentCard.value = await getDefaultCard();
+    const _cardList = await getCardList();
+    cardList.value = _cardList;
+    activeKey.value = _cardList[0].cardId;
     userInfo.value = await getUserInfo();
+}, { immediate: true, once: true });
+
+
+watch(activeKey, async (newVal) => {
+    if (!newVal) {
+        return;
+    }
+
+    const res = await get(URL.card.cardInfo, [['cardId', newVal]]);
+
+    if (res?.err) {
+        return;
+    }
+
+    cardData.value = res.data;
 }, { immediate: true });
 
 </script>
@@ -67,11 +86,11 @@ watchEffect(async () => {
 
         <div id="tabs" class="w-full flex flex-row justify-between items-center">
             <Tabs class="grow flex-grow " v-model:activeKey="activeKey" tabBarStyle=" ">
-                <TabPane class="h-full" v-for="(card, idx) in cardList" :key="idx">
+                <TabPane class="h-full" v-for="(card, idx) in cardList" :key="card.carId">
                     <template #tab>
                         <div class="h-full text-2xl font-semibold flex items-end">
                             <CreditCardOutlined />
-                            <div> {{ String(card['cardNo']).slice(-4) }}</div>
+                            <div> {{ String(card.cardNumber.slice(-4)) }}</div>
                         </div>
                     </template>
 
@@ -87,9 +106,12 @@ watchEffect(async () => {
                     </span>
                     <span class="font-semibold">
                         {{
-                            `${userInfo.expiration.split('-')[0]}年${userInfo.expiration.split('-')[1]}月${userInfo.expiration.split('-')[2]}日`
+                            parseDate(cardData.membershipEndDate)
                         }}
                     </span>
+
+
+
 
                 </div>
                 <div>
@@ -97,18 +119,16 @@ watchEffect(async () => {
                         本月充值限额
                     </span>
                     <span class="font-semibold">
-                        ${{ userInfo.limit }}
+                        ${{ cardData.rechargeLimit }}
                     </span>
                 </div>
-                <a 
-                    @click="openHelpModal = true"
-                class="text-blue-500" href="#">
+                <a @click="openHelpModal = true" class="text-blue-500" href="#">
                     提升额度
                 </a>
                 <GeneralModal v-model:open="openHelpModal" width="600px" :centered="false">
                     <template #footer>
                         <div class="flex justify-center">
-                            
+
                         </div>
                     </template>
                     <div class="flex flex-col items-center justify-center">
@@ -125,14 +145,14 @@ watchEffect(async () => {
             </div>
         </div>
 
-        <CardDetail :cardData="currentCard" />
+        <CardDetail :cardData="cardData" :cardId="activeKey" />
 
         <div id="invite" class="mt-6 w-full">
             <InviteBanner />
         </div>
 
         <div id="history" class="w-full">
-            <CardHistory />
+            <CardHistory v-if="activeKey" :cardId="activeKey" />
         </div>
 
     </div>

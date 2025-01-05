@@ -16,10 +16,20 @@ const URL = {
         modifyEmail:`${BASE_URL}/v1/user/modifyEmail`,
         checkCurrentNumber:`${BASE_URL}/v1/user/checkCurrentNumber`,
         userInfo:`${BASE_URL}/v1/user/userInfo`,
+        requestStatement:`${BASE_URL}/v1/user/requestStatement`,
     },
     invitation:{
         summary:`${BASE_URL}/v1/invitation/summary`,
         invitationList:`${BASE_URL}/v1/invitation/List`,
+    },
+    card:{
+        cardList: `${BASE_URL}/v1/card/list`,
+        cardInfo: `${BASE_URL}/v1/card/info`,
+        verifyPassword: `${BASE_URL}/v1/card/verifyPassword`,
+    },
+    transaction:{
+        summary: `${BASE_URL}/v1/transaction/summary`,
+        card: `${BASE_URL}/v1/transaction/card`,
     }
 }
 

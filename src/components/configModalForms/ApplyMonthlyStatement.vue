@@ -1,22 +1,67 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, watch, watchEffect } from 'vue';
 import GeneralModal from '../Modal/GeneralModal.vue';
 import { Form, FormItem, Select } from 'ant-design-vue';
 import CardNumber from '../CardNumber.vue';
 import { message } from '../Message';
+import get from '../../api/get';
+import URL from '../../api/api-list';
+import post from '../../api/post';
+
+
+const cardOptions = ref([])
+
+const userInfo = ref(null);
+
+watchEffect(async () => {
+    const res = await post(URL.user.userInfo, {});
+    if (!res.err) {
+        userInfo.value = res.data;
+        if(!res.data.email){
+            message.error('请先绑定邮箱');
+            open.value = false;
+        }
+    } else {
+        userInfo.value = null;
+    }
+})
+
+
+watchEffect(async ()=>{
+    const res = await get(URL.card.cardList, null);
+    if (!res.err) {
+        cardOptions.value = res.data;
+    } else {
+        cardOptions.value = []
+    }
+})
+
+const currentCard = ref(null);
+
+
+const handleCardChange = (value)=>{
+    currentCard.value = cardOptions.value.find(card=>card.cardNumber === value);
+}
 
 const open = defineModel('openApplyMonthlyStatementModal', { type: Boolean });
 
 const month = ref(1);
 const year = ref(2023);
-const email = ref('example@mail.com')
-const cardOptions = [
-    '4568124210930294',
-    '2058193058201023',
-    '1234567890123456'
-]
+
+
 const card = ref(cardOptions[0]);
-const handleApply = () => {
+const handleApply = async () => {
+
+    const res = await post(URL.user.requestStatement, {
+        cardNumber: card.value,
+        year: year.value,
+        month: month.value
+    })
+    if (res.err) {
+        message.error('月结单发送失败');
+        return;
+    }
+
     message.success('月结单已发送至您的邮箱');
     open.value = false;
 }
@@ -48,8 +93,8 @@ const handleApply = () => {
                             <div class="content_select">
                                 <Select v-model:value="card" class="w-full" size="large"
                                     :getPopupContainer="triggerNode => triggerNode.parentNode">
-                                    <Select.Option v-for="card in cardOptions" :key="card" :value="card">
-                                        <CardNumber :value="card" />
+                                    <Select.Option v-for="card in cardOptions" :key="card.cardId" :value="card.cardNumber">
+                                        <CardNumber :value="card.cardNumber" />
                                     </Select.Option>
                                 </Select>
                             </div>
@@ -84,7 +129,7 @@ const handleApply = () => {
         <div class="text-center text-gray-600">
             月结单将会在1-3个工作日内发送至您的邮箱地址：
             <div class="text-lg font-bold">
-                {{ email }}
+                {{ userInfo?.email }}
             </div>
         </div>
         <div class="grid place-content-center">

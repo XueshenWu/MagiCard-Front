@@ -9,6 +9,8 @@ const mock = false
 
 
 
+
+
 const get = async (url, params, token = true) => {
 
     if (token === true && !localStorage.getItem('token')) {
@@ -17,7 +19,6 @@ const get = async (url, params, token = true) => {
         return
     }
 
-    const url_with_params = params ? `${url}?${params.map(([key, value]) => `${key}=${value}`).join('&')}` : url
     try {
 
         const headers = {
@@ -31,7 +32,7 @@ const get = async (url, params, token = true) => {
             headers,
         })
         console.log(`
-            ---------------POST Request----------------
+            ---------------GET Request----------------
             url: ${url_with_params},
             headers: ${JSON.stringify(headers)},
             -------------------------------------------
@@ -40,7 +41,7 @@ const get = async (url, params, token = true) => {
         const res = await resp.json()
 
         console.log(`
-            ---------------POST Response----------------
+            ---------------GET Response----------------
             code: ${res.code},
             data: ${JSON.stringify(res)},
             -------------------------------------------
@@ -59,6 +60,7 @@ const get = async (url, params, token = true) => {
                 break
             case 500:
                 message.error(res.msg)
+                return { err: true, data: null }
                 break
             default:
                 message.error('出现未知错误，请稍后再试')

@@ -1,17 +1,16 @@
 <script setup>
 
 import { watchEffect, ref } from 'vue';
+import get from '../../api/get'
+import URL from '../../api/api-list'
 
 async function getTransactionMeta() {
-    return await new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve({
-                totalRechargeAmount: 45.2,
-                totalConsumptionAmount: 40.2,
-                totalWithdrawAmount: 5
-            })
-        })
-    }, 50)
+    const res = await get(URL.transaction.summary, null)
+    if(!res.err){
+        return res.data
+    }else{
+        return null
+    }
 }
 
 
