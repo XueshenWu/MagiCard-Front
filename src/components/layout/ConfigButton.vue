@@ -4,7 +4,6 @@ import { DownOutlined } from '@ant-design/icons-vue';
 import { provide, ref } from 'vue';
 
 import ModifyEmail from '../configModalForms/ModifyEmail.vue';
-import ModifyCheckoutPassword from '../configModalForms/ModifyCheckoutPassword.vue';
 import ResetPassword from '../configModalForms/ResetPassword.vue';
 import ApplyMonthlyStatement from '../configModalForms/ApplyMonthlyStatement.vue';
 import ModifyPhoneNumber from '../configModalForms/ModifyPhoneNumber.vue';
@@ -13,7 +12,6 @@ import ResetCheckoutPassword from '../configModalForms/ResetCheckoutPassword.vue
 
 const openModifyPhoneNumberModal = ref(false);
 const openModifyEmailModal = ref(false);
-const openModifyCheckoutPasswordModal = ref(false);
 const openResetPasswordModal = ref(false);
 const openApplyMonthlyStatementModal = ref(false);
 const openResetCheckoutPasswordModal = ref(false);
@@ -68,7 +66,6 @@ const handleMenuClick = ({ key }) => {
     <ModifyPhoneNumber v-if="openModifyPhoneNumberModal" v-model:openModifyPhoneNumberModal="openModifyPhoneNumberModal" />
     <ModifyEmail v-if="openModifyEmailModal" v-model:openModifyEmailModal="openModifyEmailModal" /> 
     <ResetCheckoutPassword v-if="openResetCheckoutPasswordModal" v-model:open="openResetCheckoutPasswordModal" />
-    <!-- <ModifyCheckoutPassword v-if="openModifyCheckoutPasswordModal" v-model:openModifyCheckoutPasswordModal="openModifyCheckoutPasswordModal" /> -->
     <ResetPassword v-if="openResetPasswordModal" v-model:openResetPasswordModal="openResetPasswordModal" />
     <ApplyMonthlyStatement v-if="openApplyMonthlyStatementModal" v-model:openApplyMonthlyStatementModal="openApplyMonthlyStatementModal" />
     

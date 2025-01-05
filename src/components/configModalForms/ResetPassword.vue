@@ -94,7 +94,7 @@ onMounted(async () => {
 
             const gtResult = captcha.getValidate();
 
-           
+
 
             const body = {
                 phone: userInfo.value.phoneNumber,
@@ -115,17 +115,15 @@ onMounted(async () => {
 </script>
 
 <template>
-    <template v-if="!userInfo ">
+    <template v-if="!userInfo">
         <div>
             Loading...
         </div>
     </template>
     <template v-else>
-        <GeneralModal v-model:open="open" width="600px">
+        <GeneralModal v-model:open="open" width="29.1667vw" :mainTitle="userInfo.loginPassword ? '重置密码' : '设置密码'"
+            :centered="true">
             <div class="flex flex-col items-center justify-center gap-y-6 w-full px-8 pt-6">
-                <div class="text-4xl">
-                    {{ userInfo.loginPassword ? '重置密码' : '设置密码' }}
-                </div>
                 <Form ref="formRef" :model="formState" :rules="rules" autocomplete="on" @finish="onFinish"
                     name="password_reset_form">
                     <div class="flex flex-col items-center justify-center w-full gap-y-2">
@@ -134,7 +132,7 @@ onMounted(async () => {
                                 请输入您的新登陆密码
                             </div>
                             <FormItem name="password_new">
-                                <InputPassword class="w-72" v-model:value="formState.password_new" size="large" />
+                                <InputPassword class="input-style" v-model:value="formState.password_new" size="large" />
                             </FormItem>
                         </div>
                         <div class="flex flex-col items-center justify-start w-full gap-y-2">
@@ -142,7 +140,7 @@ onMounted(async () => {
                                 请再次输入您的新登陆密码
                             </div>
                             <FormItem name="password_confirm">
-                                <InputPassword class="w-72" v-model:value="formState.password_confirm" size="large" />
+                                <InputPassword class="input-style" v-model:value="formState.password_confirm" size="large" />
                             </FormItem>
                         </div>
                         <div class="flex flex-col items-start justify-start w-full gap-y-2">
@@ -153,19 +151,20 @@ onMounted(async () => {
                                 </span>
                             </div>
                             <FormItem name="otp">
-                                <div class="flex items-center justify-between gap-x-6 h-12 w-full">
-                                    <Input class="w-48" v-model:value="formState.otp" size="large" />
-                                    <a class="text-blue-500 text-md" @click="handleSendOtp" v-if="captchaReady">
-                                        获取验证码
-                                    </a>
-                                    <span v-else class="text-gray-500 text-xs">
-                                        请稍候
-                                    </span>
+                                <div class="flex items-center justify-between gap-x-6 w-full">
+                                    <Input v-model:value="formState.otp" placeholder="请输入验证码" size="large"
+                                        class="input-style border-radius-custom">
+                                        <template #suffix>
+                                            <a @click="handleSendOtp" class="text-blue-500 text-[.9375vw]">
+                                                获取验证码
+                                            </a>
+                                        </template>
+                                    </Input>
                                 </div>
                             </FormItem>
                             <FormItem>
                                 <button type="submit" html-type="submit"
-                                    class="w-72 h-12 py-2 hover:bg-blue-400 duration-100 rounded-md bg-blue-500 text-white">
+                                    class="button-style hover:bg-blue-400 duration-100 rounded-3xl bg-blue-500 text-white">
                                     确认
                                 </button>
                             </FormItem>
@@ -180,5 +179,22 @@ onMounted(async () => {
 <style scoped>
 ::v-deep(.ant-input-affix-wrapper-lg) {
     padding: 12px 30px !important;
+}
+
+.button-style {
+    font-size: 1.041667vw;
+    height: auto;
+    line-height: 1.458333vw;
+    padding: .625vw;
+    width: 11.666667vw;
+    ;
+}
+
+.input-style {
+    padding: .989583vw 2.03125vw;
+}
+
+.border-radius-custom {
+    border-radius: .625vw;
 }
 </style>

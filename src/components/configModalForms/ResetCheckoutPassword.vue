@@ -44,7 +44,7 @@ onMounted(async () => {
         captcha.onSuccess(async function () {
 
             const body = {
-                action:"login",
+                action: "login",
                 phone: userInfo.value.phoneNumber,
                 geeTest: convertGt(captcha.getValidate()),
             }
@@ -52,7 +52,7 @@ onMounted(async () => {
             const data = await post(URL.user.smsCode, body)
             if (!data.err) {
                 message.success('验证码发送成功');
-       
+
             } else {
                 message.error('验证码发送失败');
             }
@@ -122,16 +122,12 @@ const rules = {
     </template>
 
     <template v-else>
-        <GeneralModal v-model:open="open" width="600px">
+        <GeneralModal v-model:open="open" width="29.1667vw" :mainTitle="userInfo.paymentPassword ? '修改支付密码' : '设置支付密码'"
+            :centered="true">
             <div class="flex flex-col items-center justify-center gap-y-6 px-8 py-8">
-                <div>
-                    <div class="text-3xl">
-                        {{ userInfo.paymentPassword? '修改' : '设置' }}支付密码
-                    </div>
-                </div>
-                <Form ref="formRef" :model="formState" :rules="rules" name="checkout_password_form" @finish="onFinish">
 
-
+                <Form ref="formRef" :model="formState" :rules="rules" name="checkout_password_form" @finish="onFinish"
+                    class="w-full">
                     <div class="flex flex-col items-center justify-start gap-y-4 w-full">
                         <div class="text-lg text-gray-500">
                             输入新支付密码
@@ -151,26 +147,30 @@ const rules = {
                     </div>
                     <div class="flex flex-col items-center justify-start gap-y-4 w-full">
                         <FormItem>
-
                             <div class="flex flex-row items-center justify-between w-full gap-x-6">
                                 <Input v-model:value="formState.otp" placeholder="请输入验证码" size="large"
-                                    class="ml-6 w-48 h-14" />
-                                <a @click="handleSendOtp" class="text-blue-500 text-lg">
-                                    获取验证码
-                                </a>
+                                    class="input-style border-radius-custom">
+                                <template #suffix>
+                                    <a @click="handleSendOtp" class="text-blue-500 text-[.9375vw]">
+                                        获取验证码
+                                    </a>
+                                </template>
+                                </Input>
 
                             </div>
-                            <div class="mt-4 ml-20 text-gray-500">
+                            <div class=" text-gray-500 text-lg text-center mt-4">
                                 发送至 +86 {{ userInfo.phoneNumber }}
                             </div>
                         </FormItem>
                     </div>
 
                     <FormItem>
-                        <button type="submit" html-type="submit"
-                            class="w-full bg-blue-500 text-white rounded-xl text-xl py-2 h-14 hover:bg-blue-400 duration-100">
-                            {{ userInfo.paymentPassword? '修改' : '设置' }}支付密码
-                        </button>
+                        <div class="w-full flex items-center justify-center">
+                            <button type="submit" html-type="submit"
+                                class="w-full bg-blue-500 text-white rounded-xl text-xl button-style hover:bg-blue-400 duration-100">
+                                {{ userInfo.paymentPassword ? '修改' : '设置' }}支付密码
+                            </button>
+                        </div>
                     </FormItem>
                 </Form>
 
@@ -179,3 +179,21 @@ const rules = {
         </GeneralModal>
     </template>
 </template>
+<style scoped>
+.button-style {
+    font-size: 1.041667vw;
+    height: auto;
+    line-height: 1.458333vw;
+    padding: .625vw;
+    width: 11.666667vw;
+    ;
+}
+
+.input-style {
+    padding: .989583vw 2.03125vw;
+}
+
+.border-radius-custom {
+    border-radius: .625vw;
+}
+</style>

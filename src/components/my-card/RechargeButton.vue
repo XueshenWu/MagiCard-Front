@@ -40,13 +40,11 @@ const imgList = new Array(18).fill(0).map((_, idx) => `/subscriptionIcons/downlo
                     rechargeAmount.toFixed(2) }}</span>
             <span> + 手续费</span><span class="text-black font-bold">${{ (rechargeAmount * 0.035).toFixed(2)
                 }}</span>(3.5%)
-
         </div>
-
         <template #footer>
             <div class="flex flex-row justify-center items-center text-xl mt-6 mb-[2vw]">
                 <button  @click="openRechargeModal = false"
-                class="text-white  w-[14.0625vw] h-[2.70833vw]  text-[1.04167vw] hover:bg-blue-400 duration-100 bg-blue-500 px-6 py-3 rounded-xl">
+                class="text-white  w-[14.0625vw] h-[2.70833vw]  text-[1.04167vw] hover:bg-blue-400 duration-100 bg-blue-500 rounded-xl">
                 去支付
             </button>
             </div>

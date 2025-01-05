@@ -7,7 +7,6 @@ import post from '../../api/post.js';
 import URL from '../../api/api-list.js';
 import { convertGt } from '../../utils/converGt.js'
 
-
 const step = ref(1);
 
 const formRef = ref(null);
@@ -130,15 +129,15 @@ onMounted(async () => {
     <GeneralModal v-if="userInfo" v-model:open="open" width="29.1667vw" mainTitle="修改手机号"
         :subTitle="step === 1 ? '请先验证当前登录手机号' : '请验证新手机号'" :centered="true">
         <div class="p-8 gap-y-12  flex flex-col items-center justify-center">
-            <Form>
-                <div class="w-[438px] space-y-8">
+            <Form class="w-full">
+                <div class="w-full space-y-8">
                     <template v-if="step === 1">
                         <div class="flex flex-col items-start w-full gap-y-4">
                             <div class="text-gray-500">
                                 手机号
                             </div>
                             <div
-                                class="input-style cursor-not-allowed py-4 w-full flex flex-row justify-between rounded-xl border text-xl border-gray-300 ">
+                                class="input-style cursor-not-allowed py-4 w-full flex flex-row justify-between border-radius-custom border text-xl border-gray-300 ">
                                 <div class="text-gray-300 font-bold text-center pr-6 border-r border-gray-400">
                                     +86
                                 </div>
@@ -153,7 +152,7 @@ onMounted(async () => {
                             </div>
                             <div class="flex flex-row items-center justify-between w-full gap-x-4">
                                 <Input v-model:value="formState.otp_old" placeholder="请输入验证码" size="large"
-                                    class="input-style rounded-xl">
+                                    class="input-style border-radius-custom">
                                     <template #suffix>
                                         <a @click="handleSendOtp" class="text-blue-500 text-[.9375vw]">
                                             获取验证码
@@ -171,7 +170,7 @@ onMounted(async () => {
                                     手机号
                                 </div>
                                 <div
-                                    class=" h-16 py-4 w-full flex flex-row items-center justify-between rounded-xl border text-xl border-gray-300 ">
+                                    class="py-4 w-full flex flex-row items-center justify-between border-radius-custom border text-xl border-gray-300 ">
                                     <div class="text-gray-300 font-bold text-center px-6 border-r border-gray-400">
                                         +86
                                     </div>
@@ -185,12 +184,11 @@ onMounted(async () => {
                         </FormItem>
                         <FormItem>
                             <div class="text-gray-500 mb-4">
-
                                 验证码
                             </div>
                             <div class="flex flex-row items-center justify-between w-full gap-x-4">
                                 <Input v-model:value="formState.otp_new" placeholder="请输入验证码" size="large"
-                                    class="input-style rounded-xl">
+                                    class="input-style border-radius-custom">
                                     <template #suffix>
                                         <a @click="handleSendOtp" class="text-blue-500 text-[.9375vw]">
                                             获取验证码
@@ -236,5 +234,9 @@ onMounted(async () => {
 
 .input-style {
     padding: .989583vw 2.03125vw;
+}
+
+.border-radius-custom{
+    border-radius: .625vw;
 }
 </style>
