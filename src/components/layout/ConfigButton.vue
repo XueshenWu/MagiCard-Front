@@ -9,7 +9,7 @@ import ResetPassword from '../configModalForms/ResetPassword.vue';
 import ApplyMonthlyStatement from '../configModalForms/ApplyMonthlyStatement.vue';
 import ModifyPhoneNumber from '../configModalForms/ModifyPhoneNumber.vue';
 import ResetCheckoutPassword from '../configModalForms/ResetCheckoutPassword.vue';
-
+import Feedback from '../configModalForms/Feedback.vue';
 
 const openModifyPhoneNumberModal = ref(false);
 const openModifyEmailModal = ref(false);
@@ -17,6 +17,7 @@ const openModifyCheckoutPasswordModal = ref(false);
 const openResetPasswordModal = ref(false);
 const openApplyMonthlyStatementModal = ref(false);
 const openResetCheckoutPasswordModal = ref(false);
+const openFeedbackModal = ref(false);
 
 const switchSelected = (i)=>{
     handleMenuClick({key: i});
@@ -32,6 +33,7 @@ const handleMenuClick = ({ key }) => {
     openResetCheckoutPasswordModal.value = key === '3';
     openResetPasswordModal.value = key === '4';
     openApplyMonthlyStatementModal.value = key === '5';
+    openFeedbackModal.value = key === '6';
 
     if(key === '7'){
         localStorage.removeItem('token');
@@ -71,7 +73,7 @@ const handleMenuClick = ({ key }) => {
     <!-- <ModifyCheckoutPassword v-if="openModifyCheckoutPasswordModal" v-model:openModifyCheckoutPasswordModal="openModifyCheckoutPasswordModal" /> -->
     <ResetPassword v-if="openResetPasswordModal" v-model:openResetPasswordModal="openResetPasswordModal" />
     <ApplyMonthlyStatement v-if="openApplyMonthlyStatementModal" v-model:openApplyMonthlyStatementModal="openApplyMonthlyStatementModal" />
-    
+    <Feedback v-if="openFeedbackModal" v-model:openFeedbackModal="openFeedbackModal" />
 </template>
 
 <style scoped lang="less">
