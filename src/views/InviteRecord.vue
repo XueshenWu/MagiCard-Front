@@ -384,7 +384,7 @@ const handleCloseWithdrewRewardAmount = () => {
                 <div class="flex flex-col items-center justify-center gap-y-4 pt-6 px-8">
                     <p class="text-[1.458333vw]">邀请奖励余额</p>
                     <p class="text-[0.8vw]">你可提现的奖励金额为</p>
-                    <p class="font-bold text-[2.08333vw]">${{ Number(rewardAmount).toFixed(2) }}</p>
+                    <p class="font-bold text-[2.08333vw]">${{ Number(inviteStatistics.totalRewardAmount).toFixed(2) }}</p>
                 </div>
             </template>
             <template #footer>

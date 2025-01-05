@@ -2,11 +2,11 @@
 
 import { watch, watchEffect, ref, computed } from 'vue';
 import { txRecordResp, txRecordResp2 } from '../../mock/txrRecord';
-import { Table } from 'ant-design-vue';
+import { Skeleton, Table } from 'ant-design-vue';
 
 import { typeToColor, typeToString, typeToImg, typeToSign } from '../../utils/txTypeConversion';
 
-
+const loading = ref(true)
 
 async function getTxRecord(page) {
     return await new Promise((resolve, reject) => {
@@ -49,8 +49,12 @@ const handleRefresh = () => {
 
 
 watch(current, async () => {
+    loading.value = true
     txRecord.value = (await getTxRecord(current)).data
+    loading.value = false
 }, { immediate: true })
+
+
 
 const dataSource = computed(() => {
     if (!txRecord.value) {
@@ -125,10 +129,10 @@ const columns = [
         </div>
         <div>
 
-            <template v-if="dataSource">
+            <template v-if="txRecord">
 
-                <Table @change="handleTableChange" :pagination="pagination" :columns="columns" class="w-full" bordered
-                    :dataSource="dataSource">
+                <Table :loading="loading" @change="handleTableChange" :pagination="pagination" :columns="columns"
+                    class="w-full" bordered :dataSource="dataSource">
                     <template v-slot:bodyCell="{ text, record, index, column }">
                         <div class="text-lg py-2 px-1">
                             <span class="font-semibold" v-if="column.dataIndex === 'transactionTime'">
@@ -172,8 +176,9 @@ const columns = [
 
             </template>
             <template v-else>
-                加载中...
+                <Skeleton :active="true" :paragraph="{ rows: 10 }" />
             </template>
+           
         </div>
 
 
