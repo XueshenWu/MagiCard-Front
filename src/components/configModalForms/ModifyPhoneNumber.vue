@@ -6,7 +6,7 @@ import { message } from '../Message.js';
 import post from '../../api/post.js';
 import URL from '../../api/api-list.js';
 import { convertGt } from '../../utils/converGt.js'
-import { flexProps } from 'ant-design-vue/es/flex/interface.js';
+
 
 const step = ref(2);
 
@@ -67,6 +67,7 @@ const finishModify = async () => {
     }
 
     const data = await post(URL.user.modifyPhoneNumber, body)
+  
     if (!data.err) {
         message.success('修改成功');
         open.value = false;
@@ -187,8 +188,8 @@ onMounted(async () => {
                                     手机号
                                 </div>
                                 <div
-                                    class="py-4 w-full flex flex-row items-center justify-between border-radius-custom border text-xl border-gray-300 ">
-                                    <div class="text-gray-300 font-bold text-center px-6 border-r border-gray-400">
+                                    class=" input-style border-radius-custom py-4 w-full flex flex-row items-center justify-between border-radius-custom border text-xl border-gray-300 ">
+                                    <div class="text-gray-300 font-bold text-left pr-8 border-r border-gray-400">
                                         +86
                                     </div>
                                     <div ref="divInputRef" @change="handleChange"
@@ -251,6 +252,10 @@ onMounted(async () => {
 
 .input-style {
     padding: .989583vw 2.03125vw;
+    height: 3.39vw;
+
+    font-size: .9375vw;
+
 }
 
 .border-radius-custom{

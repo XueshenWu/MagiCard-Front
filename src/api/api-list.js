@@ -1,6 +1,6 @@
 
-// const BASE_URL = 'http://192.168.193.75:8085';
-const BASE_URL = 'http://3.86.106.168:8085';
+const BASE_URL = 'http://192.168.193.75:8085';
+// const BASE_URL = 'http://3.86.106.168:8085';
 
 
 const URL = {

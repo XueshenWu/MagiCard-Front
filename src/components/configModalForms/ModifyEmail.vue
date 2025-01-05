@@ -46,7 +46,7 @@ const handleSubmit = async () => {
             newEmailAddress: email.value
         };
 
-        const res = post(URL.user.modifyEmail, body)
+        const res = await post(URL.user.modifyEmail, body)
         if (!res.err) {
             console.log('Email modified successfully');
             message.success('邮箱修改成功');
