@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, watchEffect } from 'vue';
+import { ref, watch, watchEffect,inject } from 'vue';
 import GeneralModal from '../Modal/GeneralModal.vue';
 import { Form, FormItem, Select } from 'ant-design-vue';
 import CardNumber from '../CardNumber.vue';
@@ -7,7 +7,7 @@ import { message } from '../Message';
 import get from '../../api/get';
 import URL from '../../api/api-list';
 import post from '../../api/post';
-
+const switchSelected = inject('switchSelected')
 
 const cardOptions = ref([])
 
@@ -20,6 +20,7 @@ watchEffect(async () => {
         if(!res.data.email){
             message.error('请先绑定邮箱');
             open.value = false;
+            switchSelected('');
         }
     } else {
         userInfo.value = null;
@@ -70,6 +71,7 @@ const handleApply = async () => {
 
     message.success('月结单已发送至您的邮箱');
     open.value = false;
+    switchSelected('');
 }
 </script>
 
