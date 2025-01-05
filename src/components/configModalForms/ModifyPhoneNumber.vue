@@ -1,13 +1,14 @@
 <script setup>
-import { reactive, ref, onMounted, watchEffect } from 'vue';
+import { reactive, ref, onMounted, watchEffect,inject } from 'vue';
 import { Form, FormItem, Input } from 'ant-design-vue';
 import GeneralModal from '../Modal/GeneralModal.vue';
 import { message } from '../Message.js';
 import post from '../../api/post.js';
 import URL from '../../api/api-list.js';
 import { convertGt } from '../../utils/converGt.js'
+import { flexProps } from 'ant-design-vue/es/flex/interface.js';
 
-const step = ref(1);
+const step = ref(2);
 
 const formRef = ref(null);
 const captchaReady = ref(false);
@@ -15,7 +16,7 @@ const captchaObj = ref(null);
 const open = defineModel('openModifyPhoneNumberModal');
 const divInputRef = ref(null);
 const userInfo = ref(null);
-
+const switchSelected = inject('switchSelected')
 watchEffect(async () => {
     userInfo.value = (await post(URL.user.userInfo, {}, true)).data
 })
@@ -56,10 +57,20 @@ const finishModify = async () => {
         phoneNumber: formState.phoneNumber_new,
     }
 
+    if(!formState.otp_new){
+        message.error('请输入验证码');
+        return;
+    }
+    if(!formState.phoneNumber_new || !validatePhoneNumber(formState.phoneNumber_new)){
+        message.error('请输入正确的手机号码');
+        return;
+    }
+
     const data = await post(URL.user.modifyPhoneNumber, body)
     if (!data.err) {
         message.success('修改成功');
-        open = false;
+        open.value = false;
+        switchSelected('');
     } else {
         message.error('修改失败');
     }
@@ -70,6 +81,12 @@ const validatePhoneNumber = (phonenumber) => {
 }
 
 const toStep2 = async () => {
+
+
+    if(!formState.otp_old){
+        message.error('请输入验证码');
+        return;
+    }
 
     const body = {
         smsCode: formState.otp_old,

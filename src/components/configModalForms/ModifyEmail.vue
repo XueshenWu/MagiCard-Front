@@ -1,12 +1,13 @@
 <script setup>
 import { Input } from 'ant-design-vue';
-import { ref, computed } from 'vue';
+import { ref, computed,inject } from 'vue';
 import GeneralModal from '../Modal/GeneralModal.vue';
 import post from '../../api/post';
 import URL from '../../api/api-list';
 import { watchEffect } from 'vue';
+import { message } from '../Message';
 
-
+const switchSelected = inject('switchSelected')
 const userInfo = ref(null);
 
 watchEffect(async () => {
@@ -48,11 +49,13 @@ const handleSubmit = async () => {
         const res = post(URL.user.modifyEmail, body)
         if (!res.err) {
             console.log('Email modified successfully');
-           
+            message.success('邮箱修改成功');
             open.value = false;
+            switchSelected('');
         } else {
             console.log('Email modification failed');
             open.value = false;
+            switchSelected('');
         }
 
     }
@@ -62,6 +65,7 @@ const handleCancel = () => {
     email.value = '';
     emailError.value = '';
     open.value = false;
+    switchSelected('');
 };
 </script>
 <template>

@@ -2,7 +2,7 @@
 import GeneralModal from '../Modal/GeneralModal.vue';
 import { Form, FormItem } from 'ant-design-vue';
 import { InputPassword, Input } from 'ant-design-vue';
-import { ref, onMounted, reactive, watchEffect } from 'vue';
+import { ref, onMounted, reactive, watchEffect,inject } from 'vue';
 import { message } from "../Message.js"
 import post from '../../api/post.js';
 import URL from '../../api/api-list.js';
@@ -11,7 +11,7 @@ import { convertGt } from '../../utils/converGt.js'
 
 
 
-
+const switchSelected = inject('switchSelected')
 
 const userInfo = ref(null);
 
@@ -72,6 +72,7 @@ const onFinish = async () => {
     if (!data.err) {
         message.success('密码重置成功');
         open.value = false;
+        switchSelected('');
     } else {
         message.error('密码重置失败');
     }
