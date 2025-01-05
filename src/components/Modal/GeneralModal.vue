@@ -1,25 +1,34 @@
 <template>
-
-
-    <Modal  wrapClassName=" " getContainer="#scale-container" :mask="false" v-model:open="innerOpen" :width="width"
-        :centered="centered" :class="modalClass" @cancel="handleClose" @close="handleClose" :title="title">
+    <Modal
+        wrapClassName=" "
+        :mask="true"
+        v-model:open="innerOpen"
+        :width="width"
+        :centered="centered"
+        :class="modalClass"
+        @cancel="handleClose"
+        @close="handleClose"
+    >
+        <template #title>
+            <div class="flex flex-col items-center justify-center gap-y-4 pt-8 px-8">
+                <p v-if="mainTitle" class="title-style">{{ mainTitle }}</p>
+                <p v-if="subTitle" class="subtitle-style">{{ subTitle }}</p>
+            </div>
+        </template>
 
         <slot>
             <div class="p-4 text-center"></div>
         </slot>
-        <template #footer>
-            <slot name="footer">
 
-            </slot>
+        <template #footer>
+            <slot name="footer"></slot>
         </template>
     </Modal>
-
-
 </template>
 
 <script setup>
 import { Modal } from 'ant-design-vue';
-import { watch, ref } from 'vue'
+import { watch, ref } from 'vue';
 import { inject } from 'vue';
 
 const {
@@ -32,7 +41,15 @@ const props = defineProps({
         type: Boolean,
         default: false
     },
-    title: {
+    title: { 
+        type: String,
+        default: ''
+    },
+    mainTitle: { 
+        type: String,
+        default: ''
+    },
+    subTitle: { 
         type: String,
         default: ''
     },
@@ -48,25 +65,28 @@ const props = defineProps({
         type: String,
         default: ''
     }
-})
+});
 
-const emit = defineEmits(['update:open'])
+const emit = defineEmits(['update:open', 'close']);
 
-
-const innerOpen = ref(props.open)
+const innerOpen = ref(props.open);
 
 watch(
     () => props.open,
     (newVal) => {
         innerOpen.value = newVal;
-        (newVal) ? turnOffLight() : turnOnLight()
+        if (newVal) {
+            turnOffLight();
+        } else {
+            turnOnLight();
+        }
     }
-)
+);
 
 function handleClose() {
     innerOpen.value = false;
-    turnOnLight()
-    emit('update:open', false)
+    turnOnLight();
+    emit('update:open', false);
     emit('close');
 }
 </script>
@@ -75,4 +95,19 @@ function handleClose() {
 .ant-modal .ant-modal-content {
     border-radius: 25px !important;
 }
+
+.title-style{
+    font-size: 1.458333vw;
+    font-weight: 500;
+    padding-top: 1vw;
+    padding-bottom: 0.5vw;
+}
+
+.subtitle-style{
+    font-size: 0.8vw;
+    font-weight: 500;
+    color: grey;
+}
+
+
 </style>

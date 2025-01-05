@@ -277,21 +277,21 @@ const downLoadAddressDetails = async () => {
                                 @click="copyCVV">
                                 复制
                             </a>
-                            <GeneralModal v-model:open="openCheckoutCodeModal" width="520px">
+                            <GeneralModal v-model:open="openCheckoutCodeModal" width="29.1667vw" :centered="true">
 
                                 <div class="flex items-center flex-col justify-center p-8 gap-y-8">
-                                    <div class="text-3xl">
+                                    <div class="text-[1.458333vw]">
                                         请输入您的支付密码
                                     </div>
                                     <div class="flex flex-col items-center justify-center gap-y-2">
-                                        <div class="w-full text-center ">
+                                        <div class="w-full text-center text-[0.8vw] mb-8">
                                             您的支付密码将用于保护您的账户安全
                                         </div>
                                         <NumberBoxInput v-model:value="checkoutCode" />
                                     </div>
                                     <button @click="finishCVVRequestModal" :disabled="!isCheckoutCodeValid"
                                         :class="{ 'bg-[#3189ef] hover:bg-blue-400 cursor-pointer': isCheckoutCodeValid, 'bg-gray-400 cursor-not-allowed': !isCheckoutCodeValid }"
-                                        class="text-white font-normal text-xl py-3 px-14 rounded-xl duration-100">
+                                        class="text-white font-normal text-[1.04167vw] w-[14.0625vw] h-[2.70833vw] px-14 rounded-xl duration-100">
                                         确认密码
                                     </button>
                                 </div>
