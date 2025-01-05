@@ -18,6 +18,8 @@ import post from '../api/post.js';
 // let inviteCode = ref("ASIU23");
 // let inviteCodeModal = ref("");
 
+const loading = ref(true);
+
 const inviteStatistics = ref({
     rewardBalance: 0,
     monthlyReferrals: 0,
@@ -62,6 +64,7 @@ const dataSource = ref([
 
 
 const update = async ([current, selectByStatus, selectByMonth]) => {
+    loading.value = true;
     const res = await post(URL.invitation.invitationList, {
         pageSize: pageSize,
         pageNum: current,
@@ -91,42 +94,13 @@ const update = async ([current, selectByStatus, selectByMonth]) => {
         });
         total.value = res.total;
     }
+    loading.value = false;
 }
 
 
 watch([current, selectByStatus, selectByMonth], (val) => update(val), { immediate: true })
 
 
-// watch([current, selectByStatus], async (val) => {
-//     const res = await post(URL.invitation.invitationList, {
-//         pageSize: pageSize,
-//         pageNum: val[0],
-//         invitationType: status_to_number[val[1]]
-
-//     }, true)
-//     if (res.err) {
-//         message.error('获取邀请信息失败')
-//     } else {
-//         dataSource.value = res.rows.map((item) => {
-
-//             const formattedDate = new Date(item.queryDate);
-//             const year = formattedDate.getFullYear();
-//             const month = String(formattedDate.getMonth() + 1).padStart(2, '0');
-//             const day = String(formattedDate.getDate()).padStart(2, '0');
-//             const hours = String(formattedDate.getHours()).padStart(2, '0');
-//             const minutes = String(formattedDate.getMinutes()).padStart(2, '0');
-//             const formattedDateString = `${year}-${month}-${day} ${hours}:${minutes}`;
-
-//             return {
-//                 queryDate: formattedDateString,
-//                 status: item.status,
-//                 invitedPhoneNumber: item.invitedPhoneNumber,
-//                 rewardAmount: item.rewardAmount,
-//             }
-//         });
-//         total.value = res.total;
-//     }
-// }, { immediate: true })
 
 
 
@@ -367,7 +341,10 @@ const handleCloseWithdrewRewardAmount = () => {
                 </div>
             </div>
             <div class="rounded-lg overflow-hidden shadow-sm w-[90%] ">
-                <Table @change="(pagination, filters, sorter, { action, currentDataSource }) => {
+                <Table 
+                :loading="loading"
+                
+                @change="(pagination, filters, sorter, { action, currentDataSource }) => {
                     current = pagination.current
                 }" :pagination="{
                     current: current,

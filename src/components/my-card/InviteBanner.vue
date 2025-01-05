@@ -115,7 +115,7 @@ const newInviteCode = ref('');
                 </div>
                 <button @click="openBonusCashout = true"
                     className="bg-[#3b82f6] rounded-xl  px-12 py-3 text-2xl text-white hover:bg-blue-400 "
-                    :availableBalance="invitationInfo['balance']">
+                    :availableBalance=" invitationInfo.rewardBalance.toFixed(2)">
                     去提现
                 </button>
             </div>
@@ -124,7 +124,7 @@ const newInviteCode = ref('');
                 <div class="flex flex-col items-center justify-center gap-y-4 pt-8 px-8">
                     <p class="text-[1.458333vw]">邀请奖励余额</p>
                     <p class="text-[0.8vw]">你可提现的奖励金额为</p>
-                    <p class="font-bold text-[2.08333vw]">${{ Number(invitationInfo['balance']).toFixed(2) }}</p>
+                    <p class="font-bold text-[2.08333vw]">${{ Number( invitationInfo.rewardBalance.toFixed(2)).toFixed(2) }}</p>
                 </div>
                 <template #footer>
                     <div class="flex flex-row items-center justify-center gap-x-4 mt-12 px-8 pb-8 ">

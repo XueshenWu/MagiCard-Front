@@ -26,7 +26,20 @@ const parseDate = (dateStr) => {
 
 const openHelpModal = ref(false);
 
-const cardData = ref(null);
+const cardData = ref({
+    "cardNumber": "4910900031259940",
+    "userName": "xxx",
+    "membershipEndDate": "2025-07-04T08:44:57.000+00:00",
+    "address": "20 Barneson ave", 
+    "rechargeLimit": 60,
+    "city": "San Mateo",
+    "country": "US",
+    "postalCode": "94402",
+    "state": "CA",
+    "balance": "0.00",
+    "cardStatus": "Active",
+    "currency": "USD"
+});
 
 async function getCardList() {
     const res = await get(URL.card.cardList, null);

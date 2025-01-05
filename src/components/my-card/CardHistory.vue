@@ -1,10 +1,10 @@
 <script setup>
 
-// TODO: Group records by date
+
 
 import { ref, computed, watch, nextTick } from 'vue';
 import _, { cloneWith } from 'lodash';
-import { Divider, Pagination, Tag } from 'ant-design-vue';
+import { Divider, Pagination, Skeleton, Tag } from 'ant-design-vue';
 import get from '../../api/get';
 import URL from '../../api/api-list';
 
@@ -36,9 +36,6 @@ const props = defineProps({
 
 
 watch([current, () => props.cardId], async ([currentValue, cardIdValue]) => {
-
-
-
 
 
 
@@ -127,7 +124,6 @@ const typeToColor = (txType) => {
 
 
 <template>
-
     <template v-if="transactionMap">
         <div class="w-full flex flex-col items-start gap-y-6 border-t border-gray-300 pt-12 mt-6">
             <div class="text-2xl ">
@@ -169,14 +165,18 @@ const typeToColor = (txType) => {
                 </div>
             </div>
 
-            <Pagination v-model:current="current" :total="cardHistory.total"
-                v-model:pageSize="LIMIT" />
+            <Pagination v-model:current="current" :total="cardHistory.total" v-model:pageSize="LIMIT" />
 
         </div>
     </template>
 
     <template v-else>
-        加载中...
+        <div class="w-full flex flex-col items-start gap-y-6 border-t border-gray-300 pt-12 mt-6">
+        <div class="text-2xl ">
+            消费记录
+        </div>
+        <Skeleton active />
+        </div>
     </template>
 
 

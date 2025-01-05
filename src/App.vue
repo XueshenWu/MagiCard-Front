@@ -76,7 +76,7 @@ onMounted(() => {
 <!-- App.vue -->
 <script setup>
 import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router';
-import { message } from 'ant-design-vue';
+
 import Navbar from './components/layout/Navbar.vue';
 import { computed, onMounted, onUnmounted, ref, provide } from 'vue';
 import Header from './components/layout/Header.vue';
@@ -88,6 +88,19 @@ const path = computed(() => route.path);
 const headerHeight = ref(0); // 16 * 4 = 64px (h-16)
 const lightOff = ref(false);
 const router = useRouter();
+
+
+router.beforeEach((to, from, next) => {
+    if (to.path === '/' && localStorage.getItem('token')) {
+        next('/cards');
+       
+    } else if(to.path !== '/' && !localStorage.getItem('token')) {
+        next('/');
+        modalStore.loginModalOpen = true;
+    } else {
+        next(); 
+    }
+});
 
 
 
