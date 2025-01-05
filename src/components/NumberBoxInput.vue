@@ -2,7 +2,7 @@
     <div class="flex items-center justify-center gap-2">
         <div v-for="(digit, index) in otpArray" :key="index" class="relative">
             <input type="text" :ref="el => inputRefs[index] = el" v-model="otpArray[index]" maxlength="1"
-                class="w-10 h-10 text-center text-lg border-2 border-gray-200 rounded focus:outline-none focus:border-blue-500 transition-colors"
+                class="w-[2.29vw] h-[2.29vw] text-center text-lg border-2 border-gray-200 rounded focus:outline-none focus:border-blue-500 transition-colors"
                 @input="handleInput($event, index)" @keydown="handleKeydown($event, index)" @paste="handlePaste"
                 @focus="$event.target.select()" inputmode="numeric" pattern="[0-9]*">
         </div>

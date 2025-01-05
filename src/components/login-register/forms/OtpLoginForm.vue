@@ -174,31 +174,68 @@ const handleSendOtp = () => {
 <template>
     <Form class="w-full" ref="formRef" @finish="onFinish" @finishFailed="onFinishFailed" :model="formState"
         :rules="rules" autocomplete="on">
-        <div class="w-full space-y-8 px-12">
+        <div class="w-full px-12">
             <FormItem name="phoneNumber" class="w-full">
                 <PhoneNumberInput v-model:phoneNumber="formState.phoneNumber" />
             </FormItem>
             <FormItem name="otp">
-                <div class="flex items-center justify-between gap-x-2 h-12">
-                    <Input placeholder="请输入短信验证码" class="h-14 w-60" v-model:value="formState.otp" />
-                    <a class="text-blue-500 text-lg" @click="handleSendOtp">
-                        获取验证码
-
-                    </a>
+                <div class="flex items-center justify-between gap-x-2">
+                    <Input v-model:value="formState.otp" placeholder="请输入验证码" size="large"
+                        class="input-style border-radius-custom">
+                    <template #suffix>
+                        <a @click="handleSendOtp" class="text-blue-500 text-[.9375vw]">
+                            获取验证码
+                        </a>
+                    </template>
+                    </Input>
                 </div>
 
 
             </FormItem>
             <FormItem>
                 <div class="flex flex-col gap-y-2">
-                    <a-button class="w-full *:text-xl " size="large" type="primary" html-type="submit">登录</a-button>
+                    <a-button class="button-style w-full *:text-xl " size="large" type="primary"
+                        html-type="submit">登录</a-button>
                     <slot />
                 </div>
             </FormItem>
 
             <FormItem name="checkedAgreement">
-                <Agreement v-model:checkedAgreement="formState.checkedAgreement" />
+                <div class="flex items-center justify-center w-full">
+                    <Agreement v-model:checkedAgreement="formState.checkedAgreement" />
+                </div>
+
             </FormItem>
         </div>
     </Form>
 </template>
+
+<style scoped>
+
+
+.button-style {
+    font-size: 1.041667vw;
+    height: 3.13vw;
+    line-height: 1.458333vw;
+    padding: .625vw;
+  
+    ;
+}
+
+.input-style {
+    padding: .989583vw 2.03125vw;
+    height: 3.39vw;
+    width: 24.17vw;
+    font-size: .9375vw;
+
+}
+
+::v-deep(.ant-form-item) {
+    margin-bottom: 1.875vw !important;
+}
+
+
+.border-radius-custom {
+    border-radius: .625vw;
+}
+</style>

@@ -38,7 +38,7 @@ const handleOk = () => {
          class="bg-black text-white text-[0.75vw] px-[1vw] h-[1.75vw] rounded-xl hover:bg-slate-800 duration-150">
          登录/注册
       </button>
-      <GeneralModal v-model:open="modalStore.loginModalOpen" width="600px" :centered="false">
+      <GeneralModal v-model:open="modalStore.loginModalOpen" width="29.17vw" :centered="true">
          <template #footer>
 
 

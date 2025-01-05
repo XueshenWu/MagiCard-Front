@@ -128,25 +128,25 @@ onMounted(async () => {
                     name="password_reset_form">
                     <div class="flex flex-col items-center justify-center w-full gap-y-2">
                         <div class="flex flex-col items-center justify-center w-full gap-y-2">
-                            <div class="text-[#595a61] py-3 text-xl">
+                            <div class="text-[#595a61] py-3 text-[0.833333vw]">
                                 请输入您的新登陆密码
                             </div>
                             <FormItem name="password_new">
-                                <InputPassword class="input-style" v-model:value="formState.password_new" size="large" />
+                                <InputPassword class="input-style w-full" v-model:value="formState.password_new" size="large" />
                             </FormItem>
                         </div>
                         <div class="flex flex-col items-center justify-start w-full gap-y-2">
-                            <div class="text-[#595a61] py-3 text-xl">
-                                请再次输入您的新登陆密码
+                            <div class="text-[#595a61] py-3 text-[.833333vw]">
+                                请再次输入您的新登陆密码以确认
                             </div>
                             <FormItem name="password_confirm">
                                 <InputPassword class="input-style" v-model:value="formState.password_confirm" size="large" />
                             </FormItem>
                         </div>
-                        <div class="flex flex-col items-start justify-start w-full gap-y-2">
-                            <div class="flex items-center gap-x-4 text-[#595a61] py-3 text-xl">
+                        <div class="flex flex-col items-center justify-center w-full gap-y-2">
+                            <div class="flex items-center gap-x-4 text-[#595a61] py-3 text-[.833333vw]">
                                 <span>请输入验证码</span>
-                                <span class="text-gray-400 text-xs">
+                                <span class="text-gray-400 ">
                                     将发送至 +86 {{ userInfo.phoneNumber }}
                                 </span>
                             </div>
@@ -177,8 +177,12 @@ onMounted(async () => {
     </template>
 </template>
 <style scoped>
-::v-deep(.ant-input-affix-wrapper-lg) {
+::v-deep(.ant-input-affix-wrapper-lg ) {
     padding: 12px 30px !important;
+}
+
+::v-deep(.ant-input-affix-wrapper .ant-input-password) {
+    
 }
 
 .button-style {
@@ -188,10 +192,14 @@ onMounted(async () => {
     padding: .625vw;
     width: 11.666667vw;
     ;
+    border-radius: .625vw;
 }
 
 .input-style {
     padding: .989583vw 2.03125vw;
+    width: 24.14vw;
+    height: 3.67vw;
+    border-radius: .625vw;
 }
 
 .border-radius-custom {

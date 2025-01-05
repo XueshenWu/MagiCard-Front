@@ -40,7 +40,7 @@ const login = async (captchaValidateResult, formState) => {
     const res = await post(URL.user.passwordLogin, body, false)
 
     if (!res.err) {
-     
+
         localStorage.setItem('token', res.data.token)
         loginState.value = false
         router.replace('/cards')
@@ -155,23 +155,55 @@ const onFinishFailed = () => {
 </script>
 
 <template>
-    <Form class="text-lg w-full space-y-12" ref="formRef" @finish="onFinish" @finishFailed="onFinishFailed"
+    <Form class="text-lg w-full" ref="formRef" @finish="onFinish" @finishFailed="onFinishFailed"
         :model="formState" :rules="rules" autocomplete="on">
         <FormItem name="phoneNumber">
-            <PhoneNumberInput class="h-14" v-model:phoneNumber="formState.phoneNumber" />
+            <PhoneNumberInput  v-model:phoneNumber="formState.phoneNumber" />
         </FormItem>
         <FormItem name="password">
             <PasswordInput v-model:password="formState.password" />
         </FormItem>
         <FormItem>
             <div class="flex flex-col gap-y-2">
-                <a-button class="w-full *:text-xl" size="large" type="primary" html-type="submit">登录</a-button>
+                <a-button class="w-full button-style" size="large" type="primary" html-type="submit">登录</a-button>
                 <slot />
             </div>
         </FormItem>
 
         <FormItem name="checkedAgreement">
-            <Agreement v-model:checkedAgreement="formState.checkedAgreement" />
+            <div class="flex items-center justify-center w-full">
+                <Agreement v-model:checkedAgreement="formState.checkedAgreement" />
+            </div>
         </FormItem>
     </Form>
 </template>
+
+<style scoped>
+
+
+.button-style {
+    font-size: 1.041667vw;
+    height: 3.13vw;
+    line-height: 1.458333vw;
+    padding: .625vw;
+  
+    ;
+}
+
+.input-style {
+    padding: .989583vw 2.03125vw;
+    height: 3.39vw;
+    width: 24.17vw;
+    font-size: .9375vw;
+
+}
+
+::v-deep(.ant-form-item) {
+    margin-bottom: 1.875vw !important;
+}
+
+
+.border-radius-custom {
+    border-radius: .625vw;
+}
+</style>

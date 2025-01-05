@@ -22,7 +22,7 @@ const handleConfirm = () => {
 <template>
 
 
-    <Checkbox v-model:checked="checked" class="text-xs">我已阅读并同意<a href="#" class=" text-blue-500 "
+    <Checkbox v-model:checked="checked" class="*:text-[.833333vw]">我已阅读并同意<a href="#" class=" text-blue-500 "
             @click="showAgreement">《用户协议与服务条款》</a>
     </Checkbox>
     <GeneralModal v-model:open="open" title="用户协议与服务条款" :centered="false">
