@@ -1,9 +1,9 @@
 import { message } from "../components/Message.js";
 
-import { useRouter } from "vue-router";
+import { router } from "../main.js";
 import fetchMock from "./fetch-mock.js";
 
-const router = useRouter()
+
 
 const mock = false
 
@@ -53,10 +53,14 @@ const get = async (url, params, token = true) => {
             case 401:
                 message.error("请先登录")
                 router.replace("/login")
+                return { err: true, data: null }
+                
                 break
             case 404:
                 message.error("请求的地址不存在")
                 router.replace('/')
+                return { err: true, data: null }
+                
                 break
             case 500:
                 message.error(res.msg)
