@@ -26,57 +26,40 @@ const handleLoginTypeChange = () => {
             </div>
         </div>
         <div class="flex flex-col items-center justify-start  w-full  gap-y-10">
-
-
             <PasswordLoginForm v-if="loginType === 'password'" class="px-16 ">
                 <button @click="handleLoginTypeChange"
-                    class="button-style   border border-gray-200 rounded-md *:text-xl py-2 w-full hover:bg-slate-200 duration-50">
-
+                    class="button-style border border-gray-200  hover:bg-slate-200 duration-50">
                     <div v-if="loginType === 'password'">
                         使用手机验证码登录
                     </div>
-
                     <div v-else>
                         使用密码登录
                     </div>
-
                 </button>
             </PasswordLoginForm>
             <OtpLoginForm v-else>
                 <button @click="handleLoginTypeChange"
-                    class="button-style border border-gray-200 rounded-md *:text-xl py-2 w-full hover:bg-slate-200 duration-50">
-
+                    class="button-style border border-gray-200  hover:bg-slate-200 duration-50">
                     <div v-if="loginType === 'password'">
                         使用手机验证码登录
                     </div>
-
                     <div v-else>
                         使用密码登录
                     </div>
                 </button>
             </OtpLoginForm>
-
-
-
-
-
         </div>
-
     </div>
-
-
-
-
 </template>
 
 <style scoped>
-
 .button-style {
     font-size: 1.041667vw;
-    height: auto;
+    height: 3.13vw;
     line-height: 1.458333vw;
     padding: .625vw;
     width: 100%;
     border-radius: 0.625vw;
 }
+
 </style>

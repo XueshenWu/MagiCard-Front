@@ -7,9 +7,9 @@ const password = defineModel('password')
 
 
 <template>
-    
-    <InputPassword  v-model:value="password" placeholder="请输入密码" class="input-style" />
-
+    <div class="w-full">
+        <InputPassword  v-model:value="password" placeholder="请输入密码" class="input-style" />
+    </div>
 </template>
 
 <style scoped>
@@ -22,7 +22,7 @@ const password = defineModel('password')
     height: 3.39vw;
     font-size: .9375vw;
     width: 100%;
-
+    border-radius: .625vw;
 }
 
 </style>

@@ -7,7 +7,6 @@ import Agreement from '../Agreement.vue';
 import { Form, FormItem, message } from 'ant-design-vue';
 import { convertGt } from '../../../utils/converGt.js';
 import post from '../../../api/post.js';
-import get from '../../../api/get.js';
 import URL from '../../../api/api-list.js';
 
 
@@ -169,7 +168,6 @@ const onFinishFailed = () => {
                 <slot />
             </div>
         </FormItem>
-
         <FormItem name="checkedAgreement">
             <div class="flex items-center justify-center w-full">
                 <Agreement v-model:checkedAgreement="formState.checkedAgreement" />
@@ -179,17 +177,13 @@ const onFinishFailed = () => {
 </template>
 
 <style scoped>
-
-
 .button-style {
     font-size: 1.041667vw;
     height: 3.13vw;
     line-height: 1.458333vw;
     padding: .625vw;
-  
-    ;
+    border-radius: 0.625vw;
 }
-
 .input-style {
     padding: .989583vw 2.03125vw;
     height: 3.39vw;
@@ -197,12 +191,9 @@ const onFinishFailed = () => {
     font-size: .9375vw;
 
 }
-
 ::v-deep(.ant-form-item) {
     margin-bottom: 1.875vw !important;
 }
-
-
 .border-radius-custom {
     border-radius: .625vw;
 }

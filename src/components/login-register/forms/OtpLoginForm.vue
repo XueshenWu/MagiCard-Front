@@ -189,37 +189,31 @@ const handleSendOtp = () => {
                     </template>
                     </Input>
                 </div>
-
-
             </FormItem>
             <FormItem>
                 <div class="flex flex-col gap-y-2">
-                    <a-button class="button-style w-full *:text-xl " size="large" type="primary"
+                    <a-button class="button-style w-full " type="primary"
                         html-type="submit">登录</a-button>
                     <slot />
                 </div>
             </FormItem>
-
             <FormItem name="checkedAgreement">
                 <div class="flex items-center justify-center w-full">
                     <Agreement v-model:checkedAgreement="formState.checkedAgreement" />
                 </div>
-
             </FormItem>
         </div>
     </Form>
 </template>
 
 <style scoped>
-
-
 .button-style {
     font-size: 1.041667vw;
     height: 3.13vw;
     line-height: 1.458333vw;
     padding: .625vw;
-  
-    ;
+    width: 100%;
+    border-radius: 0.625vw;
 }
 
 .input-style {
