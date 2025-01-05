@@ -52,6 +52,12 @@ const year = ref(2023);
 const card = ref(cardOptions[0]);
 const handleApply = async () => {
 
+    if(!currentCard.value){
+        message.error('请选择卡片');
+        return;
+    }
+
+
     const res = await post(URL.user.requestStatement, {
         cardNumber: card.value,
         year: year.value,

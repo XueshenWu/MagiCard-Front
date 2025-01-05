@@ -124,7 +124,7 @@ onMounted(async () => {
         <GeneralModal v-model:open="open" width="29.1667vw" :mainTitle="userInfo.loginPassword ? '重置密码' : '设置密码'"
             :centered="true">
             <div class="flex flex-col items-center justify-center gap-y-6 w-full px-8 pt-6">
-                <Form ref="formRef" :model="formState" :rules="rules" autocomplete="on" @finish="onFinish"
+                <Form class="w-full" ref="formRef" :model="formState" :rules="rules" autocomplete="on" @finish="onFinish"
                     name="password_reset_form">
                     <div class="flex flex-col items-center justify-center w-full gap-y-2">
                         <div class="flex flex-col items-center justify-center w-full gap-y-2">
