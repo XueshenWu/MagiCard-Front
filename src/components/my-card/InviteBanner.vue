@@ -35,9 +35,6 @@ const copyInviteCode = async () => {
         message.error('复制失败');
     }
 };
-
-const newInviteCode = ref('');
-
 </script>
 <template>
     <template v-if="!invitationInfo">
@@ -95,7 +92,7 @@ const newInviteCode = ref('');
                                     <div class="text-gray-500 text-[.833333vw]">
                                         邀请码
                                     </div>
-                                    <Input allowClear v-model:value="newInviteCode"
+                                    <Input allowClear v-model:value="invitationInfo.inviteCode"
                                         class="text-[.9375vw] font-semibold customer-input" />
 
                                 </div>
@@ -104,9 +101,9 @@ const newInviteCode = ref('');
                             <template #footer>
                                 <div class="flex justify-center items-center gap-x-4 m-4">
                                     <button @click="open = false"
-                                        class="h-[2.708333vw] text-[1.041667vw] py-3 w-[100%] rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors duration-200">取消</button>
+                                        class="h-[2.708333vw] text-[1.041667vw] w-[100%] rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors duration-200">取消</button>
                                     <button @click="open = false"
-                                        :class="`h-[2.708333vw] text-[1.041667vw] py-3 w-[100%] rounded-xl transition-colors duration-200 ${(newInviteCode ?? '').length > 0 ? ' bg-blue-500 text-white hover:bg-blue-400' : 'bg-gray-200 cursor-not-allowed text-gray-500'}`">确认</button>
+                                        :class="`h-[2.708333vw] text-[1.041667vw] w-[100%] rounded-xl transition-colors duration-200 ${(invitationInfo.inviteCode ?? '').length > 0 ? ' bg-blue-500 text-white hover:bg-blue-400' : 'bg-gray-200 cursor-not-allowed text-gray-500'}`">确认</button>
                                 </div>
                             </template>
                         </GeneralModal>

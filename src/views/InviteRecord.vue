@@ -3,6 +3,7 @@ import { DownOutlined } from '@ant-design/icons-vue';
 import { computed, ref, watchEffect } from 'vue';
 import { message } from "../components/Message.js"
 import URL from '../api/api-list.js';
+import { Input } from 'ant-design-vue';
 
 import useClipboard from 'vue-clipboard3';
 import GeneralModal from '../components/Modal/GeneralModal.vue';
@@ -12,11 +13,9 @@ import { watch } from 'vue';
 import post from '../api/post.js';
 
 
-// const open = ref(false);
-// const openRewardShow = ref(false);
-// let rewardAmount = ref(0.00);
-// let inviteCode = ref("ASIU23");
-// let inviteCodeModal = ref("");
+const open = ref(false);
+const openRewardShow = ref(false);
+let inviteCodeModal = ref("");
 
 const inviteStatistics = ref({
     rewardBalance: 0,
@@ -301,19 +300,19 @@ const handleCloseWithdrewRewardAmount = () => {
                 <div class="flex flex-row w-full justify-between mt-5">
                     <div class="flex flex-col">
                         <div class="text-2xl text-black font-bold">{{ inviteStatistics.monthlyReferrals }}</div>
-                        <div class="text-xl text-[#a59897] font-normal">本月推荐人数</div>
+                        <div class="text-xl text-[#979797] font-normal">本月推荐人数</div>
                     </div>
                     <div class="flex flex-col">
                         <div class="text-2xl text-black font-bold">{{ inviteStatistics.totalReferrals }}</div>
-                        <div class="text-xl text-[#a59897] font-normal">总推荐人数</div>
+                        <div class="text-xl text-[#979797] font-normal">总推荐人数</div>
                     </div>
                     <div class="flex flex-col">
                         <div class="text-2xl text-black font-bold">{{ inviteStatistics.rechargedUsers }}</div>
-                        <div class="text-xl text-[#a59897] font-normal">已充值人数</div>
+                        <div class="text-xl text-[#979797] font-normal">已充值人数</div>
                     </div>
                     <div class="flex flex-col">
                         <div class="text-2xl text-black font-bold">${{ inviteStatistics.totalRewardAmount }}</div>
-                        <div class="text-xl text-[#a59897] font-normal">总奖励金额</div>
+                        <div class="text-xl text-[#979797] font-normal">总奖励金额</div>
                     </div>
 
 
@@ -368,50 +367,53 @@ const handleCloseWithdrewRewardAmount = () => {
             </div>
             <div class="rounded-lg overflow-hidden shadow-sm w-[90%] ">
                 <Table @change="(pagination, filters, sorter, { action, currentDataSource }) => {
-                    current = pagination.current
-                }" :pagination="{
-                    current: current,
-                    pageSize: pageSize,
-                    total: total,
-                }" :dataSource="dataSource" :columns="columns" class="w-full " bordered />
+                            current = pagination.current
+                        }" :pagination="{
+                            current: current,
+                            pageSize: pageSize,
+                            total: total,
+                        }" :dataSource="dataSource" :columns="columns" class="w-full " bordered />
             </div>
         </div>
-        <GeneralModal v-model:open='open' width="600px" :centered="false">
-            <div class="flex flex-col items-center justify-center gap-y-4 w-full p-6">
-                <p class="text-3xl">修改邀请码</p>
-                <div class="flex flex-col w-full">
-                    <div class="py-4 text-lg">邀请码</div>
-                    <div class="h-16">
-                        <a-input allowClear v-model:value="inviteCode" placeholder="请填写邀请码" class="h-full" />
+
+
+        <GeneralModal width="29.1667vw" v-model:open="open" :centered="true">
+            <div class="p-8 flex flex-col gap-y-2 items-center justify-center">
+                <div class="text-[1.458333vw]">
+                    修改邀请码
+                </div>
+                <div class="flex flex-col items-start gap-y-4 w-full">
+                    <div class="text-gray-500 text-[.833333vw]">
+                        邀请码
                     </div>
+                    <Input allowClear v-model:value="inviteStatistics.inviteCode"
+                        class="text-[.9375vw] font-semibold customer-input" />
+
                 </div>
             </div>
+
             <template #footer>
-                <div class="flex justify-between gap-4 w-full text-xl px-4 pb-4">
-                    <button class="py-4 px-4 rounded-xl bg-[#eeeeee] text-black w-full" @click="open = false">
-                        取消
-                    </button>
-                    <button
-                        :class="`py-4 px-4 rounded-xl   w-full ${inviteCode?.length > 0 ? 'bg-[#3189ef] hover:bg-blue-400  text-white' : 'bg-[#eeeeee] cursor-not-allowed '}`">
-                        确定
-                    </button>
+                <div class="flex justify-center items-center gap-x-4 m-4">
+                    <button @click="open = false"
+                        class="h-[2.708333vw] text-[1.041667vw] w-[100%] rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors duration-200">取消</button>
+                    <button @click="open = false"
+                        :class="`h-[2.708333vw] text-[1.041667vw] w-[100%] rounded-xl transition-colors duration-200 ${(inviteStatistics.inviteCode ?? '').length > 0 ? ' bg-blue-500 text-white hover:bg-blue-400' : 'bg-gray-200 cursor-not-allowed text-gray-500'}`">确认</button>
                 </div>
             </template>
         </GeneralModal>
-
-        <GeneralModal v-model:open='openRewardShow' width="520px" @close="handleCloseWithdrewRewardAmount"
-            :centered="false">
+        <GeneralModal v-model:open='openRewardShow' width="29.1667vw" @close="handleCloseWithdrewRewardAmount"
+            :centered="true">
             <template #default>
                 <div class="flex flex-col items-center justify-center gap-y-4 pt-6 px-8">
-                    <p class="text-3xl">邀请奖励余额</p>
-                    <p class="text-normal">你可提现的奖励金额为</p>
-                    <p class="font-bold text-4xl">${{ Number(rewardAmount).toFixed(2) }}</p>
+                    <p class="text-[1.458333vw]">邀请奖励余额</p>
+                    <p class="text-[0.8vw]">你可提现的奖励金额为</p>
+                    <p class="font-bold text-[2.08333vw]">${{ Number(rewardAmount).toFixed(2) }}</p>
                 </div>
             </template>
             <template #footer>
-                <div class="flex items-center justify-center pb-6 px-8 mt-8">
+                <div class="flex flex-row items-center justify-center gap-x-4 mt-12 px-8 pb-8 ">
                     <button
-                        :class='` text-xl mt-4 w-72 py-4  rounded-xl   ${rewardAmount === 0 ? "disabled cursor-not-allowed bg-gray-100 text-gray-400" : " duration-100 bg-blue-500 hover:bg-blue-400 text-white"}`'>全部提现</button>
+                        :class='`text-[1.04167vw] w-[14.0625vw] h-[2.70833vw] rounded-xl   ${rewardAmount === 0 ? "disabled cursor-not-allowed bg-gray-100 text-gray-400" : " duration-100 bg-blue-500 hover:bg-blue-400 text-white"}`'>全部提现</button>
                 </div>
             </template>
         </GeneralModal>

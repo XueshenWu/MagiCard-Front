@@ -8,7 +8,7 @@ import URL from '../../api/api-list.js';
 import { convertGt } from '../../utils/converGt.js'
 
 
-const step = ref(2);
+const step = ref(1);
 
 const formRef = ref(null);
 const captchaReady = ref(false);
@@ -127,31 +127,19 @@ onMounted(async () => {
 
 
 <template>
-    <GeneralModal v-if="userInfo" v-model:open="open" width="610px">
+    <GeneralModal v-if="userInfo" v-model:open="open" width="29.1667vw" mainTitle="修改手机号"
+        :subTitle="step === 1 ? '请先验证当前登录手机号' : '请验证新手机号'" :centered="true">
         <div class="p-8 gap-y-12  flex flex-col items-center justify-center">
-
-            <div class="text-center flex flex-col gap-y-4">
-                <div class="text-3xl">
-                    修改手机号
-                </div>
-                <div class="text-lg text-gray-500">
-                    {{ step === 1 ? '请先验证当前登录手机号' : '请验证新手机号' }}
-                </div>
-
-            </div>
             <Form>
-
                 <div class="w-[438px] space-y-8">
-
-
                     <template v-if="step === 1">
                         <div class="flex flex-col items-start w-full gap-y-4">
                             <div class="text-gray-500">
                                 手机号
                             </div>
                             <div
-                                class=" h-16 cursor-not-allowed py-4 w-full flex flex-row justify-between rounded-xl border text-xl border-gray-300 ">
-                                <div class="text-gray-300 font-bold text-center px-6 border-r border-gray-400">
+                                class="input-style cursor-not-allowed py-4 w-full flex flex-row justify-between rounded-xl border text-xl border-gray-300 ">
+                                <div class="text-gray-300 font-bold text-center pr-6 border-r border-gray-400">
                                     +86
                                 </div>
                                 <div class="w-full px-8 font-semibold ">
@@ -159,18 +147,19 @@ onMounted(async () => {
                                 </div>
                             </div>
                         </div>
-
                         <FormItem>
                             <div class="text-gray-500 mb-4">
-
                                 验证码
                             </div>
                             <div class="flex flex-row items-center justify-between w-full gap-x-4">
                                 <Input v-model:value="formState.otp_old" placeholder="请输入验证码" size="large"
-                                    class="w-60 h-14" />
-                                <a @click="handleSendOtp" class="text-blue-500 text-lg">
-                                    获取验证码
-                                </a>
+                                    class="input-style rounded-xl">
+                                    <template #suffix>
+                                        <a @click="handleSendOtp" class="text-blue-500 text-[.9375vw]">
+                                            获取验证码
+                                        </a>
+                                    </template>
+                                </Input>
                             </div>
                         </FormItem>
                     </template>
@@ -191,15 +180,9 @@ onMounted(async () => {
                                         contenteditable>
                                         {{ formState.phoneNumber_new }}
                                     </div>
-
                                 </div>
-
-
-
                             </div>
                         </FormItem>
-
-
                         <FormItem>
                             <div class="text-gray-500 mb-4">
 
@@ -207,42 +190,51 @@ onMounted(async () => {
                             </div>
                             <div class="flex flex-row items-center justify-between w-full gap-x-4">
                                 <Input v-model:value="formState.otp_new" placeholder="请输入验证码" size="large"
-                                    class="w-60 h-14" />
-                                <a @click="handleSendOtp" class="text-blue-500 text-lg">
-                                    获取验证码
-                                </a>
+                                    class="input-style rounded-xl">
+                                    <template #suffix>
+                                        <a @click="handleSendOtp" class="text-blue-500 text-[.9375vw]">
+                                            获取验证码
+                                        </a>
+                                    </template>
+                                </Input>
                             </div>
                         </FormItem>
                     </template>
 
                     <div class="flex flex-row justify-between w-full text-xl gap-x-4 ">
                         <button v-show="step === 1" @click="open = false"
-                            class=" py-4 w-full bg-gray-200 rounded-xl">取消</button>
+                            class="button-style bg-gray-200 rounded-xl">取消</button>
                         <button @click="toStep2" v-show="step === 1"
-                            class=" py-4 w-full text-white bg-blue-500 rounded-xl">
+                            class="button-style text-white bg-blue-500 rounded-xl">
                             下一步
                         </button>
                         <button v-show="step === 2" @click="step = 1"
-                            class="text-white py-4 w-full bg-blue-500 rounded-xl">
+                            class="text-white bg-blue-500 rounded-xl button-style">
                             上一步
                         </button>
                         <button @click="finishModify" v-show="step === 2"
-                            class="text-white py-4 w-full bg-blue-500 rounded-xl">
+                            class="text-white bg-blue-500 rounded-xl button-style">
                             完成
                         </button>
                     </div>
                 </div>
             </Form>
-
-
         </div>
-
-
-
     </GeneralModal>
     <div v-else>
         加载中...
     </div>
-
-
 </template>
+<style scoped>
+.button-style {
+    font-size: 1.041667vw;
+    height: auto;
+    line-height: 1.458333vw;
+    padding: .625vw;
+    width: 100%;
+}
+
+.input-style {
+    padding: .989583vw 2.03125vw;
+}
+</style>

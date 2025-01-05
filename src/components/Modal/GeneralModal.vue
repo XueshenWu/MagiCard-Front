@@ -1,16 +1,10 @@
 <template>
-    <Modal
-        wrapClassName=" "
-        :mask="true"
-        v-model:open="innerOpen"
-        :width="width"
-        :centered="centered"
-        :class="modalClass"
+    <Modal wrapClassName="" :mask="true" v-model:open="innerOpen" :width="width" :centered="centered" :bodyStyle="bodyStyle"
+        :class="modalClass" :confirmLoading="true"
         @cancel="handleClose"
-        @close="handleClose"
-    >
+        @close="handleClose">
         <template #title>
-            <div class="flex flex-col items-center justify-center gap-y-4 pt-8 px-8">
+            <div class="flex flex-col items-center justify-center">
                 <p v-if="mainTitle" class="title-style">{{ mainTitle }}</p>
                 <p v-if="subTitle" class="subtitle-style">{{ subTitle }}</p>
             </div>
@@ -41,15 +35,15 @@ const props = defineProps({
         type: Boolean,
         default: false
     },
-    title: { 
+    title: {
         type: String,
         default: ''
     },
-    mainTitle: { 
+    mainTitle: {
         type: String,
         default: ''
     },
-    subTitle: { 
+    subTitle: {
         type: String,
         default: ''
     },
@@ -64,6 +58,10 @@ const props = defineProps({
     modalClass: {
         type: String,
         default: ''
+    },
+    bodyStyle: { 
+        type: Object,
+        default: () => ({})
     }
 });
 
@@ -96,18 +94,16 @@ function handleClose() {
     border-radius: 25px !important;
 }
 
-.title-style{
+.title-style {
     font-size: 1.458333vw;
     font-weight: 500;
     padding-top: 1vw;
     padding-bottom: 0.5vw;
 }
 
-.subtitle-style{
+.subtitle-style {
     font-size: 0.8vw;
     font-weight: 500;
     color: grey;
 }
-
-
 </style>
