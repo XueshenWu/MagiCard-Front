@@ -16,7 +16,7 @@ const get = async (url, params, token = true) => {
     if (token === true && !localStorage.getItem('token')) {
         message.error("请先登录")
         router.replace("/login")
-        return
+        return { err: true, data: null }
     }
 
     try {

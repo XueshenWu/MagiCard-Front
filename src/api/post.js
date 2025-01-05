@@ -1,9 +1,9 @@
 import { message } from "../components/Message.js";
 
-import { useRouter } from "vue-router";
+import { router } from "../main.js";
 import fetchMock from "./fetch-mock.js";
 
-const router = useRouter()
+
 
 const mock = false
 
@@ -12,7 +12,7 @@ const post = async (url, body, token = true) => {
     if (token === true && !localStorage.getItem('token')) {
         message.error("请先登录")
         router.replace("/login")
-        return
+        return { err: true, data: null }
     }
 
     try {

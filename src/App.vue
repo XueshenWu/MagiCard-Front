@@ -82,6 +82,10 @@ import { computed, onMounted, onUnmounted, ref, provide } from 'vue';
 import Header from './components/layout/Header.vue';
 
 import { modalStore } from './states/modalStore';
+import get from './api/get';
+import URL from './api/api-list';
+import { message } from './components/Message';
+
 
 const route = useRoute();
 const path = computed(() => route.path);
@@ -90,15 +94,33 @@ const lightOff = ref(false);
 const router = useRouter();
 
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
     if (to.path === '/' && localStorage.getItem('token')) {
         next('/cards');
-       
-    } else if(to.path !== '/' && !localStorage.getItem('token')) {
+
+    } else if (to.path !== '/' && !localStorage.getItem('token')) {
         next('/');
         modalStore.loginModalOpen = true;
     } else {
-        next(); 
+
+        if (to.path === '/cards') {
+
+            const res = await get(URL.card.cardList, null, true)
+            if (res.err) {
+                router.replace('subscription')
+            } else {
+                const data = res.data;
+                if (data.length === 0) {
+                    message.error('请先开通会员')
+                    router.replace('openCard')
+                }
+            }
+
+
+
+        }
+
+        next();
     }
 });
 

@@ -1,5 +1,5 @@
 <script setup>
-import { watch, ref, watchEffect } from 'vue';
+import { watch, ref, watchEffect, onMounted } from 'vue';
 import { cardListResp } from '../mock/cardList';
 import { defaultCardResp } from '../mock/defaultCard';
 import { Divider, TabPane, Tabs } from 'ant-design-vue';
@@ -9,8 +9,9 @@ import InviteBanner from '../components/my-card/InviteBanner.vue';
 import CardHistory from '../components/my-card/CardHistory.vue';
 import GeneralModal from '../components/Modal/GeneralModal.vue';
 import get from '../api/get';
+import { message } from '../components/Message';
 import URL from '../api/api-list';
-
+import { useRouter } from 'vue-router';
 
 // TODO: vue3 节流防抖
 
@@ -40,6 +41,13 @@ const cardData = ref({
     "cardStatus": "Active",
     "currency": "USD"
 });
+
+
+const router = useRouter();
+
+
+
+
 
 async function getCardList() {
     const res = await get(URL.card.cardList, null);

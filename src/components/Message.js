@@ -15,6 +15,7 @@ export const message = {
     },
     error: (content) => {
         ant_message.error({
+            class:"text-[1vw]",
             content: " ",
             icon: h(MessageIcon, { success: false, content }),
         })

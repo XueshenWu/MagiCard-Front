@@ -102,7 +102,7 @@ onMounted(async () => {
                 geeTest: convertGt(gtResult),
                 action: 'login'
             };
-            const data = post(URL.user.smsCode, body, true);
+            const data = await post(URL.user.smsCode, body, true);
             if (!data.err) {
                 // message.success('验证码发送成功');
             } else {

@@ -162,7 +162,7 @@ onMounted(async () => {
                 action: 'register'
             }
 
-            const data = post(URL.user.smsCode, body, false)
+            const data = await post(URL.user.smsCode, body, false)
             if (!data.err) {
                 message.success('验证码发送成功')
 

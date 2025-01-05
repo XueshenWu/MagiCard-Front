@@ -1,9 +1,10 @@
 <script setup>
 import { DownOutlined } from '@ant-design/icons-vue';
-import { computed, ref, watchEffect } from 'vue';
+import { computed, onMounted, ref, watchEffect } from 'vue';
 import { message } from "../components/Message.js"
 import URL from '../api/api-list.js';
 import { Input } from 'ant-design-vue';
+import { useRouter } from 'vue-router';
 
 import useClipboard from 'vue-clipboard3';
 import GeneralModal from '../components/Modal/GeneralModal.vue';
@@ -34,6 +35,8 @@ const status_to_number = {
     未支付: 2,
     已支付: 3
 }
+
+
 
 const date_to_number = (t) => {
 
