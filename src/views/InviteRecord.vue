@@ -14,9 +14,10 @@ import { watch } from 'vue';
 import post from '../api/post.js';
 
 
+
 const open = ref(false);
 const openRewardShow = ref(false);
-let inviteCodeModal = ref("");
+const inviteCodeModal = ref("");
 
 const loading = ref(true);
 
@@ -145,6 +146,44 @@ const rotate = () => {
     rotateDegree.value += 360
 }
 
+
+const handleOpenChangeInvitationCode = () => {
+    open.value = true;
+    inviteCodeModal.value = inviteStatistics.value.inviteCode;
+}
+
+
+const handleModifyInviteCode = async () => {
+
+    if (inviteCodeModal.value === inviteStatistics.value.inviteCode) {
+        message.error('请输入新的邀请码');
+        return;
+    }
+
+    const inviteCodePattern = /^[a-zA-Z0-9]{6}$/;
+    if (!inviteCodePattern.test(inviteCodeModal.value)) {
+        message.error('邀请码必须是6位数字和字母的组合');
+        return;
+    }
+
+    const res = await post(URL.invitation.changeInvitationCode, { invitationCode: inviteCodeModal.value }, true)
+    if (!res.err) {
+        message.success('修改成功');
+
+        const res = await get(URL.invitation.summary, null, true)
+        if (!res.err) {
+            inviteStatistics.value = res.data;
+        }
+
+
+    } else {
+        message.error('修改失败');
+    }
+
+    open.value = false;
+};
+
+
 const handleRefresh = () => {
     rotate()
 }
@@ -222,10 +261,7 @@ const handleWithdrew = () => {
 
 }
 
-const handleOpenChangeInvitationCode = () => {
-    open.value = true;
-    inviteCodeModal.value = inviteCode.value;
-}
+
 const handleOpenWithdrewRewardAmount = () => {
     openRewardShow.value = true;
 }
@@ -343,10 +379,7 @@ const handleCloseWithdrewRewardAmount = () => {
                 </div>
             </div>
             <div class="rounded-lg overflow-hidden shadow-sm w-[90%] ">
-                <Table 
-                :loading="loading"
-                
-                @change="(pagination, filters, sorter, { action, currentDataSource }) => {
+                <Table :loading="loading" @change="(pagination, filters, sorter, { action, currentDataSource }) => {
                     current = pagination.current
                 }" :pagination="{
                     current: current,
@@ -366,7 +399,7 @@ const handleCloseWithdrewRewardAmount = () => {
                     <div class="text-gray-500 text-[.833333vw]">
                         邀请码
                     </div>
-                    <Input allowClear v-model:value="inviteStatistics.inviteCode"
+                    <Input allowClear v-model:value="inviteCodeModal"
                         class="text-[.9375vw] font-semibold customer-input" />
 
                 </div>
@@ -376,7 +409,7 @@ const handleCloseWithdrewRewardAmount = () => {
                 <div class="flex justify-center items-center gap-x-4 m-4">
                     <button @click="open = false"
                         class="h-[2.708333vw] text-[1.041667vw] w-[100%] rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors duration-200">取消</button>
-                    <button @click="open = false"
+                    <button @click="handleModifyInviteCode"
                         :class="`h-[2.708333vw] text-[1.041667vw] w-[100%] rounded-xl transition-colors duration-200 ${(inviteStatistics.inviteCode ?? '').length > 0 ? ' bg-blue-500 text-white hover:bg-blue-400' : 'bg-gray-200 cursor-not-allowed text-gray-500'}`">确认</button>
                 </div>
             </template>

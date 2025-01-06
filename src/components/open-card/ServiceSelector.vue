@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
 
 
 
@@ -15,7 +15,7 @@ const creativity = {
     incompatible: ['Netflix', 'Disney', 'Spotify', 'Wise', 'Google Cloud', 'Oracle Cloud', 'Temu']
 }
 
-const service = ref('multi-media')
+const service = inject('cardType');
 
 </script>
 

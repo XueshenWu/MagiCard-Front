@@ -1,6 +1,6 @@
 
-// const BASE_URL = 'http://192.168.193.75:8085';
-const BASE_URL = 'http://3.86.106.168:8085';
+const BASE_URL = 'http://192.168.193.75:8085';
+// const BASE_URL = 'http://3.86.106.168:8085';
 
 
 const URL = {
@@ -22,16 +22,22 @@ const URL = {
     invitation:{
         summary:`${BASE_URL}/v1/invitation/summary`,
         invitationList:`${BASE_URL}/v1/invitation/List`,
+        changeInvitationCode:`${BASE_URL}/v1/invitation/changeInvitationCode`,
     },
     card:{
         cardList: `${BASE_URL}/v1/card/list`,
         cardInfo: `${BASE_URL}/v1/card/info`,
         verifyPassword: `${BASE_URL}/v1/card/verifyPassword`,
+        rechargeFee: `${BASE_URL}/v1/card/rechargeFee`,
     },
     transaction:{
         summary: `${BASE_URL}/v1/transaction/summary`,
         card: `${BASE_URL}/v1/transaction/card`,
         all: `${BASE_URL}/v1/transaction/all`,
+    },
+    payment:{
+        openCardPayment:`${BASE_URL}/v1/payment/openCardPayment`,
+        rechargePayment:`${BASE_URL}/v1/payment/rechargePayment`,
     }
 }
 

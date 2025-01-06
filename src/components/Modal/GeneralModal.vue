@@ -1,5 +1,7 @@
 <template>
-    <Modal wrapClassName="" :mask="true" v-model:open="innerOpen" :width="width" :centered="centered" :bodyStyle="bodyStyle"
+    <Modal wrapClassName="" 
+    :maskClosable="maskClosable"
+    :mask="true" v-model:open="innerOpen" :width="width" :centered="centered" :bodyStyle="bodyStyle"
         :class="modalClass" :confirmLoading="true"
         @cancel="handleClose"
         @close="handleClose">
@@ -53,7 +55,7 @@ const props = defineProps({
     },
     centered: {
         type: Boolean,
-        default: false
+        default: true
     },
     modalClass: {
         type: String,
@@ -62,6 +64,10 @@ const props = defineProps({
     bodyStyle: { 
         type: Object,
         default: () => ({})
+    },
+    maskClosable:{
+        type: Boolean,
+        default: true
     }
 });
 

@@ -1,7 +1,9 @@
 <script setup>
-import { ref } from 'vue';
+import { inject, ref, watch } from 'vue';
 
 const currentPlan = ref(0);
+
+const yearTerm = inject('yearTerm');
 
 const rate = [
     {
@@ -14,6 +16,12 @@ const rate = [
     }
 ]
 
+
+const handleClick = (idx) => {
+    currentPlan.value = idx;
+    yearTerm.value = rate[idx].duration;
+}
+
 </script>
 
 <template>
@@ -23,22 +31,9 @@ const rate = [
             <div class="text-2xl font-bold">
                 选择卡片年限
             </div>
-            <!-- <div>
-                <div @click="duration = 2"
-                    :class="`cursor-pointer tracking-wide text-sm flex border w-64 rounded-lg px-8 h-16 justify-between duration-75 items-center ${duration === 2 ? 'border-blue-500' : 'border-gray-100'}`">
-                    <span class=" first-letter:font-semibold">2年</span>
-                    <span class="font-semibold ">$14.99</span>
-                </div>
-            </div>
-            <div>
-                <div @click="duration = 1"
-                    :class="`cursor-pointer tracking-wide text-sm flex border w-64 rounded-lg px-8 h-16 justify-between duration-75 items-center ${duration === 1 ? 'border-blue-500' : 'border-gray-100'}`">
-                    <span class=" first-letter:font-semibold">1年</span>
-                    <span class="font-semibold ">$9.99</span>
-                </div>
-            </div> -->
+        
             <div v-for="(item, idx) in rate" :key="idx" class="w-full">
-                <div @click="currentPlan = idx"
+                <div @click="()=>handleClick(idx)"
                     :class="`cursor-pointer tracking-wide text-2xl flex border w-full rounded-lg px-12 h-24 justify-between duration-75 items-center ${rate[currentPlan].duration === item.duration ? 'border-blue-500' : 'border-gray-100'}`">
                     <span class="first-letter:font-semibold">{{ item.duration }}年</span>
                     <span class="font-semibold ">{{ item.price }}</span>

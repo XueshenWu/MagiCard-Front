@@ -14,6 +14,6 @@ const toggleLocale = () => {
 
 <template>
    <img 
-   class="w-[1.5625vw] h-[1.875vw] cursor-pointer"
+   class="w-[1.5625vw] h-[1.5625vw] cursor-pointer"
    src="/translation-icon.png" @click="toggleLocale" />
 </template>

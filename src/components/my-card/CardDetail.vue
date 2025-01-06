@@ -250,7 +250,7 @@ const downLoadAddressDetails = async () => {
 
                         <CashoutButton :availableBalance="cardData['balance']" />
 
-                        <RechargeButton cardInfo="test" />
+                        <RechargeButton :cardId="cardId" />
                         <button @click="() => router.replace('/openCard')"
                             class="bg-black text-slate-200 px-8 py-3 rounded-xl hover:bg-slate-800 duration-100">
                             开新卡
