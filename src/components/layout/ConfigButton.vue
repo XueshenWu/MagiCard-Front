@@ -1,5 +1,5 @@
 <script setup>
-import { Button, Dropdown, Menu } from 'ant-design-vue';
+import { Button, Dropdown, Menu, message } from 'ant-design-vue';
 import { DownOutlined } from '@ant-design/icons-vue';
 import { provide, ref } from 'vue';
 
@@ -9,6 +9,7 @@ import ApplyMonthlyStatement from '../configModalForms/ApplyMonthlyStatement.vue
 import ModifyPhoneNumber from '../configModalForms/ModifyPhoneNumber.vue';
 import ResetCheckoutPassword from '../configModalForms/ResetCheckoutPassword.vue';
 import Feedback from '../configModalForms/Feedback.vue';
+import { useI18n } from 'vue-i18n';
 
 const openModifyPhoneNumberModal = ref(false);
 const openModifyEmailModal = ref(false);
@@ -16,6 +17,8 @@ const openResetPasswordModal = ref(false);
 const openApplyMonthlyStatementModal = ref(false);
 const openResetCheckoutPasswordModal = ref(false);
 const openFeedbackModal = ref(false);
+
+const { t } = useI18n();
 
 const switchSelected = (i)=>{
     handleMenuClick({key: i});
@@ -48,18 +51,18 @@ const handleMenuClick = ({ key }) => {
     <Dropdown class="w-[5.36vw] h-[2.24vw] flex items-center justify-center text-[1.06vw]" overlayClassName="">
         <template #overlay>
             <Menu @click='handleMenuClick'>
-                <Menu.Item key="1">修改手机号</Menu.Item>
-                <Menu.Item key="2">修改邮箱</Menu.Item>
-                <Menu.Item key="3">修改支付密码</Menu.Item>
-                <Menu.Item key="4">修改登录密码</Menu.Item>
-                <Menu.Item key="5">申请月结单</Menu.Item>
-                <Menu.Item key="6">投诉建议</Menu.Item>
-                <Menu.Item key="7">退出登录</Menu.Item>
+                <Menu.Item key="1">{{ t('message.modifyPhone') }}</Menu.Item>
+                <Menu.Item key="2">{{ t('message.modifyEmail') }}</Menu.Item>
+                <Menu.Item key="3">{{ t('message.modifyPaymentPassword') }}</Menu.Item>
+                <Menu.Item key="4">{{ t('message.modifyLoginPassword') }}</Menu.Item>
+                <Menu.Item key="5">{{ t('message.applyMonthlyStatement') }}</Menu.Item>
+                <Menu.Item key="6">{{ t('message.feedback') }}</Menu.Item>
+                <Menu.Item key="7">{{ t('message.logout') }}</Menu.Item>
             </Menu>
         </template>
 
-        <Button class="flex items-center">
-            设置
+        <Button class="flex items-center ">
+            {{ t('message.settings') }}
             <DownOutlined />
         </Button>
 
@@ -74,9 +77,10 @@ const handleMenuClick = ({ key }) => {
 </template>
 
 <style scoped lang="less">
-div /deep/ .ant-btn-default {
+::v-deep(.ant-btn-default) {
     border-color: transparent !important;
     background-color: #eeeeee !important;
+    padding: .364583vw 1.041667vw !important;
 }
 
 

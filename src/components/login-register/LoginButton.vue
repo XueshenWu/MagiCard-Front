@@ -4,10 +4,14 @@ import { ref, provide, nextTick, inject } from 'vue';
 import CardContainer from './CardContainer.vue';
 import GeneralModal from '../Modal/GeneralModal.vue';
 import { modalStore } from '../../states/modalStore';
+import { useI18n } from 'vue-i18n';
+
 const {
     turnOnLight,
     turnOffLight
 } = inject('lightSwitch');
+
+const { t } = useI18n();
 
 
 const closeModal = () => {
@@ -36,7 +40,7 @@ const handleOk = () => {
    <div ref="replayModal">
       <button @click="handleClick"
          class="bg-black text-white text-[0.75vw] px-[1vw] h-[1.75vw] rounded-xl hover:bg-slate-800 duration-150">
-         登录/注册
+         {{ t('message.login') }}
       </button>
       <GeneralModal v-model:open="modalStore.loginModalOpen" width="29.17vw" :centered="true">
          <template #footer>

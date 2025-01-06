@@ -1,6 +1,11 @@
 <script setup>
 import { Input } from 'ant-design-vue';
 
+import { useI18n } from 'vue-i18n';
+
+
+
+const { t } = useI18n()
 const phoneNumber = defineModel('phoneNumber')
 
 
@@ -9,7 +14,7 @@ const phoneNumber = defineModel('phoneNumber')
 
 <template>
     <div class="flex items-center justify-start gap-x-2 h-12 w-full">
-        <Input v-model:value="phoneNumber" placeholder="请输入手机号码" class="input-style border-radius-custom before:placeholder:[+86]">
+        <Input v-model:value="phoneNumber" :placeholder="t('message.phoneNumberInput.placeHolder')" class="input-style border-radius-custom before:placeholder:[+86]">
         <template #prefix>
             <span class="font-bold text-[1.041667vw]">+86</span>
         </template>

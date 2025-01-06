@@ -1,11 +1,23 @@
 <script setup>
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 
 const { title, features, paragraphs, src } = {
-    title: "收费标准",
-    features: ['$11.99 / 1年', '0 月费'],
-    paragraphs: ['充值手续费 3.5%', '提现手续费 0%', '消费手续费 0%', '非美国消费 1%+$0.5', '预扣款撤销费 $1', '交易退款费 2%'],
-    src: "/main-no-product-bg1.png"
+   title: 'message.pricingStandard',
+   features: [
+       'message.yearlyFee',
+       'message.monthlyFee'
+   ],
+   paragraphs: [
+       'message.rechargeFee',
+       'message.withdrawalFee', 
+       'message.consumptionFee',
+       'message.nonUsFee',
+       'message.preAuthCancelFee',
+       'message.refundFee'
+   ],
+   src: "/main-no-product-bg1.png"
 }
 
 
@@ -16,14 +28,14 @@ const { title, features, paragraphs, src } = {
         <img :src="src" alt="feature" class="absolute h-[360px] aspect-auto  " />
 
         <div class=" text-lg font-bold">
-            {{ title }}
+            {{ t(title) }}
         </div>
 
         <div class="grid grid-cols-2 gap-y-2 mt-36 font-bold z-10 text-[#585858]">
-            <p v-for="f in features">{{ f }}</p>
+            <p v-for="f in features">{{ t(f) }}</p>
         </div>
         <div class="grid grid-cols-2 gap-y-1 gap-x-2 mt-4 text-xs text-[#585858]">
-            <p v-for="p in paragraphs">{{ p }}</p>
+            <p v-for="p in paragraphs">{{ t(p) }}</p>
         </div>
     </div>
 
