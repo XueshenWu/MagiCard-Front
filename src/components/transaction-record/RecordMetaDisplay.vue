@@ -3,6 +3,10 @@
 import { watchEffect, ref } from 'vue';
 import get from '../../api/get'
 import URL from '../../api/api-list'
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n()
+
 
 async function getTransactionMeta() {
     const res = await get(URL.transaction.summary, null)
@@ -33,7 +37,7 @@ watchEffect(async () => {
 
     <div v-if="transactionMeta" class="flex flex-col justify-start items-start gap-y-6">
         <div class="text-xl font-bold">
-            消费统计
+            {{ t('message.transaction.title') }}
         </div>
         <div class="flex flex-row items-center justify-start gap-x-48">
             <div class="flex flex-col items-start gap-y-2">
@@ -41,7 +45,7 @@ watchEffect(async () => {
                     <span class="text-3xl">$</span> <span class="text-5xl">{{ transactionMeta.totalRechargeAmount.toFixed(2) }}</span>
                 </div>
                 <div class="text-xl text-gray-500">
-                    总充值金额
+                    {{ t('message.transaction.totalRecharge') }}
                 </div>
             </div>
             <div class="flex flex-col items-start gap-y-2">
@@ -49,7 +53,7 @@ watchEffect(async () => {
                     <span class="text-3xl">$</span> <span class="text-5xl">{{ transactionMeta.totalConsumptionAmount.toFixed(2) }}</span>
                 </div>
                 <div class="text-xl text-gray-500">
-                    已提现金额
+                    {{ t('message.transaction.totalWithdrawn') }}
                 </div>
             </div>
             <div class="flex flex-col items-start gap-y-2">
@@ -57,7 +61,7 @@ watchEffect(async () => {
                     <span class="text-3xl">$</span> <span class="text-5xl">{{ transactionMeta.totalWithdrawAmount.toFixed(2) }}</span>
                 </div>
                 <div class="text-xl text-gray-500">
-                    总消费金额
+                    {{ t('message.transaction.totalConsumption') }}
                 </div>
             </div>
 

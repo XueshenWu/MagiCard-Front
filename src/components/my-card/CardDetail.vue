@@ -16,7 +16,9 @@ import GeneralModal from '../Modal/GeneralModal.vue';
 import get from '../../api/get';
 import post from '../../api/post';
 import URL from '../../api/api-list';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 
 const openCheckoutCodeModal = ref(false);
 
@@ -49,13 +51,6 @@ const cardDetailRef = ref(null);
 
 const { cardData, cardId } = defineProps(['cardData', 'cardId']);
 
-const parseDate = (dateStr) => {
-    const date = new Date(dateStr);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}年${month}月${day}日`;
-}
 
 
 const cvv = ref();
@@ -71,7 +66,7 @@ const finishSecureInfoRequestModal = async () => {
 
     const _cvv = info.cvv;
     cvv.value = _cvv;
-    
+
     const _expireDate = {
         month: info.expMonth,
         year: info.expYear
@@ -94,9 +89,9 @@ const { toClipboard } = useClipboard();
 const copy = async (text) => {
     try {
         await toClipboard(text);
-        message.success('复制成功');
+        message.success(t('message.messages.copySuccess'));
     } catch (error) {
-        message.error('复制失败');
+        message.error(t('message.messages.copyFailed'));
     }
 };
 
@@ -112,9 +107,19 @@ const copyCVV = () => {
 
 const copyExpireDate = () => {
     if (expireDate.value) {
-        copy(`${expireDate.value.month}月 / ${expireDate.value.year.slice(-2)} 年 (或 ${expireDate.value.month}月 / ${expireDate.value.year} 年)`)
+        copy(t('message.dateFormat.expiry', {
+            month: expireDate.value.month,
+            year2: expireDate.value.year.slice(-2),
+            year4: expireDate.value.year
+        }));
     } else {
-        cb = async (data) => { await copy(`${data.expireDate.month}月 / ${data.expireDate.year.slice(-2)} 年 (或 ${data.expireDate.month}月 / ${data.expireDate.year} 年)`) };
+        cb = async (data) => {
+            await copy(t('message.dateFormat.expiry', {
+                month: data.expireDate.month,
+                year2: data.expireDate.year.slice(-2),
+                year4: data.expireDate.year
+            }));
+        };
         openCheckoutCodeModal.value = true;
     }
 }
@@ -130,14 +135,21 @@ const copyCardDetails = async () => {
         try {
 
             await nextTick();
-            const details = `卡号: ${cardData.cardNumber}
-有效期: ${expireDate.value.month}月 / ${expireDate.value.year.slice(-2)} 年 (或 ${expireDate.value.month}月 / ${expireDate.value.year} 年)
-安全码: ${cvv.value}
-姓名: ${cardData.userName}`;
+            const details = t('message.cardDetails.format', {
+                cardNumber: cardData.cardNumber,
+                month: expireDate.value.month,
+                year2: expireDate.value.year.slice(-2),
+                year4: expireDate.value.year,
+                cvv: cvv.value,
+                name: cardData.userName
+            });
+
+
+
             await toClipboard(details);
-            message.success('复制成功');
+            message.success(t('message.messages.copySuccess'));
         } catch (error) {
-            message.error('复制失败');
+            message.error(t('message.messages.copyFailed'));
         }
     }
 
@@ -175,14 +187,17 @@ const updateScale = (reset = false) => {
 
 const copyAddressDetails = async () => {
     try {
-        const address = `地址1: ${cardData.address}
-城市: ${cardData.city}
-邮编: ${cardData.postalCode}
-州: ${cardData.state}${cardData.stateCnName ? ' / ' + cardData.stateCnName : ''}`;
+        const address = t('message.addressDetails.format', {
+            address: cardData.address,
+            city: cardData.city,
+            postalCode: cardData.postalCode,
+            state: cardData.state,
+            stateNameCn: cardData.stateCnName ? t('message.addressDetails.stateSeparator') + cardData.stateCnName : ''
+        });
         await toClipboard(address);
-        message.success('复制成功');
+        message.success(t('message.messages.copySuccess'));
     } catch (error) {
-        message.error('复制失败');
+        message.error(t('message.messages.copyFailed'));
     }
 };
 
@@ -238,7 +253,7 @@ const downLoadAddressDetails = async () => {
                 <div class="flex flex-row justify-between w-full">
                     <div class="flex flex-col gap-y-4">
                         <div class="text-2xl">
-                            可支付
+                            {{ t('message.payable') }}
                         </div>
                         <div class="flex items-end gap-x-2">
                             <div class="font-bold text-4xl">$</div>
@@ -253,15 +268,11 @@ const downLoadAddressDetails = async () => {
                         <RechargeButton :cardId="cardId" />
                         <button @click="() => router.replace('/openCard')"
                             class="bg-black text-slate-200 px-8 py-3 rounded-xl hover:bg-slate-800 duration-100">
-                            开新卡
+                            {{ t('message.openNewCard') }}
                         </button>
 
-                        <CardOptionButton 
-                            :cardId="cardId"
-                            :balance="cardData.balance"
-                            :cardStatus="cardData.cardStatus"
-                        
-                        />
+                        <CardOptionButton :cardId="cardId" :balance="cardData.balance"
+                            :cardStatus="cardData.cardStatus" />
                     </div>
                 </div>
             </div>
@@ -277,7 +288,7 @@ const downLoadAddressDetails = async () => {
                             class="trim flex flex-row items-center justify-center gap-x-4 text-[#3189ef] [&>a]:cursor-pointer">
                             <CardHelp />
                             <a @click="copyCardDetails" class="text-lg tracking-widest">
-                                复制全部
+                                {{ t('message.cardInfo.copyAll') }}
                             </a>
                             <a @click="downLoadCardDetails" class="grid place-content-center">
                                 <img src="/download.png" class="w-5 h-5" />
@@ -287,40 +298,40 @@ const downLoadAddressDetails = async () => {
                     <div class="flex flex-col gap-y-2">
                         <div class="flex flex-row justify-between items-end">
                             <div class="flex flex-col items-start">
-                                <div class=" text-gray-500 text-lg">卡号</div>
+                                <div class=" text-gray-500 text-lg">{{ t('message.cardInfo.cardNumber') }} </div>
                                 <!-- <div class="font-bold text-lg">{{ cardData['cardNo'] }}</div> -->
                                 <CardNumber :value="cardData['cardNumber']" class="font-semibold text-3xl" />
                             </div>
                             <a v-if="!trimed" class="cursor-pointer text-lg tracking-widest text-[#3189ef]"
                                 @click="copy(cardData['cardNumber'])">
-                                复制
+                                {{ t('message.cardInfo.copy') }}
                             </a>
                         </div>
                         <div class="flex flex-row justify-between items-end">
                             <div class="flex flex-col items-start">
-                                <div class=" text-gray-500 text-lg">安全码/CVC/CVV</div>
+                                <div class=" text-gray-500 text-lg">{{ t('message.cardInfo.cvv') }}</div>
                                 <div class="font-semibold text-3xl">{{ cvv ?? '* * *' }}</div>
                             </div>
                             <a v-if="!trimed" class="cursor-pointer text-lg tracking-widest text-[#3189ef]"
                                 @click="copyCVV">
-                                复制
+                                {{ t('message.cardInfo.copy') }}
                             </a>
                             <GeneralModal v-model:open="openCheckoutCodeModal" width="29.1667vw" :centered="true">
 
                                 <div class="flex items-center flex-col justify-center p-8 gap-y-8">
                                     <div class="text-[1.458333vw]">
-                                        请输入您的支付密码
+                                        {{ t('message.modal.enterPaymentPassword') }}
                                     </div>
                                     <div class="flex flex-col items-center justify-center gap-y-2">
                                         <div class="w-full text-center text-[0.8vw] mb-8">
-                                            您的支付密码将用于保护您的账户安全
+                                            {{ t('message.modal.passwordProtection') }}
                                         </div>
                                         <NumberBoxInput v-model:value="checkoutCode" />
                                     </div>
                                     <button @click="finishSecureInfoRequestModal" :disabled="!isCheckoutCodeValid"
                                         :class="{ 'bg-[#3189ef] hover:bg-blue-400 cursor-pointer': isCheckoutCodeValid, 'bg-gray-400 cursor-not-allowed': !isCheckoutCodeValid }"
                                         class="text-white font-normal text-[1.04167vw] w-[14.0625vw] h-[2.70833vw] px-14 rounded-xl duration-100">
-                                        确认密码
+                                        {{ t('message.modal.confirmPassword') }}
                                     </button>
                                 </div>
 
@@ -330,27 +341,28 @@ const downLoadAddressDetails = async () => {
                         </div>
                         <div class="flex flex-row justify-between items-end">
                             <div class="flex flex-col items-start">
-                                <div class="text-lg text-gray-500">有效期</div>
+                                <div class="text-lg text-gray-500">{{ t('message.cardInfo.expiryDate') }}</div>
                                 <div class="font-semibold text-3xl">
-                                    <!-- <DateDisply :dateStr="cardData.membershipEndDate" /> -->
-                                    {{ expireDate ? `${expireDate.month}月 / ${expireDate.year.slice(-2)} 年 (或
-                                    ${expireDate.month}月 /
-                                    ${expireDate.year} 年)`: `**月 / **年` }}
+                                    {{ expireDate ? t('message.dateFormat.expiry', {
+                                        month: expireDate.month,
+                                        year2: expireDate.year.slice(-2),
+                                    year4: expireDate.year
+                                    }) : t('message.dateFormat.placeholder') }}
                                 </div>
                             </div>
                             <a v-if="!trimed" class="cursor-pointer text-[#3189ef] tracking-widest text-lg"
                                 @click="copyExpireDate">
-                                复制
+                                {{ t('message.cardInfo.copy') }}
                             </a>
                         </div>
                         <div class="flex flex-row justify-between items-end">
                             <div class="flex flex-col items-start">
-                                <div class="text-lg text-gray-500">姓名</div>
+                                <div class="text-lg text-gray-500">{{ t('message.cardInfo.name') }}</div>
                                 <div class="font-bold text-3xl">{{ cardData["userName"] }}</div>
                             </div>
                             <a v-if="!trimed" class="cursor-pointer text-[#3189ef] tracking-widest text-lg"
                                 @click="copy(cardData['userName'])">
-                                复制
+                                {{ t('message.cardInfo.copy') }}
                             </a>
                         </div>
                     </div>
@@ -361,13 +373,13 @@ const downLoadAddressDetails = async () => {
                     <div class="flex flex-row items-center justify-between">
                         <div class="flex items-center gap-x-2">
                             <img src="/usflag.png" alt="logo" class="w-6 h-4" />
-                            <div class="text-lg">账单地址</div>
+                            <div class="text-lg">{{ t('message.billingAddress.title') }}</div>
                         </div>
                         <div v-if="!trimed"
                             class="flex flex-row items-center justify-center gap-x-4 text-[#3189ef] [&>a]:cursor-pointer">
                             <CardHelp />
                             <a @click="copyAddressDetails" class="text-lg tracking-widest">
-                                复制全部
+                                {{ t('message.cardInfo.copyAll') }}
                             </a>
                             <a @click="downLoadAddressDetails" class="grid place-content-center">
                                 <img src="/download.png" class="w-5 h-5" />
@@ -377,46 +389,45 @@ const downLoadAddressDetails = async () => {
                     <div class="flex flex-col gap-y-2">
                         <div class="flex flex-row justify-between items-end">
                             <div class="flex flex-col items-start">
-                                <div class="text-lg text-gray-500">地址1</div>
+                                <div class="text-lg text-gray-500">{{ t('message.billingAddress.address1') }}</div>
                                 <div class="font-semibold text-3xl">{{ cardData["address"] }}</div>
                             </div>
                             <a v-if="!trimed" class="cursor-pointer text-[#3189ef] tracking-widest text-lg"
                                 @click="copy(cardData['address'])">
-                                复制
+                                {{ t('message.cardInfo.copy') }}
                             </a>
                         </div>
                         <div class="flex flex-row justify-between items-end">
                             <div class="flex flex-col items-start">
-                                <div class="text-lg text-gray-500">城市</div>
+                                <div class="text-lg text-gray-500">{{ t('message.billingAddress.city') }}</div>
                                 <div class="font-semibold text-3xl">{{ cardData["city"] }}</div>
                             </div>
                             <a v-if="!trimed" class="cursor-pointer text-[#3189ef] tracking-widest text-lg"
                                 @click="copy(cardData['city'])">
-                                复制
+                                {{ t('message.cardInfo.copy') }}
                             </a>
                         </div>
                         <div class="flex flex-row justify-between items-end">
                             <div class="flex flex-col items-start">
-                                <div class="text-lg text-gray-500">邮编</div>
+                                <div class="text-lg text-gray-500">{{ t('message.billingAddress.postalCode') }}</div>
                                 <div class="font-semibold text-3xl">{{ cardData["postalCode"] }}</div>
                             </div>
                             <a v-if="!trimed" class="cursor-pointer text-[#3189ef] tracking-widest text-lg"
                                 @click="copy(cardData['postalCode'])">
-                                复制
+                                {{ t('message.cardInfo.copy') }}
                             </a>
                         </div>
                         <div class="flex flex-row justify-between items-end">
                             <div class="flex flex-col items-start">
-                                <div class="text-lg text-gray-500">州</div>
+                                <div class="text-lg text-gray-500">{{ t('message.billingAddress.state') }}</div>
                                 <div class="font-semibold text-3xl">
-                                    <!-- {{ cardData["stateName"] }} {{ cardData["stateCnName"] && '/' }}
-                                    {{ cardData["stateCnName"] }} -->
+                                 
                                     {{ cardData.state }}
                                 </div>
                             </div>
                             <a v-if="!trimed" class="cursor-pointer text-[#3189ef] text-lg tracking-widest"
                                 @click="copy(`${cardData['stateName']}${cardData['stateCnName'] ? ' / ' + cardData['stateCnName'] : ''}`)">
-                                复制
+                                {{ t('message.cardInfo.copy') }}
                             </a>
                         </div>
                     </div>

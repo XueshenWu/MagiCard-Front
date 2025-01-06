@@ -1,8 +1,9 @@
 <script setup>
 
-import { watch, watchEffect, ref, computed } from 'vue';
+import { watch, watchEffect, ref, computed, nextTick } from 'vue';
 
 import { Skeleton, Table } from 'ant-design-vue';
+import { useI18n } from 'vue-i18n';
 
 import { typeToColor, typeToString, typeToImg, typeToSign } from '../../utils/txTypeConversion';
 import get from '../../api/get';
@@ -16,6 +17,8 @@ const PAGE_SIZE = 10
 const txRecord = ref()
 
 const current = ref(1)
+
+const { t, locale } = useI18n()
 
 
 
@@ -33,7 +36,7 @@ const handleRefresh = () => {
 }
 
 const pagination = ref({
-    total:0,
+    total: 0,
     current: 1,
     pageSize: PAGE_SIZE,
 })
@@ -82,39 +85,39 @@ const dataSource = computed(() => {
 })
 
 
-const columns = [
+const columns = ref([
     {
-        title: '交易时间',
+        title: 'message.transactions.columns.time',
         dataIndex: 'transactionTime',
         key: 'orderNo',
         sorter: (a, b) => new Date(a.transactionTime) - new Date(b.transactionTime)
     },
     {
-        title: '类型',
+        title: 'message.transactions.columns.type',
         dataIndex: 'type',
         key: 'orderNo'
     },
     {
-        title: '卡号后四位',
+        title: ('message.transactions.columns.cardNumber'),
         dataIndex: "lastFour",
         key: 'orderNo'
     },
     {
-        title: '详情',
+        title: ('message.transactions.columns.details'),
         dataIndex: 'detail',
         key: 'orderNo'
     },
     {
-        title: '交易金额',
+        title: ('message.transactions.columns.amount'),
         dataIndex: 'orderAmount',
         key: 'orderNo'
     },
     {
-        title: '手续费',
+        title: ('message.transactions.columns.fee'),
         dataIndex: 'fee',
         key: 'orderNo'
     }
-]
+])
 
 
 </script>
@@ -124,13 +127,13 @@ const columns = [
     <div class="w-full flex flex-col  gap-y-6 border-t border-gray-200 pt-10 mt-12">
         <div class="flex flex-row justify-between items-center w-full">
             <div class="text-2xl font-semibold">
-                消费记录
+                {{ t('message.transactions.title') }}
             </div>
             <div @click="handleRefresh" class="flex items-center text-blue-400 gap-x-1 cursor-pointer">
 
                 <img :style="{ transform: `rotate(${rotateDegree}deg)`, transition: 'transform 0.5s ease' }"
                     :class='` w-4 h-4`' src="/invitation/refresh.png" alt="refresh" />
-                <span class="text-lg">刷新</span>
+                <span class="text-lg">{{ t('message.transactions.refresh') }}</span>
             </div>
         </div>
         <div>
@@ -139,6 +142,14 @@ const columns = [
 
                 <Table :loading="loading" @change="handleTableChange" :pagination="pagination" :columns="columns"
                     class="w-full" bordered :dataSource="dataSource">
+
+
+                    <template v-slot:headerCell="{ column }">
+                        <div class="text-lg py-2 px-1">
+                            {{ t(column.title) }}
+                        </div>
+                    </template>
+
                     <template v-slot:bodyCell="{ text, record, index, column }">
                         <div class="text-lg py-2 px-1">
                             <span class="font-semibold" v-if="column.dataIndex === 'transactionTime'">
@@ -154,7 +165,8 @@ const columns = [
                             `" :style="{
                                 color: record.status === 'Closed' ? 'rgb(17, 173, 166)' : '#000000'
                             }">
-                                    {{ record.status === 'Closed' ? '成功' : '失败' }}
+                                    {{ record.status === 'Closed' ? t('message.transactions.status.success') :
+                                        t('message.transactions.status.failed') }}
                                 </div>
                             </span>
                             <span class="font-semibold" v-else-if="column.dataIndex === 'lastFour'">

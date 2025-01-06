@@ -4,6 +4,7 @@ const BASE_URL = 'http://192.168.193.75:8085';
 
 
 const URL = {
+    base: BASE_URL,
     user:{
         verifyPassword:`${BASE_URL}/v1/user/verifyPassword`,
         smsLogin:`${BASE_URL}/v1/user/smsLogin`,

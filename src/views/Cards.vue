@@ -12,6 +12,9 @@ import get from '../api/get';
 import { message } from '../components/Message';
 import URL from '../api/api-list';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 // TODO: vue3 节流防抖
 
@@ -139,7 +142,7 @@ watch(activeKey, async (newVal) => {
             <div  class="flex flex-row items-center  gap-x-2 text-md">
                 <div>
                     <span class=" text-gray-400">
-                        会员有效期至
+                        {{ t('message.membership.validUntil') }}
                     </span>
                     <span class="font-semibold">
                         {{
@@ -153,14 +156,14 @@ watch(activeKey, async (newVal) => {
                 </div>
                 <div>
                     <span class=" text-gray-400">
-                        本月充值限额
+                        {{ t('message.membership.monthlyLimit') }}
                     </span>
                     <span class="font-semibold">
                         ${{ cardData.rechargeLimit }}
                     </span>
                 </div>
                 <a @click="openHelpModal = true" class="text-blue-500" href="#">
-                    提升额度
+                    {{ t('message.membership.increaseLimit') }}
                 </a>
                 <GeneralModal v-model:open="openHelpModal" width="600px" :centered="false">
                     <template #footer>
@@ -170,9 +173,9 @@ watch(activeKey, async (newVal) => {
                     </template>
                     <div class="flex flex-col items-center justify-center">
                         <div class="text-3xl font-semibold">
-                            请扫描下方二维码联系客服
+                            {{ t('message.customerService.title') }}
                         </div>
-                        <img src="/QR_Wechat.webp" alt="wechat" class="" />
+                        <img src="/QR_Wechat.webp" :alt="t('message.customerService.wechatAlt')" class="" />
 
                     </div>
                 </GeneralModal>

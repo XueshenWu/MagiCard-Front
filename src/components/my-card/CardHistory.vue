@@ -1,7 +1,7 @@
 <script setup>
 
 
-
+import { useI18n } from 'vue-i18n';
 import { ref, computed, watch, nextTick } from 'vue';
 import _, { cloneWith } from 'lodash';
 import { Divider, Pagination, Skeleton, Spin, Tag } from 'ant-design-vue';
@@ -14,6 +14,7 @@ const current = ref(1);
 
 const loading = ref(false);
 
+const { t } = useI18n();
 
 
 
@@ -87,16 +88,12 @@ const typeToImg = (txType) => {
 }
 
 const typeToString = (txType) => {
-    switch (txType) {
-        case 'TransferIn':
-            return '充值';
-        case 'TransferOut':
-            return '提现';
-        case 'Consumption':
-            return '消费';
-        default:
-            return '';
-    }
+    const types = {
+        'TransferIn': t('message.transaction.types.transferIn'),
+        'TransferOut': t('message.transaction.types.transferOut'),
+        'Consumption': t('message.transaction.types.consumption')
+    };
+    return types[txType] || '';
 }
 
 const typeToSign = (txType) => {
@@ -128,9 +125,7 @@ const typeToColor = (txType) => {
 <template>
     <template v-if="transactionMap">
         <div class="w-full flex flex-col items-start gap-y-6 border-t border-gray-300 pt-12 mt-6">
-            <div class="text-2xl ">
-                消费记录
-            </div>
+            <div class="text-2xl">{{ t('message.transaction.title') }}</div>
             <Spin wrapperClassName="w-full" :spinning="loading">
                 <div class="w-full flex flex-col items-center gap-y-4">
                     <div class="w-full" v-for="([date, transactions]) in transactionMap" :key="date">
@@ -159,7 +154,7 @@ const typeToColor = (txType) => {
                                 <div class="text-md font-semibold text-center rounded-md py-1 px-1  "
                                     v-if="transaction.status === 'Closed'"
                                     :style="`${transaction.status === 'Closed' ? 'color: #5daca1;' : ''} background-color:#e8f6f0;`">
-                                    {{ transaction.status === 'Closed' ? '成功' : '失败' }}
+                                    {{ transaction.status === 'Closed' ? t('message.transaction.status.success') : t('message.transaction.status.fail') }}
                                 </div>
                             </div>
 

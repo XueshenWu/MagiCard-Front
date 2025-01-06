@@ -1,40 +1,40 @@
 <script setup>
 import { ref } from 'vue';
 import GeneralModal from '../Modal/GeneralModal.vue';
+import { useI18n } from 'vue-i18n';
 
 const openHelpModal = ref(false);
 
+const { t } = useI18n();
 </script>
 
 
 <template>
-    <a @click="openHelpModal = true" class="text-[#3189ef] text-lg tracking-widest">如何使用</a>
-    <GeneralModal v-model:open='openHelpModal' width="970px" :centered="false">
-        <div class=" flex flex-col items-center justify-start">
-            <div class="text-xl ">
-                使用帮助
-            </div>
-            <div>
-                <div class=" tracking-wider">
-                    <span class="text-lg">&#8226;</span> <span class="font-semibold mr-1">ChatGPT Plus</span> 如何绑卡
-                </div>
-                <div class="text-xs pl-4 mt-2">
-                    根据箭头所连接的对应项目，将信息依次复制到对应输入框内，点击订阅即可完成ChatGPT Plus的绑卡
-                </div>
-                <img src="/help/help-gpt.webp" alt="ChatGPT Plus如何绑卡">
-            </div>
-            <div>
-                <div class=" tracking-wider">
-                    <span class="text-lg">&#8226;</span> <span class="font-semibold mr-1">OpenAI API</span> 如何绑卡
-                </div>
-                <div class="text-xs pl-4 mt-2">
-                    根据箭头所连接的对应项目，将信息依次复制到对应输入框内，点击订阅即可完成 OpenAI API 的绑卡
-                </div>
-                <img src="/help/help-openai.webp" alt="OpenAI API如何绑卡">
-            </div>
+<a @click="openHelpModal = true" class="text-[#3189ef] text-lg tracking-widest">{{ t('message.help.howToUse') }}</a>
+<GeneralModal v-model:open='openHelpModal' width="970px" :centered="false">
+    <div class="flex flex-col items-center justify-start">
+        <div class="text-xl">
+            {{ t('message.help.helpTitle') }}
         </div>
-        <template #footer>
-        </template>
-    </GeneralModal>
+        <div>
+            <div class="tracking-wider">
+                <span class="text-lg">&#8226;</span> <span class="font-semibold mr-1">{{ t('message.help.chatGPT.title') }}</span> {{ t('message.help.chatGPT.binding') }}
+            </div>
+            <div class="text-xs pl-4 mt-2">
+                {{ t('message.help.chatGPT.instruction') }}
+            </div>
+            <img src="/help/help-gpt.webp" :alt="t('message.help.chatGPT.title') + t('message.help.chatGPT.binding')">
+        </div>
+        <div>
+            <div class="tracking-wider">
+                <span class="text-lg">&#8226;</span> <span class="font-semibold mr-1">{{ t('message.help.openAI.title') }}</span> {{ t('message.help.openAI.binding') }}
+            </div>
+            <div class="text-xs pl-4 mt-2">
+                {{ t('message.help.openAI.instruction') }}
+            </div>
+            <img src="/help/help-openai.webp" :alt="t('message.help.openAI.title') + t('message.help.openAI.binding')">
+        </div>
+    </div>
+</GeneralModal>
 
 </template>

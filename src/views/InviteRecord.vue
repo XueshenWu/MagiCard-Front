@@ -12,7 +12,9 @@ import get from '../api/get.js';
 import { Table } from 'ant-design-vue';
 import { watch } from 'vue';
 import post from '../api/post.js';
+import { useI18n } from 'vue-i18n';
 
+const {t} = useI18n();
 
 
 const open = ref(false);
@@ -133,11 +135,11 @@ const { toClipboard } = useClipboard();
 
 const copy = async (text) => {
     try {
-        await toClipboard(text);
-        message.success('复制成功');
-    } catch (error) {
-        message.error('复制失败');
-    }
+    await toClipboard(text);
+    message.success(t('message.clipboard.success'));
+} catch (error) {
+    message.error(t('message.clipboard.error'));
+}
 };
 
 
@@ -219,6 +221,7 @@ const onClickTime = ({ key }) => {
 };
 
 
+//FIXME: finish i18n here
 
 const columns = [
     {
@@ -276,7 +279,7 @@ const handleCloseWithdrewRewardAmount = () => {
         <div class="flex flex-row w-full">
             <div class="flex flex-col w-[40%] border-r-[1px] border-b-[1px] p-10">
                 <div class="text-xl">
-                    邀请码
+                    {{ t('message.invitation.code') }}
                 </div>
                 <div class="flex flex-row justify-between  py-5">
                     <div class="flex flex-row">
@@ -287,17 +290,17 @@ const handleCloseWithdrewRewardAmount = () => {
                     <div>
                         <button @click="() => copy(inviteStatistics.inviteCode)"
                             class="bg-[#eeeeee] text-black px-8 py-3 rounded-lg duration-100 cursor-pointer text-xl font-normal">
-                            复制链接
+                            {{ t('message.invitation.copyLink') }}
                         </button>
                     </div>
                 </div>
                 <div class="text-[#979797] text-xl font-normal">
-                    邀请 1 位用户返 2 美金。
+                    {{ t('message.invitation.reward') }}
                 </div>
             </div>
             <div class="flex flex-col w-[60%] border-b-[1px] p-10">
                 <div class="text-black text-xl">
-                    邀请奖励余额
+                    {{ t('message.invitation.balance') }}
                 </div>
                 <div class="flex flex-row justify-between py-5">
                     <div class="flex flex-row">
@@ -306,26 +309,26 @@ const handleCloseWithdrewRewardAmount = () => {
                     <div>
                         <button @click="handleOpenWithdrewRewardAmount"
                             class="bg-[#3189ef] text-white px-6 py-2 rounded-lg duration-100 cursor-pointer">
-                            奖励提现
+                            {{ t('message.invitation.withdraw') }}
                         </button>
                     </div>
                 </div>
                 <div class="flex flex-row w-full justify-between mt-5">
                     <div class="flex flex-col">
                         <div class="text-2xl text-black font-bold">{{ inviteStatistics.monthlyReferrals }}</div>
-                        <div class="text-xl text-[#979797] font-normal">本月推荐人数</div>
+                        <div class="text-xl text-[#979797] font-normal">{{ t('message.invitation.stats.monthlyReferrals') }}</div>
                     </div>
                     <div class="flex flex-col">
                         <div class="text-2xl text-black font-bold">{{ inviteStatistics.totalReferrals }}</div>
-                        <div class="text-xl text-[#979797] font-normal">总推荐人数</div>
+                        <div class="text-xl text-[#979797] font-normal">{{ t('message.invitation.stats.totalReferrals') }}</div>
                     </div>
                     <div class="flex flex-col">
                         <div class="text-2xl text-black font-bold">{{ inviteStatistics.rechargedUsers }}</div>
-                        <div class="text-xl text-[#979797] font-normal">已充值人数</div>
+                        <div class="text-xl text-[#979797] font-normal">{{ t('message.invitation.stats.rechargedUsers') }}</div>
                     </div>
                     <div class="flex flex-col">
                         <div class="text-2xl text-black font-bold">${{ inviteStatistics.totalRewardAmount }}</div>
-                        <div class="text-xl text-[#979797] font-normal">总奖励金额</div>
+                        <div class="text-xl text-[#979797] font-normal">{{ t('message.invitation.stats.totalReward') }}</div>
                     </div>
 
 
@@ -393,11 +396,11 @@ const handleCloseWithdrewRewardAmount = () => {
         <GeneralModal width="29.1667vw" v-model:open="open" :centered="true">
             <div class="p-8 flex flex-col gap-y-2 items-center justify-center">
                 <div class="text-[1.458333vw]">
-                    修改邀请码
+                    {{ t('message.invitation.modal.changeCode.title') }}
                 </div>
                 <div class="flex flex-col items-start gap-y-4 w-full">
                     <div class="text-gray-500 text-[.833333vw]">
-                        邀请码
+                        {{ t('message.invitation.modal.changeCode.label') }}
                     </div>
                     <Input allowClear v-model:value="inviteCodeModal"
                         class="text-[.9375vw] font-semibold customer-input" />
@@ -408,9 +411,9 @@ const handleCloseWithdrewRewardAmount = () => {
             <template #footer>
                 <div class="flex justify-center items-center gap-x-4 m-4">
                     <button @click="open = false"
-                        class="h-[2.708333vw] text-[1.041667vw] w-[100%] rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors duration-200">取消</button>
+                        class="h-[2.708333vw] text-[1.041667vw] w-[100%] rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors duration-200">{{ t('message.invitation.modal.changeCode.cancel') }}</button>
                     <button @click="handleModifyInviteCode"
-                        :class="`h-[2.708333vw] text-[1.041667vw] w-[100%] rounded-xl transition-colors duration-200 ${(inviteStatistics.inviteCode ?? '').length > 0 ? ' bg-blue-500 text-white hover:bg-blue-400' : 'bg-gray-200 cursor-not-allowed text-gray-500'}`">确认</button>
+                        :class="`h-[2.708333vw] text-[1.041667vw] w-[100%] rounded-xl transition-colors duration-200 ${(inviteStatistics.inviteCode ?? '').length > 0 ? ' bg-blue-500 text-white hover:bg-blue-400' : 'bg-gray-200 cursor-not-allowed text-gray-500'}`">{{ t('message.invitation.modal.changeCode.confirm') }}</button>
                 </div>
             </template>
         </GeneralModal>
@@ -418,15 +421,15 @@ const handleCloseWithdrewRewardAmount = () => {
             :centered="true">
             <template #default>
                 <div class="flex flex-col items-center justify-center gap-y-4 pt-6 px-8">
-                    <p class="text-[1.458333vw]">邀请奖励余额</p>
-                    <p class="text-[0.8vw]">你可提现的奖励金额为</p>
+                    <p class="text-[1.458333vw]">{{ t('message.invitation.modal.withdraw.title') }}</p>
+                    <p class="text-[0.8vw]">{{ t('message.invitation.modal.withdraw.available') }}</p>
                     <p class="font-bold text-[2.08333vw]">${{ Number(inviteStatistics.rewardBalance).toFixed(2) }}</p>
                 </div>
             </template>
             <template #footer>
                 <div class="flex flex-row items-center justify-center gap-x-4 mt-12 px-8 pb-8 ">
                     <button
-                        :class='`text-[1.04167vw] w-[14.0625vw] h-[2.70833vw] rounded-xl   ${rewardAmount === 0 ? "disabled cursor-not-allowed bg-gray-100 text-gray-400" : " duration-100 bg-blue-500 hover:bg-blue-400 text-white"}`'>全部提现</button>
+                        :class='`text-[1.04167vw] w-[14.0625vw] h-[2.70833vw] rounded-xl   ${rewardAmount === 0 ? "disabled cursor-not-allowed bg-gray-100 text-gray-400" : " duration-100 bg-blue-500 hover:bg-blue-400 text-white"}`'>{{ t('message.invitation.modal.withdraw.withdrawAll') }}</button>
                 </div>
             </template>
         </GeneralModal>
