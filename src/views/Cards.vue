@@ -1,8 +1,8 @@
 <script setup>
-import { watch, ref, watchEffect, onMounted } from 'vue';
+import { watch, ref, watchEffect, onMounted, nextTick } from 'vue';
 import { cardListResp } from '../mock/cardList';
 import { defaultCardResp } from '../mock/defaultCard';
-import { Divider, TabPane, Tabs } from 'ant-design-vue';
+import { Divider, Spin, TabPane, Tabs } from 'ant-design-vue';
 import { CreditCardOutlined } from '@ant-design/icons-vue';
 import CardDetail from '../components/my-card/CardDetail.vue';
 import InviteBanner from '../components/my-card/InviteBanner.vue';
@@ -17,6 +17,15 @@ import { useRouter } from 'vue-router';
 
 
 
+const loading = ref(true);
+
+const handleActiveKeyChange = (key) => {
+
+
+    activeKey.value = key;
+}
+
+
 const parseDate = (dateStr) => {
     const date = new Date(dateStr);
     const year = date.getFullYear();
@@ -27,11 +36,13 @@ const parseDate = (dateStr) => {
 
 const openHelpModal = ref(false);
 
+
+
 const cardData = ref({
     "cardNumber": "4910900031259940",
     "userName": "xxx",
     "membershipEndDate": "2025-07-04T08:44:57.000+00:00",
-    "address": "20 Barneson ave", 
+    "address": "20 Barneson ave",
     "rechargeLimit": 60,
     "city": "San Mateo",
     "country": "US",
@@ -70,7 +81,7 @@ async function getUserInfo() {
     });
 }
 
-const cardList = ref();
+const cardList = ref([]);
 const userInfo = ref(null);
 
 
@@ -85,6 +96,7 @@ watchEffect(async () => {
 
 
 watch(activeKey, async (newVal) => {
+    loading.value = true;
     if (!newVal) {
         return;
     }
@@ -96,6 +108,8 @@ watch(activeKey, async (newVal) => {
     }
 
     cardData.value = res.data;
+    await nextTick();
+    loading.value = false;
 }, { immediate: true });
 
 </script>
@@ -106,10 +120,12 @@ watch(activeKey, async (newVal) => {
     <div class="flex px-10 py-4 flex-col items-start justify-start gap-y-6  h-full">
 
         <div id="tabs" class="w-full flex flex-row justify-between items-center">
-            <Tabs class="grow flex-grow " v-model:activeKey="activeKey" tabBarStyle=" ">
+            <Tabs v-if="cardList.length > 0" @change="() => { }" class="grow flex-grow " v-model:activeKey="activeKey"
+                tabBarStyle=" ">
                 <TabPane class="h-full" v-for="(card, idx) in cardList" :key="card.carId">
                     <template #tab>
-                        <div class="h-full text-2xl font-semibold flex items-end">
+                        <div @click.stop="handleActiveKeyChange(card.cardId)"
+                            class="h-full text-2xl font-semibold flex items-end">
                             <CreditCardOutlined />
                             <div> {{ String(card.cardNumber.slice(-4)) }}</div>
                         </div>
@@ -120,7 +136,7 @@ watch(activeKey, async (newVal) => {
 
             </Tabs>
 
-            <div v-if="userInfo" class="flex flex-row items-center  gap-x-2 text-md">
+            <div  class="flex flex-row items-center  gap-x-2 text-md">
                 <div>
                     <span class=" text-gray-400">
                         会员有效期至
@@ -161,12 +177,11 @@ watch(activeKey, async (newVal) => {
                     </div>
                 </GeneralModal>
             </div>
-            <div v-else>
-                加载中...
-            </div>
+       
         </div>
-
-        <CardDetail :cardData="cardData" :cardId="activeKey" />
+        <Spin :spinning="loading" wrapperClassName="w-full">
+            <CardDetail :cardData="cardData" :cardId="activeKey" />
+        </Spin>
 
         <div id="invite" class="mt-6 w-full">
             <InviteBanner />

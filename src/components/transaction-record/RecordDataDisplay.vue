@@ -1,42 +1,27 @@
 <script setup>
 
 import { watch, watchEffect, ref, computed } from 'vue';
-import { txRecordResp, txRecordResp2 } from '../../mock/txrRecord';
+
 import { Skeleton, Table } from 'ant-design-vue';
 
 import { typeToColor, typeToString, typeToImg, typeToSign } from '../../utils/txTypeConversion';
+import get from '../../api/get';
+import URL from '../../api/api-list';
 
 const loading = ref(true)
 
-async function getTxRecord(page) {
-    return await new Promise((resolve, reject) => {
-        setTimeout(() => {
+const PAGE_SIZE = 10
 
-            if (page.value === 1) {
-                resolve(txRecordResp)
-            } else {
-                resolve(txRecordResp2)
-            }
-        }, 200)
-    })
-}
 
+const txRecord = ref()
 
 const current = ref(1)
 
-const pagination = computed(() => {
-    return {
-        total: txRecordResp.data.totalRecord,
-        current: current.value,
-        pageSize: 10,
-    }
-})
+
 
 const handleTableChange = (pagination, filters, sorter) => {
     current.value = pagination.current
 }
-
-const txRecord = ref()
 
 const rotateDegree = ref(0)
 const rotate = () => {
@@ -47,10 +32,31 @@ const handleRefresh = () => {
     rotate()
 }
 
+const pagination = ref({
+    total:0,
+    current: 1,
+    pageSize: PAGE_SIZE,
+})
 
-watch(current, async () => {
+watch(current, async (val) => {
     loading.value = true
-    txRecord.value = (await getTxRecord(current)).data
+
+    const res = await get(URL.transaction.all, [['pageNum', val], ['pageSize', PAGE_SIZE]])
+
+    if (res.err) {
+        return txRecord.value = {
+            rowList: [],
+            totalRecords: 0
+        }
+    }
+
+    pagination.value = {
+        total: res.totalRecords,
+        current: val,
+        pageSize: PAGE_SIZE
+    }
+
+    txRecord.value = res
     loading.value = false
 }, { immediate: true })
 
@@ -60,13 +66,13 @@ const dataSource = computed(() => {
     if (!txRecord.value) {
         return null
     }
-    const res = Array.from(txRecord.value.rowList).map((item) => {
+    const res = Array.from(txRecord.value.records).map((item) => {
         return {
             transactionTime: item.transactionTime,
-            type: item.type,
-            lastFour: item.lastFour,
-            detail: item.detail,
-            orderAmount: item.orderAmount,
+            type: item.transactionType,
+            lastFour: item.cardNumber.slice(-4),
+            detail: item.transactionDetail,
+            orderAmount: item.amount,
             fee: item.fee,
             status: item.status
         }
@@ -146,9 +152,9 @@ const columns = [
                                 <div>{{ typeToString(record.type) }}</div>
                                 <div :class="`
                             `" :style="{
-                                color: record.status === 2 ? 'rgb(17, 173, 166)' : '#000000'
+                                color: record.status === 'Closed' ? 'rgb(17, 173, 166)' : '#000000'
                             }">
-                                    {{ record.status === 2 ? '成功' : '失败' }}
+                                    {{ record.status === 'Closed' ? '成功' : '失败' }}
                                 </div>
                             </span>
                             <span class="font-semibold" v-else-if="column.dataIndex === 'lastFour'">
@@ -176,9 +182,9 @@ const columns = [
 
             </template>
             <template v-else>
-                <Skeleton :active="true" :paragraph="{ rows: 10 }" />
+                <Skeleton :active="true" :paragraph="{ rows: PAGE_SIZE }" />
             </template>
-           
+
         </div>
 
 

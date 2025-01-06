@@ -1,11 +1,12 @@
 const typeToImg = (txType) => {
+
     switch (txType) {
-        case 1:
-            return '/transaction/move-in.svg';
-        case 8:
-            return '/transaction/move-out.svg';
-        case 3:
-            return '/transaction/consume.svg';
+        case 'TransferIn':
+            return 'transaction/move-in.svg';
+        case 'TransferOut':
+            return 'transaction/move-out.svg';
+        case 'Consumption':
+            return 'transaction/consume.svg';
         default:
             return '';
     }
@@ -13,11 +14,11 @@ const typeToImg = (txType) => {
 
 const typeToString = (txType) => {
     switch (txType) {
-        case 1:
+        case 'TransferIn':
             return '充值';
-        case 8:
+        case 'TransferOut':
             return '提现';
-        case 3:
+        case 'Consumption':
             return '消费';
         default:
             return '';
@@ -26,11 +27,11 @@ const typeToString = (txType) => {
 
 const typeToSign = (txType) => {
     switch (txType) {
-        case 1:
+        case 'TransferIn':
             return '+';
-        case 8:
+        case 'TransferOut':
             return '-';
-        case 3:
+        case 'Consumption':
             return '-';
         default:
             return '';
@@ -40,11 +41,12 @@ const typeToSign = (txType) => {
 
 const typeToColor = (txType) => {
     switch (txType) {
-        case 1:
+        case 'TransferIn':
             return '#5daca1';
         default:
-            return 'rgb(245, 34, 84)'
+            return '#000000'
     }
 }
+
 
 export { typeToImg, typeToString, typeToSign, typeToColor };

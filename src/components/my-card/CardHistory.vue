@@ -4,7 +4,7 @@
 
 import { ref, computed, watch, nextTick } from 'vue';
 import _, { cloneWith } from 'lodash';
-import { Divider, Pagination, Skeleton, Tag } from 'ant-design-vue';
+import { Divider, Pagination, Skeleton, Spin, Tag } from 'ant-design-vue';
 import get from '../../api/get';
 import URL from '../../api/api-list';
 
@@ -12,7 +12,7 @@ import URL from '../../api/api-list';
 const current = ref(1);
 
 
-
+const loading = ref(false);
 
 
 
@@ -22,7 +22,7 @@ const cardHistory = ref({
     totalRecord: 0,
     pageSize: LIMIT
 });
-const transactionMap = ref();
+const transactionMap = ref([]);
 
 const LIMIT = 5;
 
@@ -38,7 +38,7 @@ const props = defineProps({
 watch([current, () => props.cardId], async ([currentValue, cardIdValue]) => {
 
 
-
+    loading.value = true;
 
     const res = await get(URL.transaction.card, [['cardId', cardIdValue], ['page', currentValue - 1], ['limit', LIMIT]]);
     console.log('res', res)
@@ -67,6 +67,8 @@ watch([current, () => props.cardId], async ([currentValue, cardIdValue]) => {
 
 
     transactionMap.value = map;
+    await nextTick();
+    loading.value = false;
 }, { immediate: true });
 
 
@@ -129,55 +131,48 @@ const typeToColor = (txType) => {
             <div class="text-2xl ">
                 消费记录
             </div>
-            <div class="w-full flex flex-col items-center gap-y-4">
-                <div class="w-full" v-for="([date, transactions]) in transactionMap" :key="date">
-                    <div class=" text-gray-500">{{ date }}</div>
-                    <div class="py-2 mt-1 border-gray-200 flex flex-row items-center justify-between gap-x-4 border-t"
-                        v-for="transaction in transactions" :key="transaction.id">
-                        <div class="flex flex-row items-center gap-x-6">
-                            <img class="w-12 h-12" :src="typeToImg(transaction.type)" />
-                            <div class="flex flex-col gap-y-1 items-start text-lg">
+            <Spin wrapperClassName="w-full" :spinning="loading">
+                <div class="w-full flex flex-col items-center gap-y-4">
+                    <div class="w-full" v-for="([date, transactions]) in transactionMap" :key="date">
+                        <div class=" text-gray-500">{{ date }}</div>
+                        <div class="py-2 mt-1 border-gray-200 flex flex-row items-center justify-between gap-x-4 border-t"
+                            v-for="transaction in transactions" :key="transaction.id">
+                            <div class="flex flex-row items-center gap-x-6">
+                                <img class="w-12 h-12" :src="typeToImg(transaction.type)" />
+                                <div class="flex flex-col gap-y-1 items-start text-lg">
 
-                                <div class="flex flex-row items-center gap-x-2">
-                                    <div>{{ typeToString(transaction.type) }}</div>
-                                    <div>{{ transaction.detail }}</div>
+                                    <div class="flex flex-row items-center gap-x-2">
+                                        <div>{{ typeToString(transaction.type) }}</div>
+                                        <div>{{ transaction.detail }}</div>
+                                    </div>
+                                    <div class="text-gray-500">{{ transaction.formattedDateTime }}</div>
                                 </div>
-                                <div class="text-gray-500">{{ transaction.formattedDateTime }}</div>
                             </div>
-                        </div>
-                        <div class="flex flex-col items-end gap-y-1">
-                            <div class="text-lg font-semibold tracking-wide"
-                                :style="{ color: typeToColor(transaction.type) }">{{
-                                    typeToSign(transaction.type) }}${{
-                                    Number(transaction.amount).toFixed(2) }}
-                                <span class="text-black font-normal ">{{ transaction.type === 'TransferIn' ?
-                                    `(-$${Number(transaction.fee).toFixed(2)})` : '' }}</span>
+                            <div class="flex flex-col items-end gap-y-1">
+                                <div class="text-lg font-semibold tracking-wide"
+                                    :style="{ color: typeToColor(transaction.type) }">{{
+                                        typeToSign(transaction.type) }}${{
+                                        Number(transaction.amount).toFixed(2) }}
+                                    <span class="text-black font-normal ">{{ transaction.type === 'TransferIn' ?
+                                        `(-$${Number(transaction.fee).toFixed(2)})` : '' }}</span>
+                                </div>
+                                <div class="text-md font-semibold text-center rounded-md py-1 px-1  "
+                                    v-if="transaction.status === 'Closed'"
+                                    :style="`${transaction.status === 'Closed' ? 'color: #5daca1;' : ''} background-color:#e8f6f0;`">
+                                    {{ transaction.status === 'Closed' ? '成功' : '失败' }}
+                                </div>
                             </div>
-                            <div class="text-md font-semibold text-center rounded-md py-1 px-1  "
-                                v-if="transaction.status === 'Closed'"
-                                :style="`${transaction.status === 'Closed' ? 'color: #5daca1;' : ''} background-color:#e8f6f0;`">
-                                {{ transaction.status === 'Closed' ? '成功' : '失败' }}
-                            </div>
+
                         </div>
 
                     </div>
-
                 </div>
-            </div>
-
+            </Spin>
             <Pagination v-model:current="current" :total="cardHistory.total" v-model:pageSize="LIMIT" />
 
         </div>
     </template>
 
-    <template v-else>
-        <div class="w-full flex flex-col items-start gap-y-6 border-t border-gray-300 pt-12 mt-6">
-        <div class="text-2xl ">
-            消费记录
-        </div>
-        <Skeleton active />
-        </div>
-    </template>
 
 
 </template>

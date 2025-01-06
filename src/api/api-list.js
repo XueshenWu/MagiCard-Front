@@ -31,6 +31,7 @@ const URL = {
     transaction:{
         summary: `${BASE_URL}/v1/transaction/summary`,
         card: `${BASE_URL}/v1/transaction/card`,
+        all: `${BASE_URL}/v1/transaction/all`,
     }
 }
 

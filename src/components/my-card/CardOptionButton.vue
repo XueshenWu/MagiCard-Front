@@ -3,10 +3,35 @@ import { Dropdown, Menu, MenuItem, MenuDivider, Modal } from 'ant-design-vue';
 import { ref } from 'vue';
 import { EllipsisOutlined } from '@ant-design/icons-vue';
 import GeneralModal from '../Modal/GeneralModal.vue';
+import { message } from '../Message';
+
+
+const {cardId, balance, cardStatus} = defineProps({
+    cardId: {
+        type: String,
+        required: true
+    },
+    balance: {
+        type: String,
+        required: true
+    },
+    cardStatus: {
+        type: String,
+        required: true
+    }
+})
 
 
 const openFreezeModal = ref(false);
 const openDeleteModal = ref(false);
+
+const handleDeleteCard = () => {
+    if(parseFloat(balance)>0){
+        message.error('卡片余额不为0，请先提现')
+        return
+    }
+    openDeleteModal.value = true
+}
 
 
 </script>
@@ -22,14 +47,13 @@ const openDeleteModal = ref(false);
                 冻结卡片
                 </MenuItem>
                 <MenuDivider />
-                <MenuItem @click="openDeleteModal = true">
+                <MenuItem @click="handleDeleteCard">
                 删除卡片
                 </MenuItem>
             </Menu>
         </template>
     </Dropdown>
-    <GeneralModal v-model:open='openFreezeModal' width="29.166667vw" :centered="true" mainTitle="谨慎操作"
-        >
+    <GeneralModal v-model:open='openFreezeModal' width="29.166667vw" :centered="true" mainTitle="谨慎操作">
         <div class="flex flex-col items-center justify-center mt-[1.875vw] mb-[1.875vw] text-[1.09375vw] text-center">
             <p>
                 冻结后该卡片将无法使用，且所有关联的服务将暂时停止。

@@ -7,7 +7,7 @@ import { useRouter } from 'vue-router';
 import useClipboard from 'vue-clipboard3';
 import { message } from '../Message';
 import CardNumber from '../CardNumber.vue';
-import DateDisply from './DateDisply.vue';
+
 import html2canvas from 'html2canvas';
 import NumberBoxInput from '../NumberBoxInput.vue';
 
@@ -20,23 +20,26 @@ import URL from '../../api/api-list';
 
 const openCheckoutCodeModal = ref(false);
 
+const expireDate = ref(null)
+
 let cb = () => { }
 
 const trimed = ref(false);
 
 
-const getCVV = async () => {
+const getSecureInfo = async () => {
     const res = await post(URL.card.verifyPassword, {
         paymentPassword: checkoutCode.value,
         cardId: cardId
     })
 
     if (!res.err) {
-        return res.data.cvv;
+        return res.data;
     } else {
         message.error(res.msg);
     }
 }
+
 
 
 
@@ -63,13 +66,21 @@ const isCheckoutCodeValid = computed(() => {
 });
 
 
-const finishCVVRequestModal = async () => {
-    const _cvv = await getCVV();
+const finishSecureInfoRequestModal = async () => {
+    const info = await getSecureInfo();
+
+    const _cvv = info.cvv;
     cvv.value = _cvv;
+    
+    const _expireDate = {
+        month: info.expMonth,
+        year: info.expYear
+    }
+    expireDate.value = _expireDate;
+
     openCheckoutCodeModal.value = false;
     checkoutCode.value = "";
-    await cb(_cvv)
-    return _cvv;
+    await cb({ cvv: _cvv, expireDate: _expireDate });
 
 }
 
@@ -93,7 +104,17 @@ const copyCVV = () => {
     if (cvv.value) {
         copy(cvv.value);
     } else {
-        cb = copy;
+        cb = async (data) => { await copy(data.cvv) };
+        openCheckoutCodeModal.value = true;
+    }
+}
+
+
+const copyExpireDate = () => {
+    if (expireDate.value) {
+        copy(`${expireDate.value.month}月 / ${expireDate.value.year.slice(-2)} 年 (或 ${expireDate.value.month}月 / ${expireDate.value.year} 年)`)
+    } else {
+        cb = async (data) => { await copy(`${data.expireDate.month}月 / ${data.expireDate.year.slice(-2)} 年 (或 ${data.expireDate.month}月 / ${data.expireDate.year} 年)`) };
         openCheckoutCodeModal.value = true;
     }
 }
@@ -102,7 +123,7 @@ const copyCVV = () => {
 const copyCardDetails = async () => {
 
 
-    if (!cvv.value) {
+    if (!cvv.value || !expireDate.value) {
         cb = copyCardDetails;
         openCheckoutCodeModal.value = true;
     } else {
@@ -110,7 +131,7 @@ const copyCardDetails = async () => {
 
             await nextTick();
             const details = `卡号: ${cardData.cardNumber}
-有效期: ${parseDate(cardData.membershipEndDate)}
+有效期: ${expireDate.value.month}月 / ${expireDate.value.year.slice(-2)} 年 (或 ${expireDate.value.month}月 / ${expireDate.value.year} 年)
 安全码: ${cvv.value}
 姓名: ${cardData.userName}`;
             await toClipboard(details);
@@ -122,6 +143,8 @@ const copyCardDetails = async () => {
 
 
 };
+
+
 
 const updateScale = (reset = false) => {
     const viewport = {
@@ -233,7 +256,12 @@ const downLoadAddressDetails = async () => {
                             开新卡
                         </button>
 
-                        <CardOptionButton />
+                        <CardOptionButton 
+                            :cardId="cardId"
+                            :balance="cardData.balance"
+                            :cardStatus="cardData.cardStatus"
+                        
+                        />
                     </div>
                 </div>
             </div>
@@ -289,7 +317,7 @@ const downLoadAddressDetails = async () => {
                                         </div>
                                         <NumberBoxInput v-model:value="checkoutCode" />
                                     </div>
-                                    <button @click="finishCVVRequestModal" :disabled="!isCheckoutCodeValid"
+                                    <button @click="finishSecureInfoRequestModal" :disabled="!isCheckoutCodeValid"
                                         :class="{ 'bg-[#3189ef] hover:bg-blue-400 cursor-pointer': isCheckoutCodeValid, 'bg-gray-400 cursor-not-allowed': !isCheckoutCodeValid }"
                                         class="text-white font-normal text-[1.04167vw] w-[14.0625vw] h-[2.70833vw] px-14 rounded-xl duration-100">
                                         确认密码
@@ -304,11 +332,14 @@ const downLoadAddressDetails = async () => {
                             <div class="flex flex-col items-start">
                                 <div class="text-lg text-gray-500">有效期</div>
                                 <div class="font-semibold text-3xl">
-                                    <DateDisply :dateStr="cardData.membershipEndDate" />
+                                    <!-- <DateDisply :dateStr="cardData.membershipEndDate" /> -->
+                                    {{ expireDate ? `${expireDate.month}月 / ${expireDate.year.slice(-2)} 年 (或
+                                    ${expireDate.month}月 /
+                                    ${expireDate.year} 年)`: `**月 / **年` }}
                                 </div>
                             </div>
                             <a v-if="!trimed" class="cursor-pointer text-[#3189ef] tracking-widest text-lg"
-                                @click="copy(`${String(cardData['issueDate']).split('-')[1]}月/${String(cardData['issueDate']).split('-')[0]}年`)">
+                                @click="copyExpireDate">
                                 复制
                             </a>
                         </div>
@@ -380,7 +411,7 @@ const downLoadAddressDetails = async () => {
                                 <div class="font-semibold text-3xl">
                                     <!-- {{ cardData["stateName"] }} {{ cardData["stateCnName"] && '/' }}
                                     {{ cardData["stateCnName"] }} -->
-                                     {{ cardData.state }}
+                                    {{ cardData.state }}
                                 </div>
                             </div>
                             <a v-if="!trimed" class="cursor-pointer text-[#3189ef] text-lg tracking-widest"
