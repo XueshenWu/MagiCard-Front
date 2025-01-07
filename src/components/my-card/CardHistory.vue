@@ -89,9 +89,9 @@ const typeToImg = (txType) => {
 
 const typeToString = (txType) => {
     const types = {
-        'TransferIn': t('message.transaction.types.transferIn'),
-        'TransferOut': t('message.transaction.types.transferOut'),
-        'Consumption': t('message.transaction.types.consumption')
+        'TransferIn': t('message.transactionHistory.types.transferIn'),
+        'TransferOut': t('message.transactionHistory.types.transferOut'),
+        'Consumption': t('message.transactionHistory.types.consumption')
     };
     return types[txType] || '';
 }
@@ -125,7 +125,7 @@ const typeToColor = (txType) => {
 <template>
     <template v-if="transactionMap">
         <div class="w-full flex flex-col items-start gap-y-6 border-t border-gray-300 pt-12 mt-6">
-            <div class="text-2xl">{{ t('message.transaction.title') }}</div>
+            <div class="text-2xl">{{ t('message.transactionHistory.title') }}</div>
             <Spin wrapperClassName="w-full" :spinning="loading">
                 <div class="w-full flex flex-col items-center gap-y-4">
                     <div class="w-full" v-for="([date, transactions]) in transactionMap" :key="date">
@@ -154,7 +154,7 @@ const typeToColor = (txType) => {
                                 <div class="text-md font-semibold text-center rounded-md py-1 px-1  "
                                     v-if="transaction.status === 'Closed'"
                                     :style="`${transaction.status === 'Closed' ? 'color: #5daca1;' : ''} background-color:#e8f6f0;`">
-                                    {{ transaction.status === 'Closed' ? t('message.transaction.status.success') : t('message.transaction.status.fail') }}
+                                    {{ transaction.status === 'Closed' ? t('message.transactionHistory.status.success') : t('message.transactionHistory.status.fail') }}
                                 </div>
                             </div>
 

@@ -1,7 +1,7 @@
 export default{
     cn: {
         message: {
-            invitation: {
+            invitationBanner: {
                 loading: "Loading...",
                 reward: {
                     title: "邀请朋友成功加入, 每位奖励2美金",
@@ -36,7 +36,7 @@ export default{
     },
     en: {
         message: {
-            invitation: {
+            invitationBanner: {
                 loading: "Loading...",
                 reward: {
                     title: "Invite friends successfully, $2 reward each",

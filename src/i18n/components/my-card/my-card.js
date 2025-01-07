@@ -6,7 +6,7 @@ import CashoutButton from "./CashoutButton";
 import InviteBanner from "./InviteBanner";
 import RechargeButton from "./RechargeButton";
 
-export default {
+const myCard = {
     cn: {
        message:{
             ...CardDetail.cn.message,
@@ -31,3 +31,7 @@ export default {
     }
 
 }
+
+console.log(myCard);
+
+export default myCard;

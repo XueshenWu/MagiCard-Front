@@ -1,7 +1,7 @@
 import components from "./components/components"
 import views from "./views/views"
 
-export default {
+const config = {
     legacy: false,
     locale: 'cn',
     fallbackLocale: 'en',
@@ -20,3 +20,7 @@ export default {
         }
     }
 }
+
+
+
+export default config;

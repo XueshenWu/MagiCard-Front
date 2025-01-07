@@ -1,7 +1,7 @@
 export default{
     cn: {
         message: {
-            transaction: {
+            transactionHistory: {
                 title: "消费记录",
                 types: {
                     transferIn: "充值",
@@ -17,7 +17,7 @@ export default{
     },
     en: {
         message: {
-            transaction: {
+            transactionHistory: {
                 title: "Transaction History",
                 types: {
                     transferIn: "Top Up",
