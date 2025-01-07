@@ -17,6 +17,9 @@ const captchaObj = ref(null)
 const formRef = ref(null)
 const router = useRouter()
 
+const cooldown = ref(0);
+const cooldownClass = ref('text-gray-500 cursor-not-allowed');
+const readyClass = ref('text-blue-500');
 
 
 const loginState = inject('loginState')
@@ -38,6 +41,14 @@ const login = async () => {
         code: formState.otp
     }
     const res = await post(URL.user.smsLogin, body, false)
+    cooldown.value = 30;
+            const timer = setInterval(() => {
+                cooldown.value--;
+                if (cooldown.value <= 0) {
+                    clearInterval(timer);
+                    cooldown.value = 0;
+                }
+            }, 1000)
     if (!res.err) {
 
         localStorage.setItem('token', res.data.token)
@@ -84,6 +95,15 @@ onMounted(async () => {
             } else {
                 message.error('验证码发送失败')
             }
+
+            cooldown.value = 30;
+            const timer = setInterval(() => {
+                cooldown.value--;
+                if (cooldown.value <= 0) {
+                    clearInterval(timer);
+                    cooldown.value = 0;
+                }
+            }, 1000)
 
 
         })
@@ -158,6 +178,10 @@ const onFinishFailed = () => {
 
 const handleSendOtp = () => {
 
+    if (cooldown.value > 0) {
+        return;
+    }
+
     const res = validatePhoneNumberSync(formState.phoneNumber)
     if (!res) {
         message.error('请输入有效的手机号码')
@@ -167,7 +191,6 @@ const handleSendOtp = () => {
     }
 
 }
-
 
 </script>
 
@@ -183,8 +206,8 @@ const handleSendOtp = () => {
                     <Input v-model:value="formState.otp" placeholder="请输入验证码" size="large"
                         class="input-style border-radius-custom">
                     <template #suffix>
-                        <a @click="handleSendOtp" class="text-blue-500 text-[.9375vw]">
-                            获取验证码
+                        <a @click="handleSendOtp" :class="`${cooldown>0?cooldownClass:readyClass} text-[.9375vw]`">
+                           {{ cooldown > 0 ? `${cooldown}s` : '发送验证码' }}
                         </a>
                     </template>
                     </Input>

@@ -36,16 +36,16 @@ watch(rechargeAmount, (val) => {
 
 <template>
     <div class="flex flex-col gap-y-4 items-start ">
-        <div :class="`flex flex-row items-center justify-between gap-x-4 w-full cash-amount-entry-container`">
+        <div :class="`flex flex-row items-center justify-between gap-x-[0.625vw] w-full cash-amount-entry-container`">
             <div v-for="(item, idx) in quickSelect" :key="idx"
-                :class="` w-full h-14  text-2xl font-bold text-center cursor-pointer px-6 py-2 border  ${rechargeAmount === Number(item) ? ' border-blue-400' : ''} cursor-pointer rounded-lg duration-100`"
+                :class="` w-[7.3859375vw]  text-[1.15vw] font-bold text-center cursor-pointer px-2 py-2 border  ${rechargeAmount === Number(item) ? ' border-blue-400' : ''} cursor-pointer rounded-lg duration-100`"
                 @click="rechargeAmount = item">
                 ${{ item }}
             </div>
         </div>
         <div>
             <NumberInput placeholder="输入在$5到$60之间的金额" :status="valid ? '' : 'error'" v-model:modelValue="rechargeAmount"
-                size="large" :class='`w-80 *:h-14 text-lg`'>
+                size="large" :class='`w-[24.375vw] *:h-14 text-lg`'>
               
             </NumberInput>
             <div v-show="!valid" class="text-red-500 text-xs">

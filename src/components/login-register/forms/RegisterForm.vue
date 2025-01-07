@@ -14,6 +14,9 @@ import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 
 
+const cooldown = ref(0);
+const cooldownClass = ref('text-gray-500 cursor-not-allowed');
+const readyClass = ref('text-blue-500');
 
 const { t } = useI18n()
 const loginState = inject('loginState')
@@ -51,7 +54,7 @@ const validatePhoneNumber = async (_rule, value) => {
     }
     const res = validatePhoneNumberSync(value)
     if (!res) {
-        return Promise.reject('validation.invalidPhone')
+        return Promise.reject(t('message.validationRegister.invalidPhone'))
     }
     return Promise.resolve()
 }
@@ -61,29 +64,29 @@ const validateOtp = async (_rule, value) => {
         return Promise.resolve()
     }
     if (value.length !== 6) {
-        return Promise.reject('validation.invalidCode')
+        return Promise.reject(t('message.validationRegister.invalidCode'))
     }
     return Promise.resolve()
 }
 
 const validateAgreement = async (_rule, value) => {
     if (!value) {
-        return Promise.reject('validation.agreementRequired')
+        return Promise.reject(t('message.validationRegister.agreementRequired'))
     }
     return Promise.resolve()
 }
 
 const rules = {
     phoneNumber: [
-        { required: true, message: 'validation.phoneRequired', trigger: ['change', 'blur'] },
+        { required: true, message: t('message.validationRegister.phoneRequired'), trigger: ['change', 'blur'] },
         { validator: validatePhoneNumber, trigger: ['change', 'blur'] }
     ],
     otp: [
-        { required: true, message: 'validation.codeRequired', trigger: ['change', 'blur'] },
+        { required: true, message: t('message.validationRegister.codeRequired'), trigger: ['change', 'blur'] },
         { validator: validateOtp, trigger: ['change', 'blur'] }
     ],
     checkedAgreement: [
-        { required: true, message: 'validation.agreementRequired', trigger: ['change'] },
+        { required: true, message: t('message.validationRegister.agreementRequired'), trigger: ['change'] },
         { validator: validateAgreement, trigger: ['change'] }
     ]
 }
@@ -115,11 +118,19 @@ const register = async () => {
 
 
     const res = await post(URL.user.register, body, false)
+    cooldown.value = 30;
+            const timer = setInterval(() => {
+                cooldown.value--;
+                if (cooldown.value <= 0) {
+                    clearInterval(timer);
+                    cooldown.value = 0;
+                }
+            }, 1000)
     if (!res.err) {
         router.replace('/')
 
         localStorage.setItem('token', res.data.token)
-        message.success('notifications.registerSuccess')
+        message.success(t('notifications.registerSuccess'))
     }
 
     formRef.value.resetFields()
@@ -131,9 +142,15 @@ const register = async () => {
 }
 
 const handleSendOtp = () => {
+
+
+    if (cooldown.value > 0) {
+        return
+    }
+
     const res = validatePhoneNumberSync(formState.phoneNumber)
     if (!res) {
-        message.error('validation.invalidPhone')
+        message.error(t('message.validationRegister.invalidPhone'))
         return
     } else {
         captchaObj.value?.showCaptcha()
@@ -169,12 +186,20 @@ onMounted(async () => {
 
             const data = await post(URL.user.smsCode, body, false)
             if (!data.err) {
-                message.success('notifications.codeSent')
+                message.success(t('message.notifications.codeSent'))
 
             }
             else {
-                message.error('notifications.codeSendFailed')
+                message.error(t('message.notifications.codeSendFailed'))
             }
+            cooldown.value = 30;
+            const timer = setInterval(() => {
+                cooldown.value--;
+                if (cooldown.value <= 0) {
+                    clearInterval(timer);
+                    cooldown.value = 0;
+                }
+            }, 1000)
 
         })
     })
@@ -200,8 +225,8 @@ onMounted(async () => {
                         <Input v-model:value="formState.otp" :placeholder="t('message.enterCode')" size="large"
                             class="input-style border-radius-custom">
                         <template #suffix>
-                            <a @click="handleSendOtp" class="text-blue-500 text-[.9375vw]">
-                                {{ t('message.getCode') }}
+                            <a @click="handleSendOtp" :class="`${cooldown>0?cooldownClass:readyClass} text-[.9375vw]`">
+                                {{ cooldown > 0 ? `${cooldown}s` : t('message.getCode') }}
                             </a>
                         </template>
                         </Input>

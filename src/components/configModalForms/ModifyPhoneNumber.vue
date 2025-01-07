@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref, onMounted, watchEffect,inject } from 'vue';
+import { reactive, ref, onMounted, watchEffect, inject } from 'vue';
 import { Form, FormItem, Input } from 'ant-design-vue';
 import GeneralModal from '../Modal/GeneralModal.vue';
 import { message } from '../Message.js';
@@ -8,7 +8,7 @@ import URL from '../../api/api-list.js';
 import { convertGt } from '../../utils/converGt.js'
 
 
-const step = ref(2);
+const step = ref(1);
 
 const formRef = ref(null);
 const captchaReady = ref(false);
@@ -22,9 +22,15 @@ watchEffect(async () => {
 })
 
 
-
+const cooldown = ref(0);
+const cooldownClass = ref('text-gray-500 cursor-not-allowed');
+const readyClass = ref('text-blue-500');
 
 const handleSendOtp = () => {
+    if (cooldown.value > 0) {
+
+        return;
+    }
     if (captchaReady.value) {
 
         const _phonenumber = step.value === 1 ? userInfo.value.phoneNumber : divInputRef.value.innerText.trim();
@@ -37,6 +43,8 @@ const handleSendOtp = () => {
         } else {
             captchaObj.value.showCaptcha();
         }
+
+
 
     }
 };
@@ -57,17 +65,17 @@ const finishModify = async () => {
         phoneNumber: formState.phoneNumber_new,
     }
 
-    if(!formState.otp_new){
+    if (!formState.otp_new) {
         message.error('请输入验证码');
         return;
     }
-    if(!formState.phoneNumber_new || !validatePhoneNumber(formState.phoneNumber_new)){
+    if (!formState.phoneNumber_new || !validatePhoneNumber(formState.phoneNumber_new)) {
         message.error('请输入正确的手机号码');
         return;
     }
 
     const data = await post(URL.user.modifyPhoneNumber, body)
-  
+
     if (!data.err) {
         message.success('修改成功');
         open.value = false;
@@ -84,7 +92,7 @@ const validatePhoneNumber = (phonenumber) => {
 const toStep2 = async () => {
 
 
-    if(!formState.otp_old){
+    if (!formState.otp_old) {
         message.error('请输入验证码');
         return;
     }
@@ -133,9 +141,19 @@ onMounted(async () => {
             const data = await post(URL.user.smsCode, body, true);
             if (!data.err) {
                 message.success('验证码发送成功');
+
             } else {
                 message.error('验证码发送失败');
             }
+            cooldown.value = 30;
+
+            const timer = setInterval(() => {
+                cooldown.value--;
+                if (cooldown.value <= 0) {
+                    clearInterval(timer);
+                    cooldown.value = 0;
+                }
+            }, 1000)
         });
     });
 });
@@ -150,16 +168,31 @@ onMounted(async () => {
             <Form class="w-full">
                 <div class="w-full space-y-8">
                     <template v-if="step === 1">
-                        <div class="flex flex-col items-start w-full gap-y-4">
+                        <!-- <div class="flex flex-col items-start w-full gap-y-4">
                             <div class="text-gray-500">
                                 手机号
                             </div>
                             <div
-                                class="input-style cursor-not-allowed py-4 w-full flex flex-row justify-between border-radius-custom border text-xl border-gray-300 ">
+                                class="input-style *:text-[.9375vw] cursor-not-allowed  w-full flex flex-row justify-between border-radius-custom border text-xl border-gray-300 ">
                                 <div class="text-gray-300 font-bold text-center pr-6 border-r border-gray-400">
                                     +86
                                 </div>
                                 <div class="w-full px-8 font-semibold ">
+                                    {{ userInfo.phoneNumber }}
+                                </div>
+                            </div>
+                        </div> -->
+                        <div class="flex flex-col items-start justify-center w-full gap-y-4 ">
+                            <div class="text-gray-500">
+                                手机号
+                            </div>
+                            <div
+                                class=" input-style border-radius-custom  w-full flex flex-row items-center justify-between border-radius-custom border  border-gray-300 ">
+                                <div class="text-gray-300 font-bold text-left pr-8 border-r border-gray-400">
+                                    +86
+                                </div>
+                                <div
+                                    class=" font-semibold  px-8 rounded outline-none w-full focus:outline-none focus:ring-0 ">
                                     {{ userInfo.phoneNumber }}
                                 </div>
                             </div>
@@ -171,11 +204,11 @@ onMounted(async () => {
                             <div class="flex flex-row items-center justify-between w-full gap-x-4">
                                 <Input v-model:value="formState.otp_old" placeholder="请输入验证码" size="large"
                                     class="input-style border-radius-custom">
-                                    <template #suffix>
-                                        <a @click="handleSendOtp" class="text-blue-500 text-[.9375vw]">
-                                            获取验证码
-                                        </a>
-                                    </template>
+                                <template #suffix>
+                                    <a @click="handleSendOtp"
+                                        :class="`text-[.9375vw] ${cooldown > 0 ? cooldownClass : readyClass}`">
+                                        {{ cooldown <= 0 ? "获取验证码" : cooldown + 's' }} </a>
+                                </template>
                                 </Input>
                             </div>
                         </FormItem>
@@ -188,12 +221,12 @@ onMounted(async () => {
                                     手机号
                                 </div>
                                 <div
-                                    class=" input-style border-radius-custom py-4 w-full flex flex-row items-center justify-between border-radius-custom border text-xl border-gray-300 ">
+                                    class=" input-style border-radius-custom  w-full flex flex-row items-center justify-between border-radius-custom border  border-gray-300 ">
                                     <div class="text-gray-300 font-bold text-left pr-8 border-r border-gray-400">
                                         +86
                                     </div>
                                     <div ref="divInputRef" @change="handleChange"
-                                        class=" font-semibold p-3 px-8 rounded outline-none w-full focus:outline-none focus:ring-0 "
+                                        class=" font-semibold  px-8 rounded outline-none w-full focus:outline-none focus:ring-0 "
                                         contenteditable>
                                         {{ formState.phoneNumber_new }}
                                     </div>
@@ -207,11 +240,13 @@ onMounted(async () => {
                             <div class="flex flex-row items-center justify-between w-full gap-x-4">
                                 <Input v-model:value="formState.otp_new" placeholder="请输入验证码" size="large"
                                     class="input-style border-radius-custom">
-                                    <template #suffix>
-                                        <a @click="handleSendOtp" class="text-blue-500 text-[.9375vw]">
-                                            获取验证码
-                                        </a>
-                                    </template>
+                                <template #suffix>
+
+
+                                    <a @click="handleSendOtp"
+                                        :class="`text-[.9375vw] ${cooldown > 0 ? cooldownClass : readyClass}`">
+                                        {{ cooldown <= 0 ? "获取验证码" : cooldown + 's' }} </a>
+                                </template>
                                 </Input>
                             </div>
                         </FormItem>
@@ -258,7 +293,7 @@ onMounted(async () => {
 
 }
 
-.border-radius-custom{
+.border-radius-custom {
     border-radius: .625vw;
 }
 </style>

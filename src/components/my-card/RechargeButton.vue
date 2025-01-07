@@ -84,7 +84,7 @@ watchEffect(async () => {
                 }}</span><span>=
                 {{ t('message.payment.received') }}</span><span class="text-black font-bold">${{
                     rechargeAmount.toFixed(2) }}</span>
-            <span> + {{ t('message.payment.fee') }}</span><span class="text-black font-bold">${{ (rechargeAmount * (1 + feeRate)).toFixed(2)
+            <span> + {{ t('message.payment.fee') }}</span><span class="text-black font-bold">${{ (rechargeAmount * (feeRate)).toFixed(2)
                 }}</span>({{ (feeRate * 100).toFixed(1) }}%)
         </div>
         <template #footer>

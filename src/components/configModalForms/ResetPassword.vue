@@ -9,7 +9,9 @@ import URL from '../../api/api-list.js';
 import { convertGt } from '../../utils/converGt.js'
 
 
-
+const cooldown = ref(0);
+const cooldownClass = ref('text-gray-500 cursor-not-allowed');
+const readyClass = ref('text-blue-500');
 
 const switchSelected = inject('switchSelected')
 
@@ -55,6 +57,12 @@ const rules = {
 };
 
 const handleSendOtp = () => {
+
+
+    if(cooldown.value > 0) {
+        return;
+    }
+
     if (captchaReady.value) {
         captchaObj.value.showCaptcha();
     }
@@ -104,12 +112,20 @@ onMounted(async () => {
             };
             const data = await post(URL.user.smsCode, body, true);
             if (!data.err) {
-                // message.success('验证码发送成功');
+                message.success('验证码发送成功');
             } else {
                 message.error('验证码发送失败');
             }
 
-            //TODO:action type tbd
+            cooldown.value = 30;
+            const timer = setInterval(() => {
+                cooldown.value--;
+                if (cooldown.value <= 0) {
+                    clearInterval(timer);
+                    cooldown.value = 0;
+                }
+            }, 1000)
+
         });
     });
 });
@@ -156,8 +172,8 @@ onMounted(async () => {
                                     <Input v-model:value="formState.otp" placeholder="请输入验证码" size="large"
                                         class="input-style border-radius-custom">
                                         <template #suffix>
-                                            <a @click="handleSendOtp" class="text-blue-500 text-[.9375vw]">
-                                                获取验证码
+                                            <a @click="handleSendOtp" :class="`${cooldown>0?cooldownClass:readyClass} text-[.9375vw]`">
+                                               {{ cooldown>0? `${cooldown}s` : '发送验证码' }}
                                             </a>
                                         </template>
                                     </Input>
