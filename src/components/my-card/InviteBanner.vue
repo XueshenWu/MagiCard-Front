@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watchEffect, watch } from 'vue';
-import { Input, Button } from 'ant-design-vue';
+import { Input, Button, Spin } from 'ant-design-vue';
 import { useRouter } from 'vue-router';
 import useClipboard from 'vue-clipboard3';
 import GeneralModal from '../Modal/GeneralModal.vue';
@@ -11,7 +11,7 @@ import post from '../../api/post';
 import { useI18n } from 'vue-i18n';
 
 
-const {t} = useI18n();
+const { t } = useI18n();
 
 const invitationInfo = ref(null);
 const open = ref(false);
@@ -21,7 +21,30 @@ const router = useRouter();
 
 const newInviteCode = ref('');
 
+const withdrawlLoading = ref(false);
 
+
+const handleBonusCashout = async () => {
+
+    if (invitationInfo.value.rewardBalance <= 0) {
+
+        return;
+    }
+
+    withdrawlLoading.value = true;
+
+    const res = await get(URL.invitation.rewardRequest, null, true)
+    if (!res.err) {
+        message.success(t('message.invitationBanner.reward.success'));
+    } else {
+        message.error(t('message.invitationBanner.reward.failed'));
+    }
+
+
+    invitationInfo.value = await getinvitationInfo();
+    withdrawlLoading.value = false;
+    openBonusCashout.value = false;
+}
 
 
 async function getinvitationInfo() {
@@ -34,7 +57,7 @@ watchEffect(async () => {
 });
 
 const handleModifyInviteCode = async () => {
-    if(newInviteCode.value === invitationInfo.value.inviteCode){
+    if (newInviteCode.value === invitationInfo.value.inviteCode) {
         message.error(t('message.invitationBanner.code.errors.sameCode'));
         return;
     }
@@ -73,22 +96,25 @@ const copyInviteCode = async () => {
 </script>
 <template>
     <template v-if="!invitationInfo">
-    {{ t('message.invitationBanner.loading') }}
-</template>
+        {{ t('message.invitationBanner.loading') }}
+    </template>
 
     <template v-else>
         <div class=" border-t pt-12 border-gray-300 flex flex-row justify-between items-center w-full">
             <div class="flex flex-col items-start gap-y-4 text-sm">
                 <div class="text-[#3189ef] flex items-center text-3xl tracking-wider ">
-                    {{ t('message.invitationBanner.reward.title') }}<img class="w-6 h-6" src="/coinsack.svg" alt="coin sack" />!
+                    {{ t('message.invitationBanner.reward.title') }}<img class="w-6 h-6" src="/coinsack.svg"
+                        alt="coin sack" />!
                 </div>
                 <div class="flex flex-row items-center gap-x-2 *:text-lg">
                     <div class="border-r-2 border-gray-200 pr-4">
-                        {{ t('message.invitationBanner.reward.totalAmount') }}: <span class="font-semibold">${{ invitationInfo.totalRewardAmount.toFixed(2) }}</span>
+                        {{ t('message.invitationBanner.reward.totalAmount') }}: <span class="font-semibold">${{
+                            invitationInfo.totalRewardAmount.toFixed(2) }}</span>
                     </div>
 
-                    <div class="border-r-2  border-gray-200 pr-4"> {{ t('message.invitationBanner.reward.balance') }}: <span class="font-semibold">${{
-                        invitationInfo.rewardBalance.toFixed(2) }}</span>
+                    <div class="border-r-2  border-gray-200 pr-4"> {{ t('message.invitationBanner.reward.balance') }}:
+                        <span class="font-semibold">${{
+                            invitationInfo.rewardBalance.toFixed(2) }}</span>
                     </div>
 
                     <div class="text-[#3189ef] cursor-pointer" @click="() => router.replace('/invite-record')">
@@ -136,9 +162,11 @@ const copyInviteCode = async () => {
                             <template #footer>
                                 <div class="flex justify-center items-center gap-x-4 m-4">
                                     <button @click="open = false"
-                                        class="h-[2.708333vw] text-[1.041667vw] w-[100%] rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors duration-200">{{ t('message.invitationBanner.code.cancel') }}</button>
+                                        class="h-[2.708333vw] text-[1.041667vw] w-[100%] rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors duration-200">{{
+                                            t('message.invitationBanner.code.cancel') }}</button>
                                     <button @click="handleModifyInviteCode"
-                                        :class="`h-[2.708333vw] text-[1.041667vw] w-[100%] rounded-xl transition-colors duration-200 ${(invitationInfo.inviteCode ?? '').length > 0 ? ' bg-blue-500 text-white hover:bg-blue-400' : 'bg-gray-200 cursor-not-allowed text-gray-500'}`">{{ t('message.invitationBanner.code.confirm') }}</button>
+                                        :class="`h-[2.708333vw] text-[1.041667vw] w-[100%] rounded-xl transition-colors duration-200 ${(invitationInfo.inviteCode ?? '').length > 0 ? ' bg-blue-500 text-white hover:bg-blue-400' : 'bg-gray-200 cursor-not-allowed text-gray-500'}`">{{
+                                            t('message.invitationBanner.code.confirm') }}</button>
                                 </div>
                             </template>
                         </GeneralModal>
@@ -152,7 +180,7 @@ const copyInviteCode = async () => {
                 </button>
             </div>
 
-            <GeneralModal v-model:open='openBonusCashout' width="29.1667vw" :centered="true">
+            <GeneralModal :maskClosable="false" v-model:open='openBonusCashout' width="29.1667vw" :centered="true">
                 <div class="flex flex-col items-center justify-center gap-y-4 pt-8 px-8">
                     <p class="text-[1.458333vw]">{{ t('message.invitationBanner.withdrawal.title') }}</p>
                     <p class="text-[0.8vw]">{{ t('message.invitationBanner.withdrawal.subtitle') }}</p>
@@ -161,8 +189,12 @@ const copyInviteCode = async () => {
                 </div>
                 <template #footer>
                     <div class="flex flex-row items-center justify-center gap-x-4 mt-12 px-8 pb-8 ">
-                        <button @click="openBonusCashout = false"
-                            :class="`text-[1.04167vw] w-[14.0625vw] h-[2.70833vw]  rounded-xl ${invitationInfo['balance'] <= 0 ? 'bg-gray-100 cursor-not-allowed text-gray-400' : 'bg-blue-500 hover:bg-blue-400 text-white'} duration-100 `">{{ t('message.invitationBanner.withdrawal.withdrawAll') }}</button>
+                        <Spin :spinning="withdrawlLoading">
+                            <button @click="handleBonusCashout"
+                                :class="`text-[1.04167vw] w-[14.0625vw] h-[2.70833vw]  rounded-xl ${invitationInfo.rewardBalance <= 0 ? 'bg-gray-100 cursor-not-allowed text-gray-400' : 'bg-blue-500 hover:bg-blue-400 text-white'} duration-100 `">{{
+                                    t('message.invitationBanner.withdrawal.withdrawAll') }}</button>
+                        </Spin>
+
                     </div>
                 </template>
             </GeneralModal>

@@ -8,7 +8,9 @@ export default{
                     totalAmount: "奖励金额总数",
                     balance: "邀请奖励余额", 
                     viewDetails: "查看邀请明细",
-                    withdraw: "去提现"
+                    withdraw: "去提现",
+                    success: "提现成功",
+                    failed: "提现失败"
                 },
                 code: {
                     label: "邀请码",
@@ -43,7 +45,9 @@ export default{
                     totalAmount: "Total Reward Amount",
                     balance: "Reward Balance",
                     viewDetails: "View Details",
-                    withdraw: "Withdraw" 
+                    withdraw: "Withdraw",
+                    success: "Withdraw successfully",
+                    failed: "Withdraw failed"
                 },
                 code: {
                     label: "Invitation Code",

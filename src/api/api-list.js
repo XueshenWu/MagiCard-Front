@@ -24,12 +24,14 @@ const URL = {
         summary:`${BASE_URL}/v1/invitation/summary`,
         invitationList:`${BASE_URL}/v1/invitation/List`,
         changeInvitationCode:`${BASE_URL}/v1/invitation/changeInvitationCode`,
+        rewardRequest:`${BASE_URL}/v1/invitation/reward/request`,
     },
     card:{
         cardList: `${BASE_URL}/v1/card/list`,
         cardInfo: `${BASE_URL}/v1/card/info`,
         verifyPassword: `${BASE_URL}/v1/card/verifyPassword`,
         rechargeFee: `${BASE_URL}/v1/card/rechargeFee`,
+        freeze: `${BASE_URL}/v1/card/freeze`,
     },
     transaction:{
         summary: `${BASE_URL}/v1/transaction/summary`,

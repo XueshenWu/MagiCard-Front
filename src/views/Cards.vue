@@ -1,7 +1,5 @@
 <script setup>
-import { watch, ref, watchEffect, onMounted, nextTick } from 'vue';
-import { cardListResp } from '../mock/cardList';
-import { defaultCardResp } from '../mock/defaultCard';
+import { watch, ref, watchEffect, onMounted, nextTick, provide } from 'vue';
 import { Divider, Spin, TabPane, Tabs } from 'ant-design-vue';
 import { CreditCardOutlined } from '@ant-design/icons-vue';
 import CardDetail from '../components/my-card/CardDetail.vue';
@@ -97,6 +95,16 @@ watchEffect(async () => {
     userInfo.value = await getUserInfo();
 }, { immediate: true, once: true });
 
+
+
+const updateCardData = async () => {
+    const res = await get(URL.card.cardInfo, [['cardId', activeKey.value]]);
+    if (!res.err) {
+        cardData.value = res.data;
+    }
+}
+
+provide('updateCardData', updateCardData);
 
 watch(activeKey, async (newVal) => {
     loading.value = true;
