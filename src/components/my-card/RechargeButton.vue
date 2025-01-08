@@ -42,6 +42,13 @@ const handleConfirmRecharge = async () => {
     }
 }
 
+const handleFinishRecharge = async () =>{
+    const res = await post(URL.card.recharge, {
+        outOrderId: paymentInfo.value.outOrderNumber,
+        cardId:props.cardId
+    })
+}
+
 
 
 const imgList = new Array(18).fill(0).map((_, idx) => `/subscriptionIcons/download (${idx}).png`)

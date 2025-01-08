@@ -28,7 +28,8 @@ export default {
                     warning2: "请确认后再操作。",
                     success: "恢复成功",
                     failed: "恢复失败"
-                }
+                },
+                paymentTitle: "支付",
             }
         }
     },
@@ -61,8 +62,10 @@ export default {
                     warning1: "After recovery, this card will be available for use and all associated services will be resumed.",
                     warning2: "Please confirm before proceeding.",
                     success: "Recover successfully",
-                    failed: "Recover failed"
-                }
+                    failed: "Recover failed",
+                   
+                },
+                paymentTitle: "Payment",
             }
         }
     }

@@ -66,6 +66,7 @@ const get = async (url, params, token = true) => {
                 message.error(res.msg)
                 return { err: true, data: null }
                 break
+            
             default:
                 message.error('出现未知错误，请稍后再试')
                 return { err: true, data: null }

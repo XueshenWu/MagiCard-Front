@@ -34,6 +34,8 @@ const URL = {
         freeze: `${BASE_URL}/v1/card/freeze`,
         delete: `${BASE_URL}/v1/card/delete`,
         create: `${BASE_URL}/v1/card/create`,
+        recharge: `${BASE_URL}/v1/card/recharge`,
+        unfreeze: `${BASE_URL}/v1/card/unfreeze`,
     },
     transaction:{
         summary: `${BASE_URL}/v1/transaction/summary`,
@@ -43,6 +45,8 @@ const URL = {
     payment:{
         openCardPayment:`${BASE_URL}/v1/payment/openCardPayment`,
         rechargePayment:`${BASE_URL}/v1/payment/rechargePayment`,
+        unfreezePayment:`${BASE_URL}/v1/payment/unfreezePayment`,
+        checkOrderStatus:`${BASE_URL}/v1/payment/checkOrderStatus`,
     }
 }
 
