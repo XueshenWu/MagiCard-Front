@@ -7,13 +7,17 @@ import ServiceSelector from '../components/open-card/ServiceSelector.vue';
 import CheckoutResult from '../components/CheckoutResult.vue';
 import post from '../api/post'
 import URL from '../api/api-list';
-import { message, QRCode } from 'ant-design-vue';
+import { QRCode, Spin } from 'ant-design-vue';
 import GeneralModal from '../components/Modal/GeneralModal.vue';
 import UserInfoInput from '../components/open-card/UserInfoInput.vue';
+import { message } from '../components/Message';
+import { useI18n } from 'vue-i18n';
 
-
+const { t } = useI18n();
 
 const openPayUrlModal = ref(false);
+
+const reqPending = ref(false);
 
 const firstName = ref('');
 const lastName = ref('');
@@ -25,6 +29,40 @@ provide('cardType', cardType);
 
 const yearTerm = ref(0);
 provide('yearTerm', yearTerm);
+
+
+const validateName = (name) => {
+    const regex = /^[a-zA-Z\u4e00-\u9fa5]+$/;
+    return regex.test(name);
+}
+
+const finishOpenCard = async () => {
+
+    if (reqPending.value) {
+        return;
+    }
+
+    if (!validateName(firstName.value) || !validateName(lastName.value)) {
+        message.error('请填写姓名信息')
+        return;
+    }
+    reqPending.value = true;
+    await nextTick();
+
+    const res = await post(URL.card.create, {
+        firstName: firstName.value,
+        lastName: lastName.value,
+        outOrderId: '4760b12fadf5499d85b661451c74b53d'
+    })
+    reqPending.value = false;
+    if (!res.err) {
+        message.success('开卡成功')
+        current.value++;
+    } else {
+        message.error('开卡失败')
+    }
+}
+
 
 const current = ref(3);
 const next = () => {
@@ -118,18 +156,18 @@ const handlePurchaseOnline = async () => {
             <a-button v-show="current === 0" type="primary" @click="next">下一步</a-button>
             <a-button v-show="current === 1" type="primary" @click="handlePurchaseOnline">线上购买</a-button>
 
-
+            <Spin :spinning="reqPending" wrapperClassName="w-64 h-12 text-xl">
+                <a-button class="w-64 h-12 text-xl" v-show="current === 3" type="primary" @click="finishOpenCard">完成开卡</a-button>
+            </Spin>
         </div>
-        <GeneralModal :maskClosable="false" v-model:open="openPayUrlModal" width="29.1667vw" mainTitle="扫码缴费1"
-            subTitle="请使用微信或支付宝扫描二维码完成支付">
-            <div class="flex flex-col items-center justify-center payment-style">
+        <GeneralModal v-model:open="openPayUrlModal" :maskClosable="false" width="29.1667vw"
+            :mainTitle="t('message.qrCode.title')" :subTitle="t('message.qrCode.subtitle')">
+            <div class="flex flex-col items-center justify-center payment-style space-y-[1.320833vw] ">
                 <QRCode class="w-[8.85416667vw] h-[8.85416667vw]" :value="paymentInfo.payUrl" />
-                <button class="py-[.520833vw] px-[1.5625vw] text-white bg-[#3189ef] rounded-[0.625vw]">
-                    我已支付完成
+                <button class="py-[.520833vw] px-[1.5625vw]  text-white bg-[#3189ef] rounded-[0.625vw]">
+                    {{ t('message.qrCode.complete') }}
                 </button>
             </div>
-
-
         </GeneralModal>
 
     </div>

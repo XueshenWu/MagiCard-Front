@@ -33,6 +33,7 @@ const URL = {
         rechargeFee: `${BASE_URL}/v1/card/rechargeFee`,
         freeze: `${BASE_URL}/v1/card/freeze`,
         delete: `${BASE_URL}/v1/card/delete`,
+        create: `${BASE_URL}/v1/card/create`,
     },
     transaction:{
         summary: `${BASE_URL}/v1/transaction/summary`,

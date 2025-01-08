@@ -106,9 +106,9 @@ const handleOpenRechargeModal = () => {
     </GeneralModal>
 
     <GeneralModal v-model:open="openConfirmRechargeModal" :maskClosable="false" width="29.1667vw" :mainTitle="t('message.qrCode.title')" :subTitle="t('message.qrCode.subtitle')">
-        <div class="flex flex-col items-center justify-center payment-style ">
+        <div class="flex flex-col items-center justify-center payment-style space-y-[1.320833vw] ">
             <QRCode class="w-[8.85416667vw] h-[8.85416667vw]" :value="paymentInfo.payUrl" />
-            <button class="py-[.520833vw] px-[1.5625vw] my-[.520833vw] text-white bg-[#3189ef] rounded-[0.625vw]">
+            <button class="py-[.520833vw] px-[1.5625vw]  text-white bg-[#3189ef] rounded-[0.625vw]">
                 {{ t('message.qrCode.complete') }}
             </button>
         </div>

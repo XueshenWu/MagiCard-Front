@@ -10,6 +10,10 @@ import URL from '../api/api-list';
 import { message } from '../components/Message';
 import { QRCode } from 'ant-design-vue';
 
+import { useI18n } from 'vue-i18n';
+
+const {t} = useI18n();
+
 const price = ref(0);
 const valid = ref(true);
 
@@ -77,7 +81,7 @@ const handleCheckoutModalConfirm = async () => {
             amount: price.value
         })
         if (!res.err) {
-            message.success('支付成功')
+            
             paymentInfo.value = {
                 orderId: res.data.orderId,
                 outOrderId: res.data.outOrderId,
@@ -143,15 +147,14 @@ const handleCheckoutModalConfirm = async () => {
                 </div>
             </template>
         </GeneralModal>
-        <GeneralModal v-model:open="openCheckoutCodeModal" :maskClosable="false" width="29.1667vw" >
-            <div class="flex flex-col items-center justify-center payment-style">
-                <QRCode class="w-[8.85416667vw] h-[8.85416667vw]" :value="paymentInfo.payUrl" />
-                <button class="py-[.520833vw] px-[1.5625vw] text-white bg-[#3189ef] rounded-[0.625vw]">
-                    我已支付完成
-                </button>
-            </div>
-
-        </GeneralModal>
+        <GeneralModal v-model:open="openCheckoutCodeModal" :maskClosable="false" width="29.1667vw" :mainTitle="t('message.qrCode.title')" :subTitle="t('message.qrCode.subtitle')">
+        <div class="flex flex-col items-center justify-center payment-style space-y-[1.320833vw] ">
+            <QRCode class="w-[8.85416667vw] h-[8.85416667vw]" :value="paymentInfo.payUrl" />
+            <button class="py-[.520833vw] px-[1.5625vw]  text-white bg-[#3189ef] rounded-[0.625vw]">
+                {{ t('message.qrCode.complete') }}
+            </button>
+        </div>
+    </GeneralModal>
     </div>
 </template>
 
