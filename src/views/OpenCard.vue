@@ -120,15 +120,9 @@ const handlePurchaseOnline = async () => {
 
 
         </div>
-        <GeneralModal :maskClosable="false" v-model:open="openPayUrlModal">
-            <div class="flex flex-col items-center justify-center">
-                <div class="text-[1.458333vw]">
-                    扫码缴费
-                </div>
-                <div class="text-[.833333vw] text-[#262626]">
-                    请使用微信或支付宝扫描二维码完成支付
-                </div>
-
+        <GeneralModal :maskClosable="false" v-model:open="openPayUrlModal" width="29.1667vw" mainTitle="扫码缴费1"
+            subTitle="请使用微信或支付宝扫描二维码完成支付">
+            <div class="flex flex-col items-center justify-center payment-style">
                 <QRCode class="w-[8.85416667vw] h-[8.85416667vw]" :value="paymentInfo.payUrl" />
                 <button class="py-[.520833vw] px-[1.5625vw] text-white bg-[#3189ef] rounded-[0.625vw]">
                     我已支付完成
