@@ -29,20 +29,36 @@ const { cardId, balance, cardStatus } = defineProps({
 })
 
 const updateCardData = inject('updateCardData');
+const updateCardList = inject('updateCardList');
 
 
 const openFreezeModal = ref(false);
 const openDeleteModal = ref(false);
-const openRecoverModal = ref(false);
+const openRecoverModal = defineModel('openRecoverModal')
 
 const handleDeleteCard = () => {
-    if (parseFloat(balance) > 0) {
+    if (parseFloat(balance) > 1) {
         message.error(t('message.cardOptions.deleteCard.error'))
         return
     }
     openDeleteModal.value = true
 }
 
+
+
+const finishDeleteCard = async () => {
+    reqPending.value = true;
+    const res = await post(URL.card.delete, { cardId: cardId }, true)
+    reqPending.value = false;
+    if (!res.err) {
+        message.success(t('message.cardOptions.deleteCard.success'))
+        updateCardList()
+        
+    } else {
+        message.error(t('message.cardOptions.deleteCard.failed'))
+    }
+    openDeleteModal.value = false
+}
 
 const finishFreezeCard = async () => {
 
@@ -90,11 +106,11 @@ const finishFreezeCard = async () => {
         <template #footer>
 
             <div class="flex flex-row items-center justify-center gap-x-4 w-full">
-                
+
                 <button @click="openFreezeModal = false"
                     :class='`content-style px-10 h-[2.708333vw] w-[50%] ${reqPending ? " bg-slate-50 cursor-wait" : "bg-slate-200 hover:bg-slate-300"}  duration-100`'>{{
                         t('message.cardOptions.cancel') }}</button>
-            
+
                 <Spin :spinning="reqPending" wrapperClassName="h-[2.708333vw] w-[50%]">
                     <button @click="finishFreezeCard"
                         class="content-style h-[2.708333vw] w-[100%] bg-red-500 hover:bg-red-400 duration-100 text-white">{{
@@ -115,11 +131,11 @@ const finishFreezeCard = async () => {
         </div>
         <template #footer>
             <div class="flex flex-row items-center justify-center gap-x-4">
-                <Spin :spinning="reqPending">
-                    <button @click="openRecoverModal = false"
-                        class="content-style px-10 h-[2.708333vw] w-[100%] bg-slate-200 hover:bg-slate-300 duration-100">{{
-                            t('message.cardOptions.cancel') }}</button>
-                </Spin>
+
+                <button @click="openRecoverModal = false"
+                    class="content-style px-10 h-[2.708333vw] w-[100%] bg-slate-200 hover:bg-slate-300 duration-100">{{
+                        t('message.cardOptions.cancel') }}</button>
+
                 <Spin :spinning="reqPending">
                     <button @click="openRecoverModal = false"
                         class="content-style px-10 h-[2.708333vw] w-[100%] bg-red-500 hover:bg-red-400 duration-100 text-white">{{
@@ -140,13 +156,13 @@ const finishFreezeCard = async () => {
         </div>
         <template #footer>
             <div class="flex flex-row items-center justify-center gap-x-4">
-                <Spin :spinning="reqPending">
-                    <button @click="openFreezeModal = false"
-                        class="content-style px-10 h-[2.708333vw] w-[100%] bg-slate-200 hover:bg-slate-300 duration-100">{{
+               
+                    <button @click="openDeleteModal = false"
+                        class="content-style px-10 h-[2.708333vw] w-[50%] bg-slate-200 hover:bg-slate-300 duration-100">{{
                             t('message.cardOptions.cancel') }}</button>
-                </Spin>
-                <Spin :spinning="reqPending">
-                    <button @click="handleDeleteCard"
+        
+        <Spin :spinning="reqPending" wrapperClassName="h-[2.708333vw] w-[50%]">
+                    <button @click="finishDeleteCard"
                         class="content-style px-10 h-[2.708333vw] w-[100%] bg-red-500 hover:bg-red-400 duration-100 text-white">{{
                             t('message.cardOptions.deleteCard.confirm') }}</button>
                 </Spin>

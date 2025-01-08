@@ -17,12 +17,15 @@ import get from '../../api/get';
 import post from '../../api/post';
 import URL from '../../api/api-list';
 import { useI18n } from 'vue-i18n';
+import { debounce } from '../../utils/debounceConfig';
 
 const { t } = useI18n();
 
 const openCheckoutCodeModal = ref(false);
 
 const expireDate = ref(null)
+
+const openRecoverModal = ref(false);
 
 let cb = () => { }
 
@@ -49,7 +52,11 @@ const cardDetailRef = ref(null);
 
 
 
+
+
 const { cardData, cardId } = defineProps(['cardData', 'cardId']);
+
+const freezedClass = ref('*:blur [&>#info]:blur-none');
 
 
 
@@ -86,14 +93,17 @@ const finishSecureInfoRequestModal = async () => {
 const router = useRouter();
 const { toClipboard } = useClipboard();
 
-const copy = async (text) => {
+
+
+
+const copy = debounce(async (text) => {
     try {
         await toClipboard(text);
         message.success(t('message.messages.copySuccess'));
     } catch (error) {
         message.error(t('message.messages.copyFailed'));
     }
-};
+})
 
 const copyCVV = () => {
     if (cvv.value) {
@@ -243,6 +253,8 @@ const downLoadAddressDetails = async () => {
 }
 
 
+const freezed = computed(() => cardData.cardStatus !== 'Active');
+
 </script>
 
 <template>
@@ -253,7 +265,7 @@ const downLoadAddressDetails = async () => {
                 <div class="flex flex-row justify-between w-full">
                     <div class="flex flex-col gap-y-4">
                         <div class="text-2xl">
-                            {{ t('message.payable') }}
+                            {{ !freezed ? t('message.payable') : t('message.freezed') }}
                         </div>
                         <div class="flex items-end gap-x-2">
                             <div class="font-bold text-4xl">$</div>
@@ -263,22 +275,29 @@ const downLoadAddressDetails = async () => {
                     </div>
                     <div class="flex flex-row items-center text-xl gap-x-6">
 
-                        <CashoutButton :availableBalance="cardData['balance']" />
+                        <CashoutButton :disabled="freezed" :availableBalance="cardData['balance']" />
 
-                        <RechargeButton :cardId="cardId" />
+                        <RechargeButton :disabled="freezed" :cardId="cardId" />
                         <button @click="() => router.replace('/openCard')"
                             class="bg-black text-slate-200 px-8 py-3 rounded-xl hover:bg-slate-800 duration-100">
                             {{ t('message.openNewCard') }}
                         </button>
 
-                        <CardOptionButton :cardId="cardId" :balance="cardData.balance"
+                        <CardOptionButton v-model:openRecoverModal="openRecoverModal" :cardId="cardId" :balance="cardData.balance"
                             :cardStatus="cardData.cardStatus" />
                     </div>
                 </div>
             </div>
 
-            <div id="cardDisplay" class="flex flex-row items-start justify-center border rounded-2xl"
+            <div id="cardDisplay" :class="`${!freezed?'':freezedClass} relative  flex flex-row items-start justify-center border rounded-2xl`"
                 style="background: radial-gradient(circle at top , rgb(241, 253, 255) 0%, rgb(249, 249, 249) 100%);">
+                
+                <div v-if="freezed" id="info" class="absolute z-50 top-0 left-0 w-full h-full flex items-center justify-center gap-x-4">
+                    <button @click="openRecoverModal=true" class="bg-[#3189ef]  text-[1.9vw] text-white px-[3vw] py-[1.2vw] rounded-[0.625vw] hover:bg-blue-400 duration-100">
+                        {{ t('message.cardDetailRecover') }}
+                    </button>
+                </div>
+                
                 <div id="cardDetail" :ref="cardDetailRef"
                     style="background: radial-gradient(circle at top left, rgba(238,238,238,1) 0%, rgb(249, 249, 249) 100%);"
                     class="flex flex-col bg-gray-100 w-1/2 h-full gap-y-6  px-9 py-7 border  border-gray-300 rounded-2xl">

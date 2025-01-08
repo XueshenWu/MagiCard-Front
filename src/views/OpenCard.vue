@@ -9,9 +9,14 @@ import post from '../api/post'
 import URL from '../api/api-list';
 import { message, QRCode } from 'ant-design-vue';
 import GeneralModal from '../components/Modal/GeneralModal.vue';
+import UserInfoInput from '../components/open-card/UserInfoInput.vue';
+
 
 
 const openPayUrlModal = ref(false);
+
+const firstName = ref('');
+const lastName = ref('');
 
 
 const router = useRouter();
@@ -21,7 +26,7 @@ provide('cardType', cardType);
 const yearTerm = ref(0);
 provide('yearTerm', yearTerm);
 
-const current = ref(0);
+const current = ref(3);
 const next = () => {
 
     if (current.value === 1) {
@@ -81,7 +86,7 @@ const handlePurchaseOnline = async () => {
         }
         await nextTick()
         openPayUrlModal.value = true;
-       
+
     } else {
         message.error('支付失败')
     }
@@ -98,6 +103,7 @@ const handlePurchaseOnline = async () => {
         <div class="steps-content h-[440px] w-full">
             <CardDurationSelector v-model="cardType" v-if="current === 0" />
             <ServiceSelector v-model="yearTerm" v-else-if="current === 1" />
+            <UserInfoInput v-model:firstName="firstName" v-model:lastName="lastName" v-else-if="current === 3" />
             <CheckoutResult v-else-if="current === 4" v-model:current="current" />
             <div v-else>
                 <div>其他步骤</div>
@@ -114,20 +120,20 @@ const handlePurchaseOnline = async () => {
 
 
         </div>
-        <GeneralModal :maskClosable="false" v-model:open="openPayUrlModal" >
+        <GeneralModal :maskClosable="false" v-model:open="openPayUrlModal">
             <div class="flex flex-col items-center justify-center">
-            <div class="text-[1.458333vw]">
-                扫码缴费
-            </div>
-            <div class="text-[.833333vw] text-[#262626]">
-                请使用微信或支付宝扫描二维码完成支付
-            </div>
+                <div class="text-[1.458333vw]">
+                    扫码缴费
+                </div>
+                <div class="text-[.833333vw] text-[#262626]">
+                    请使用微信或支付宝扫描二维码完成支付
+                </div>
 
-            <QRCode class="w-[8.85416667vw] h-[8.85416667vw]" :value="paymentInfo.payUrl" />
-            <button class="py-[.520833vw] px-[1.5625vw] text-white bg-[#3189ef] rounded-[0.625vw]">
-                我已支付完成
-            </button>
-        </div>
+                <QRCode class="w-[8.85416667vw] h-[8.85416667vw]" :value="paymentInfo.payUrl" />
+                <button class="py-[.520833vw] px-[1.5625vw] text-white bg-[#3189ef] rounded-[0.625vw]">
+                    我已支付完成
+                </button>
+            </div>
 
 
         </GeneralModal>

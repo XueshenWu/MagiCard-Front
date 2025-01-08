@@ -10,7 +10,7 @@ import post from '../../api/post';
 import { message } from '../Message';
 import { QRCode } from 'ant-design-vue';
 
-const props = defineProps(['cardId']);
+const props = defineProps(['cardId', 'disabled']);
 const openRechargeModal = ref(false);
 const current = ref(0);
 const rechargeAmount = ref(0);
@@ -58,11 +58,19 @@ watchEffect(async () => {
     }
 })
 
+const handleOpenRechargeModal = () => {
+    if (props.disabled) {
+        return
+    }
+    openRechargeModal.value = true
+}
+
+
 </script>
 
 <template>
-    <button @click="openRechargeModal = true"
-        class="bg-blue-500 text-white px-8 py-3 rounded-xl hover:bg-blue-400 duration-100">
+    <button @click="handleOpenRechargeModal"
+        :class="`${props.disabled?'bg-gray-100 cursor-not-allowed text-black':'bg-blue-500 hover:bg-blue-400 text-white'}   px-8 py-3 rounded-[0.625vw]  duration-100`">
         {{ t('message.recharge') }}
     </button>
     <GeneralModal v-if="feeRate !== null" v-model:open="openRechargeModal" width="57.2917vw" :centered="true">

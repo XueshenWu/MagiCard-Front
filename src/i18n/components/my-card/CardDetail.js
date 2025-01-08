@@ -2,6 +2,7 @@ export default {
     cn: {
         message: {
             payable: "可支付",
+            freezed: "已冻结",
             openNewCard: "开新卡",
             cardInfo: {
                 cardNumber: "卡号",
@@ -37,13 +38,15 @@ export default {
             addressDetails: {
                 format: "地址1: {address}\n城市: {city}\n邮编: {postalCode}\n州: {state}{stateNameCn}",
                 stateSeparator: " / "
-            }
+            },
+            cardDetailRecover:"解冻卡片",
 
         }
     },
     en: {
         message: {
             payable: "Payable",
+            freezed: "Freezed",
             openNewCard: "Open New Card",
             cardInfo: {
                 cardNumber: "Card Number",
@@ -80,7 +83,8 @@ export default {
             addressDetails: {
                 format: "Address 1: {address}\nCity: {city}\nPostal Code: {postalCode}\nState: {state}{stateNameCn}",
                 stateSeparator: " / "
-            }
+            },
+            cardDetailRecover:"Unfreeze Card",
         }
     }
 }

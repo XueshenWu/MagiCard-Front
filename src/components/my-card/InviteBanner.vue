@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watchEffect, watch } from 'vue';
+import { ref, watchEffect, watch, inject } from 'vue';
 import { Input, Button, Spin } from 'ant-design-vue';
 import { useRouter } from 'vue-router';
 import useClipboard from 'vue-clipboard3';
@@ -10,6 +10,8 @@ import URL from '../../api/api-list';
 import post from '../../api/post';
 import { useI18n } from 'vue-i18n';
 
+
+const updateCardData = inject('updateCardData');
 
 const { t } = useI18n();
 
@@ -42,6 +44,7 @@ const handleBonusCashout = async () => {
 
 
     invitationInfo.value = await getinvitationInfo();
+    updateCardData()
     withdrawlLoading.value = false;
     openBonusCashout.value = false;
 }

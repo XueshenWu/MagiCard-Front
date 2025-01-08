@@ -106,6 +106,16 @@ const updateCardData = async () => {
 
 provide('updateCardData', updateCardData);
 
+
+const updateCardList = async () => {
+    const _cardList = await getCardList();
+    cardList.value = _cardList;
+    activeKey.value = _cardList[0].cardId;
+    userInfo.value = await getUserInfo();
+}
+
+provide('updateCardList', updateCardList);
+
 watch(activeKey, async (newVal) => {
     loading.value = true;
     if (!newVal) {

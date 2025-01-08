@@ -1,6 +1,6 @@
 <script setup>
 import { DownOutlined } from '@ant-design/icons-vue';
-import { computed, onMounted, ref, watchEffect } from 'vue';
+import { computed, inject, onMounted, ref, watchEffect } from 'vue';
 import { message } from "../components/Message.js"
 import URL from '../api/api-list.js';
 import { Input } from 'ant-design-vue';
@@ -15,6 +15,9 @@ import post from '../api/post.js';
 import { useI18n } from 'vue-i18n';
 
 const {t} = useI18n();
+
+
+
 
 
 const open = ref(false);

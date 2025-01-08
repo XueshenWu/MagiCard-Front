@@ -18,7 +18,9 @@ export default {
                     confirm: "确认删除",
                     warning1: "删除后该卡片将永久移除，无法恢复！请确保您已备份所需信息。",
                     warning2: "删卡不退卡费，开新卡需要重新支付费用，请确认后再操作。",
-                    error: "卡片余额不为0，请先提现"
+                    error: "卡片余额不为0，请先提现",
+                    success: "删除成功",
+                    failed: "删除失败"
                 },
                 recoverCard: {
                     confirm: "确认恢复",
@@ -50,7 +52,9 @@ export default {
                     confirm: "Confirm Delete",
                     warning1: "Once deleted, this card will be permanently removed and cannot be recovered! Please ensure you have backed up all necessary information.",
                     warning2: "Card fee is non-refundable. A new fee will be charged for opening a new card. Please confirm before proceeding.",
-                    error: "Card balance must be zero. Please withdraw first"
+                    error: "Card balance must be zero. Please withdraw first",
+                    success: "Delete successfully",
+                    failed: "Delete failed"
                 },
                 recoverCard: {
                     confirm: "Confirm Recover",

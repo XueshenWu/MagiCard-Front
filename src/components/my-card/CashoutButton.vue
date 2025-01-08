@@ -5,15 +5,23 @@ import GeneralModal from '../Modal/GeneralModal.vue';
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
-const open = ref(false);
-const { availableBalance, className } = defineProps(['availableBalance', 'className']);
 
+const open = ref(false);
+const { availableBalance, className, disabled } = defineProps(['availableBalance', 'className', 'disabled']);
+
+
+const handleClick = () =>{
+    if(disabled){
+        return;
+    }
+    open.value = true;
+}
 
 
 </script>
 <template>
-    <button @click="open = true"
-        :class="className ?? ` bg-slate-200 px-8 py-3 rounded-xl hover:bg-slate-300 duration-100`">
+    <button @click="handleClick"
+        :class="className ?? ` ${disabled?'bg-gray-100 cursor-not-allowed':'hover:bg-slate-300 bg-slate-200 '} px-8 py-3 rounded-[0.625vw]  duration-100`">
         {{ t('message.withdrawal.button') }}
     </button>
     <GeneralModal v-model:open='open' width="29.1667vw" :centered="true"  :mainTitle="t('message.withdrawal.title') " 
