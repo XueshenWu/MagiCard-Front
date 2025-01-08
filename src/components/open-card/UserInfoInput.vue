@@ -18,30 +18,30 @@ const lastName = defineModel('lastName');
 
 
         <div
-            class=" w-full py-[3vw] px-[8vw] flex flex-col items-center justify-center text-[1.04vw] gap-y-[2vw] rounded-[0.625vw]">
+            class=" w-full py-6  flex flex-col items-center justify-center text-xl gap-y-6 rounded-xl">
 
 
-            <div class="flex flex-col items-center gap-y-[0.4vw] w-1/2">
+            <div class="flex flex-col items-center gap-y-2 w-2/3">
                 <div class="w-full flex flex-row items-center justify-center">
-                    <img src="/userinfo.png" alt="userinfo" class="w-[2.5vw] h-[2.5vw]" />
-                    <div class="text-[1.25vw]">
+                    <img src="/userinfo.png" alt="userinfo" class="w-8 h-8" />
+                    <div class="text-2xl">
                         请完善您的姓名信息以完成开卡
                     </div>
                 </div>
 
-                <div class="text-[0.833vw]">
+                <div class="text-md">
                     您的姓名将仅用于注册开卡，不会被用于其他用途
                 </div>
             </div>
 
-            <div class="flex flex-col items-start gap-y-[1vw] w-1/3">
+            <div class="flex flex-col items-start gap-y-2 w-1/3">
                 <div>
                     输入您的名字
                 </div>
                 <Input v-model:value="firstName" placeholder="First Name" />
             </div>
 
-            <div class="flex flex-col items-start gap-y-[1vw] w-1/3">
+            <div class="flex flex-col items-start gap-y-2 w-1/3">
                 <div>
                     输入您的姓氏
                 </div>

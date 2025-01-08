@@ -103,11 +103,11 @@ router.beforeEach(async (to, from, next) => {
         modalStore.loginModalOpen = true;
     } else {
 
-        if (to.path === '/cards') {
+        if (to.path === '/cards' || to.path==='/subscriptions') {
 
             const res = await get(URL.card.cardList, null, true)
             if (res.err) {
-                router.replace('subscription')
+                router.replace('openCard')
             } else {
                 const data = res.data;
                 if (data.length === 0) {

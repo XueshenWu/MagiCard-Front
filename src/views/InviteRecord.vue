@@ -3,8 +3,9 @@ import { DownOutlined } from '@ant-design/icons-vue';
 import { computed, inject, onMounted, ref, watchEffect } from 'vue';
 import { message } from "../components/Message.js"
 import URL from '../api/api-list.js';
-import { Input } from 'ant-design-vue';
+import { Input, Spin } from 'ant-design-vue';
 import { useRouter } from 'vue-router';
+
 
 import useClipboard from 'vue-clipboard3';
 import GeneralModal from '../components/Modal/GeneralModal.vue';
@@ -14,7 +15,7 @@ import { watch } from 'vue';
 import post from '../api/post.js';
 import { useI18n } from 'vue-i18n';
 
-const {t} = useI18n();
+const { t } = useI18n();
 
 
 
@@ -42,7 +43,12 @@ const status_to_number = {
     已支付: 3
 }
 
+const openBonusCashout = ref(false);
 
+async function getinvitationInfo() {
+    const res = await get(URL.invitation.summary, null, true)
+    return res.data;
+}
 
 const date_to_number = (t) => {
 
@@ -52,6 +58,33 @@ const date_to_number = (t) => {
     const [year, month] = t.match(/(\d{4})年(\d{1,2})月/).slice(1, 3);
     return `${year}-${month.padStart(2, '0')}`;
 }
+
+const withdrawlLoading = ref(false);
+
+const handleBonusCashout = async () => {
+
+    if (inviteStatistics.value.rewardBalance <= 0) {
+
+        return;
+    }
+
+    withdrawlLoading.value = true;
+
+    const res = await get(URL.invitation.rewardRequest, null, true)
+    if (!res.err) {
+        message.success(t('message.invitationBanner.reward.success'));
+    } else {
+        message.error(t('message.invitationBanner.reward.failed'));
+    }
+
+
+    inviteStatistics.value = await getinvitationInfo();
+
+    withdrawlLoading.value = false;
+    openBonusCashout.value = false;
+}
+
+
 
 const selectByStatus = ref("按状态筛选");
 const selectByMonth = ref("按月筛选");
@@ -138,11 +171,11 @@ const { toClipboard } = useClipboard();
 
 const copy = async (text) => {
     try {
-    await toClipboard(text);
-    message.success(t('message.clipboard.success'));
-} catch (error) {
-    message.error(t('message.clipboard.error'));
-}
+        await toClipboard(text);
+        message.success(t('message.clipboard.success'));
+    } catch (error) {
+        message.error(t('message.clipboard.error'));
+    }
 };
 
 
@@ -269,7 +302,7 @@ const handleWithdrew = () => {
 
 
 const handleOpenWithdrewRewardAmount = () => {
-    openRewardShow.value = true;
+    openBonusCashout.value = true;
 }
 const handleCloseWithdrewRewardAmount = () => {
     openRewardShow.value = false;
@@ -310,28 +343,53 @@ const handleCloseWithdrewRewardAmount = () => {
                         <div class="text-3xl font-semibold text-black">${{ inviteStatistics.rewardBalance }}</div>
                     </div>
                     <div>
+
                         <button @click="handleOpenWithdrewRewardAmount"
                             class="bg-[#3189ef] text-white px-6 py-2 rounded-lg duration-100 cursor-pointer">
                             {{ t('message.invitation.withdraw') }}
                         </button>
+
+                        <GeneralModal :maskClosable="false" v-model:open='openBonusCashout' width="29.1667vw"
+                            :centered="true">
+                            <div class="flex flex-col items-center justify-center gap-y-4 pt-8 px-8">
+                                <p class="text-[1.458333vw]">{{ t('message.invitationBanner.withdrawal.title') }}</p>
+                                <p class="text-[0.8vw]">{{ t('message.invitationBanner.withdrawal.subtitle') }}</p>
+                                <p class="font-bold text-[2.08333vw]">${{ Number(
+                                    inviteStatistics.rewardBalance.toFixed(2)).toFixed(2) }}</p>
+                            </div>
+                            <template #footer>
+                                <div class="flex flex-row items-center justify-center gap-x-4 mt-12 px-8 pb-8 ">
+                                    <Spin :spinning="withdrawlLoading">
+                                        <button @click="handleBonusCashout"
+                                            :class="`text-[1.04167vw] w-[14.0625vw] h-[2.70833vw]  rounded-xl ${inviteStatistics.rewardBalance <= 0 ? 'bg-gray-100 cursor-not-allowed text-gray-400' : 'bg-blue-500 hover:bg-blue-400 text-white'} duration-100 `">{{
+                                                t('message.invitationBanner.withdrawal.withdrawAll') }}</button>
+                                    </Spin>
+
+                                </div>
+                            </template>
+                        </GeneralModal>
                     </div>
                 </div>
                 <div class="flex flex-row w-full justify-between mt-5">
                     <div class="flex flex-col">
                         <div class="text-2xl text-black font-bold">{{ inviteStatistics.monthlyReferrals }}</div>
-                        <div class="text-xl text-[#979797] font-normal">{{ t('message.invitation.stats.monthlyReferrals') }}</div>
+                        <div class="text-xl text-[#979797] font-normal">{{
+                            t('message.invitation.stats.monthlyReferrals') }}</div>
                     </div>
                     <div class="flex flex-col">
                         <div class="text-2xl text-black font-bold">{{ inviteStatistics.totalReferrals }}</div>
-                        <div class="text-xl text-[#979797] font-normal">{{ t('message.invitation.stats.totalReferrals') }}</div>
+                        <div class="text-xl text-[#979797] font-normal">{{ t('message.invitation.stats.totalReferrals')
+                            }}</div>
                     </div>
                     <div class="flex flex-col">
                         <div class="text-2xl text-black font-bold">{{ inviteStatistics.rechargedUsers }}</div>
-                        <div class="text-xl text-[#979797] font-normal">{{ t('message.invitation.stats.rechargedUsers') }}</div>
+                        <div class="text-xl text-[#979797] font-normal">{{ t('message.invitation.stats.rechargedUsers')
+                            }}</div>
                     </div>
                     <div class="flex flex-col">
                         <div class="text-2xl text-black font-bold">${{ inviteStatistics.totalRewardAmount }}</div>
-                        <div class="text-xl text-[#979797] font-normal">{{ t('message.invitation.stats.totalReward') }}</div>
+                        <div class="text-xl text-[#979797] font-normal">{{ t('message.invitation.stats.totalReward') }}
+                        </div>
                     </div>
 
 
@@ -414,9 +472,11 @@ const handleCloseWithdrewRewardAmount = () => {
             <template #footer>
                 <div class="flex justify-center items-center gap-x-4 m-4">
                     <button @click="open = false"
-                        class="h-[2.708333vw] text-[1.041667vw] w-[100%] rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors duration-200">{{ t('message.invitation.modal.changeCode.cancel') }}</button>
+                        class="h-[2.708333vw] text-[1.041667vw] w-[100%] rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors duration-200">{{
+                            t('message.invitation.modal.changeCode.cancel') }}</button>
                     <button @click="handleModifyInviteCode"
-                        :class="`h-[2.708333vw] text-[1.041667vw] w-[100%] rounded-xl transition-colors duration-200 ${(inviteStatistics.inviteCode ?? '').length > 0 ? ' bg-blue-500 text-white hover:bg-blue-400' : 'bg-gray-200 cursor-not-allowed text-gray-500'}`">{{ t('message.invitation.modal.changeCode.confirm') }}</button>
+                        :class="`h-[2.708333vw] text-[1.041667vw] w-[100%] rounded-xl transition-colors duration-200 ${(inviteStatistics.inviteCode ?? '').length > 0 ? ' bg-blue-500 text-white hover:bg-blue-400' : 'bg-gray-200 cursor-not-allowed text-gray-500'}`">{{
+                            t('message.invitation.modal.changeCode.confirm') }}</button>
                 </div>
             </template>
         </GeneralModal>
@@ -432,7 +492,8 @@ const handleCloseWithdrewRewardAmount = () => {
             <template #footer>
                 <div class="flex flex-row items-center justify-center gap-x-4 mt-12 px-8 pb-8 ">
                     <button
-                        :class='`text-[1.04167vw] w-[14.0625vw] h-[2.70833vw] rounded-xl   ${rewardAmount === 0 ? "disabled cursor-not-allowed bg-gray-100 text-gray-400" : " duration-100 bg-blue-500 hover:bg-blue-400 text-white"}`'>{{ t('message.invitation.modal.withdraw.withdrawAll') }}</button>
+                        :class='`text-[1.04167vw] w-[14.0625vw] h-[2.70833vw] rounded-xl   ${rewardAmount === 0 ? "disabled cursor-not-allowed bg-gray-100 text-gray-400" : " duration-100 bg-blue-500 hover:bg-blue-400 text-white"}`'>{{
+                            t('message.invitation.modal.withdraw.withdrawAll') }}</button>
                 </div>
             </template>
         </GeneralModal>
