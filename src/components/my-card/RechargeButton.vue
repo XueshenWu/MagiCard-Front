@@ -105,21 +105,13 @@ const handleOpenRechargeModal = () => {
         </template>
     </GeneralModal>
 
-    <GeneralModal v-model:open="openConfirmRechargeModal" :maskClosable="false">
-        <div class="flex flex-col items-center justify-center">
-            <div class="text-[1.458333vw]">
-                {{ t('message.qrCode.title') }}
-            </div>
-            <div class="text-[.833333vw] text-[#262626]">
-                {{ t('message.qrCode.subtitle') }}
-            </div>
-
+    <GeneralModal v-model:open="openConfirmRechargeModal" :maskClosable="false" width="29.1667vw" :mainTitle="t('message.qrCode.title')" :subTitle="t('message.qrCode.subtitle')">
+        <div class="flex flex-col items-center justify-center payment-style ">
             <QRCode class="w-[8.85416667vw] h-[8.85416667vw]" :value="paymentInfo.payUrl" />
-            <button class="py-[.520833vw] px-[1.5625vw] text-white bg-[#3189ef] rounded-[0.625vw]">
+            <button class="py-[.520833vw] px-[1.5625vw] my-[.520833vw] text-white bg-[#3189ef] rounded-[0.625vw]">
                 {{ t('message.qrCode.complete') }}
             </button>
         </div>
-
     </GeneralModal>
 </template>
 
@@ -131,5 +123,9 @@ const handleOpenRechargeModal = () => {
     font-weight: 500;
     line-height: 2.0869565217;
     margin-bottom: .833333vw;
+}
+
+.payment-style {
+    padding: 2.5vw 0;
 }
 </style>
