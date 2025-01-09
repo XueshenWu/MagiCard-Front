@@ -259,12 +259,13 @@ const onClickTime = ({ key }) => {
 
 //FIXME: finish i18n here
 
-const columns = [
+const columns = ref([
     {
-        title: '日期',
+        title: 'message.invitation.table.columns.date',
         dataIndex: 'queryDate',
         key: 'queryDate',
         sorter: (a, b) => a.queryDate.localeCompare(b.queryDate),
+      
     },
     {
         title: '状态',
@@ -282,7 +283,7 @@ const columns = [
         key: 'rewardAmount',
     }
 
-]
+])
 
 const isRotating = ref(false);
 
@@ -443,13 +444,26 @@ const handleCloseWithdrewRewardAmount = () => {
                 </div>
             </div>
             <div class="rounded-lg overflow-hidden shadow-sm w-[90%] ">
-                <Table :loading="loading" @change="(pagination, filters, sorter, { action, currentDataSource }) => {
+                <Table 
+                :showSorterTooltip = "false"
+                
+                :loading="loading" @change="(pagination, filters, sorter, { action, currentDataSource }) => {
                     current = pagination.current
                 }" :pagination="{
                     current: current,
                     pageSize: pageSize,
                     total: total,
-                }" :dataSource="dataSource" :columns="columns" class="w-full " bordered />
+                }" :dataSource="dataSource" :columns="columns" class="w-full " bordered>
+
+
+                    <template v-slot:headerCell="{ column }">
+                        <div class="text-lg py-2 px-1">
+                            {{ t(column.title) }}
+                        </div>
+                    </template>
+
+
+                </Table>
             </div>
         </div>
 

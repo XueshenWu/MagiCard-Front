@@ -32,32 +32,32 @@ const formState = reactive({
 });
 
 
-const rules = {
+const rules = ref({
     alipay_account: [
         {
             required: true,
-            message: '请输入支付宝账号',
+            message: t('message.withdrawl.validation.accountRequired'),
             trigger: 'blur'
         },
         {
             min: 4,
-            message: '支付宝账号长度不能少于4个字符',
+            message: t('message.withdrawl.validation.accountLength'),
             trigger: 'blur'
         }
     ],
     alipay_name: [
         {
             required: true,
-            message: '请输入支付宝姓名',
+            message: t('message.withdrawl.validation.nameRequired'),
             trigger: 'blur'
         },
         {
             min: 2,
-            message: '姓名长度不能少于2个字符',
+            message: t('message.withdrawl.validation.nameLength'),
             trigger: 'blur'
         }
     ]
-};
+});
 
 const handleOpenWithdrawlModal = () => {
     if (availableBalance <= 0) {
@@ -91,9 +91,9 @@ const onFinish = async () => {
 
     updateCardData();
     if (res.err) {
-        message.error('提现失败');
+        message.error(t('message.withdrawl.messages.error'));
     } else {
-        message.success('提现成功');
+        message.success(t('message.withdrawl.messages.success'));
         openWithdrawlModal.value = false;
     }
 
@@ -115,7 +115,7 @@ const onFinish = async () => {
         <template #footer>
             <div class="flex flex-row items-center justify-center gap-x-4 mt-12 px-8 pb-8 ">
                 <button @click="handleOpenWithdrawlModal"
-                    :class='`button-style w-[14.0625vw] h-[2.70833vw]  text-[1.04167vw] rounded-lg   ${availableBalance === 0 ? "disabled cursor-not-allowed bg-gray-100 text-gray-400" : " duration-100 bg-blue-500 hover:bg-blue-400 text-white"}`'>{{
+                    :class='`button-style w-[14.0625vw] h-[2.70833vw]  text-[1.04167vw] rounded-lg   ${availableBalance <= 0 ? "disabled cursor-not-allowed bg-gray-100 text-gray-400" : " duration-100 bg-blue-500 hover:bg-blue-400 text-white"}`'>{{
                         t('message.withdrawal.withdrawAll') }}</button>
             </div>
         </template>
@@ -129,20 +129,20 @@ const onFinish = async () => {
                 class="w-full space-y-[1vw]">
                 <div class="flex px-[3vw] flex-col items-start justify-start gap-y-4 w-full">
                     <div class="text-[0.8333vw] text-gray-500">
-                        支付宝账账号
+                        {{ t('message.withdrawl.alipayAccount.label') }}
                     </div>
                     <FormItem class="w-full " name="alipay_account">
-                        <Input placeholder="请输入您的支付宝账号" class="input-style w-full"
+                        <Input :placeholder="t('message.withdrawl.alipayAccount.placeholder')" class="input-style w-full"
                             v-model:value="formState.alipay_account" />
                     </FormItem>
                 </div>
 
                 <div class="flex flex-col px-[3vw] items-start justify-start gap-y-4 w-full">
                     <div class="text-[0.8333vw] text-gray-500">
-                        支付宝真实姓名
+                        {{ t('message.withdrawl.alipayName.label') }}
                     </div>
                     <FormItem class="w-full " name="alipay_name">
-                        <Input placeholder="请输入您的支付宝真实姓名" class="input-style" v-model:value="formState.alipay_name" />
+                        <Input :placeholder="t('message.withdrawl.alipayName.placeholder')" class="input-style" v-model:value="formState.alipay_name" />
                     </FormItem>
                 </div>
 
@@ -152,7 +152,7 @@ const onFinish = async () => {
                         <Spin :spinning="reqPending" wrapperClassName="w-full gird place-items-center"> 
                             <button type="submit" html-type="submit"
                                 class="w-full bg-blue-500 text-white rounded-xl text-xl button-style hover:bg-blue-400 duration-100">
-                                申请提现
+                                {{ t('message.withdrawl.submitButton') }}
                             </button>
                         </Spin>
                     </div>

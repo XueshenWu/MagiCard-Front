@@ -6,6 +6,9 @@ import { message } from '../Message.js';
 import post from '../../api/post.js';
 import URL from '../../api/api-list.js';
 import { convertGt } from '../../utils/converGt.js'
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 
 const step = ref(1);
@@ -38,7 +41,7 @@ const handleSendOtp = () => {
             formState.phoneNumber_new = divInputRef.value.innerText.trim()
         }
         if (!validatePhoneNumber(_phonenumber)) {
-            message.error('请输入正确的手机号');
+            message.error(t('message.modifyPhonenumber.validation.invalidPhone'));
             return;
         } else {
             captchaObj.value.showCaptcha();
@@ -66,22 +69,22 @@ const finishModify = async () => {
     }
 
     if (!formState.otp_new) {
-        message.error('请输入验证码');
+        message.error(t('message.modifyPhonenumber.validation.verificationCodeRequired'));
         return;
     }
     if (!formState.phoneNumber_new || !validatePhoneNumber(formState.phoneNumber_new)) {
-        message.error('请输入正确的手机号码');
+        message.error(t('message.modifyPhonenumber.validation.invalidPhoneNumber'));
         return;
     }
 
     const data = await post(URL.user.modifyPhoneNumber, body)
 
     if (!data.err) {
-        message.success('修改成功');
+        message.success(t('message.modifyPhonenumber.notifications.modifySuccess'));
         open.value = false;
         switchSelected('');
     } else {
-        message.error('修改失败');
+        message.error(t('message.modifyPhonenumber.notifications.modifyFailed'));
     }
 }
 
@@ -93,7 +96,7 @@ const toStep2 = async () => {
 
 
     if (!formState.otp_old) {
-        message.error('请输入验证码');
+        message.error(t('message.modifyPhonenumber.validation.verificationCodeRequired'));
         return;
     }
 
@@ -140,10 +143,10 @@ onMounted(async () => {
 
             const data = await post(URL.user.smsCode, body, true);
             if (!data.err) {
-                message.success('验证码发送成功');
+                message.success(t('message.modifyPhonenumber.notifications.codeSendSuccess'));
 
             } else {
-                message.error('验证码发送失败');
+                message.error(t('message.modifyPhonenumber.notifications.codeSendFailed'));
             }
             cooldown.value = 30;
 
@@ -162,29 +165,16 @@ onMounted(async () => {
 
 
 <template>
-    <GeneralModal v-if="userInfo" v-model:open="open" width="29.1667vw" mainTitle="修改手机号"
-        :subTitle="step === 1 ? '请先验证当前登录手机号' : '请验证新手机号'" :centered="true">
+    <GeneralModal v-if="userInfo" v-model:open="open" width="29.1667vw" :mainTitle="t('message.modifyPhonenumber.modal.title')"
+    :subTitle="step === 1 ? t('message.modifyPhonenumber.modal.verifyCurrentPhone') : t('message.modifyPhonenumber.modal.verifyNewPhone')" :centered="true">
         <div class="p-8 gap-y-12  flex flex-col items-center justify-center">
             <Form class="w-full">
                 <div class="w-full space-y-8">
                     <template v-if="step === 1">
-                        <!-- <div class="flex flex-col items-start w-full gap-y-4">
-                            <div class="text-gray-500">
-                                手机号
-                            </div>
-                            <div
-                                class="input-style *:text-[.9375vw] cursor-not-allowed  w-full flex flex-row justify-between border-radius-custom border text-xl border-gray-300 ">
-                                <div class="text-gray-300 font-bold text-center pr-6 border-r border-gray-400">
-                                    +86
-                                </div>
-                                <div class="w-full px-8 font-semibold ">
-                                    {{ userInfo.phoneNumber }}
-                                </div>
-                            </div>
-                        </div> -->
+                    
                         <div class="flex flex-col items-start justify-center w-full gap-y-4 ">
                             <div class="text-gray-500">
-                                手机号
+                                {{ t('message.modifyPhonenumber.form.phoneNumberLabel') }}
                             </div>
                             <div
                                 class=" input-style border-radius-custom  w-full flex flex-row items-center justify-between border-radius-custom border  border-gray-300 ">
@@ -199,15 +189,15 @@ onMounted(async () => {
                         </div>
                         <FormItem>
                             <div class="text-gray-500 mb-4">
-                                验证码
+                                {{ t('message.modifyPhonenumber.form.verificationCodeLabel') }}
                             </div>
                             <div class="flex flex-row items-center justify-between w-full gap-x-4">
-                                <Input v-model:value="formState.otp_old" placeholder="请输入验证码" size="large"
+                                <Input v-model:value="formState.otp_old" :placeholder="t('message.modifyPhonenumber.form.verificationCodePlaceholder')" size="large"
                                     class="input-style border-radius-custom">
                                 <template #suffix>
                                     <a @click="handleSendOtp"
                                         :class="`text-[.9375vw] ${cooldown > 0 ? cooldownClass : readyClass}`">
-                                        {{ cooldown <= 0 ? "获取验证码" : cooldown + 's' }} </a>
+                                        {{ cooldown <= 0 ? t('message.modifyPhonenumber.form.getVerificationCode') : cooldown + 's' }} </a>
                                 </template>
                                 </Input>
                             </div>
@@ -218,7 +208,7 @@ onMounted(async () => {
                         <FormItem>
                             <div class="flex flex-col items-start justify-center w-full gap-y-4 ">
                                 <div class="text-gray-500">
-                                    手机号
+                                    {{ t('message.modifyPhonenumber.form.phoneNumberLabel') }}
                                 </div>
                                 <div
                                     class=" input-style border-radius-custom  w-full flex flex-row items-center justify-between border-radius-custom border  border-gray-300 ">
@@ -235,17 +225,17 @@ onMounted(async () => {
                         </FormItem>
                         <FormItem>
                             <div class="text-gray-500 mb-4">
-                                验证码
+                                {{ t('message.modifyPhonenumber.form.verificationCodeLabel') }}
                             </div>
                             <div class="flex flex-row items-center justify-between w-full gap-x-4">
-                                <Input v-model:value="formState.otp_new" placeholder="请输入验证码" size="large"
+                                <Input v-model:value="formState.otp_new" :placeholder="t('message.modifyPhonenumber.form.verificationCodePlaceholder')" size="large"
                                     class="input-style border-radius-custom">
                                 <template #suffix>
 
 
                                     <a @click="handleSendOtp"
                                         :class="`text-[.9375vw] ${cooldown > 0 ? cooldownClass : readyClass}`">
-                                        {{ cooldown <= 0 ? "获取验证码" : cooldown + 's' }} </a>
+                                        {{ cooldown <= 0 ? t('message.modifyPhonenumber.form.getVerificationCode') : cooldown + 's' }} </a>
                                 </template>
                                 </Input>
                             </div>
@@ -254,18 +244,18 @@ onMounted(async () => {
 
                     <div class="flex flex-row justify-between w-full text-xl gap-x-4 ">
                         <button v-show="step === 1" @click="open = false"
-                            class="button-style bg-gray-200 rounded-xl">取消</button>
+                            class="button-style bg-gray-200 rounded-xl">{{ t('message.modifyPhonenumber.buttons.cancel') }}</button>
                         <button @click="toStep2" v-show="step === 1"
                             class="button-style text-white bg-blue-500 rounded-xl">
-                            下一步
+                            {{ t('message.modifyPhonenumber.buttons.next') }}
                         </button>
                         <button v-show="step === 2" @click="step = 1"
                             class="text-white bg-blue-500 rounded-xl button-style">
-                            上一步
+                            {{ t('message.modifyPhonenumber.buttons.previous') }}
                         </button>
                         <button @click="finishModify" v-show="step === 2"
                             class="text-white bg-blue-500 rounded-xl button-style">
-                            完成
+                            {{ t('message.modifyPhonenumber.buttons.finish') }}
                         </button>
                     </div>
                 </div>
@@ -273,7 +263,7 @@ onMounted(async () => {
         </div>
     </GeneralModal>
     <div v-else>
-        加载中...
+        
     </div>
 </template>
 <style scoped>

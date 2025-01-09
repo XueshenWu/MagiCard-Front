@@ -2,11 +2,14 @@
 import GeneralModal from '../Modal/GeneralModal.vue';
 import { Form, FormItem } from 'ant-design-vue';
 import { InputPassword, Input } from 'ant-design-vue';
-import { ref, onMounted, reactive, watchEffect,inject } from 'vue';
+import { ref, onMounted, reactive, watchEffect, inject } from 'vue';
 import { message } from "../Message.js"
 import post from '../../api/post.js';
 import URL from '../../api/api-list.js';
 import { convertGt } from '../../utils/converGt.js'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 
 const cooldown = ref(0);
@@ -35,31 +38,31 @@ const formState = reactive({
 
 const validateConfirmPassword = async (rule, value) => {
     if (value !== formState.password_new) {
-        throw new Error('两次输入的密码不一致');
+        throw new Error(t('message.validation.passwordMismatch'));
     }
 };
 
-const rules = {
+const rules = ref({
     password_new: [
-        { required: true, message: '请输入新密码', trigger: 'blur' },
-        { min: 8, message: '密码长度不能小于8位', trigger: 'blur' },
-        { pattern: /^(?=.*[a-zA-Z])(?=.*\d).+$/, message: '密码必须包含字母和数字', trigger: 'blur' }
+        { required: true, message: t('message.validation.passwordRequired'), trigger: 'blur' },
+        { min: 8, message: t('message.validation.passwordLength'), trigger: 'blur' },
+        { pattern: /^(?=.*[a-zA-Z])(?=.*\d).+$/, message: t('message.validation.passwordFormat'), trigger: 'blur' }
     ],
     password_confirm: [
-        { required: true, message: '请再次输入新密码', trigger: 'blur' },
+        { required: true, message: t('message.validation.confirmPasswordRequired'), trigger: 'blur' },
         { validator: validateConfirmPassword, trigger: 'blur' }
     ],
     otp: [
-        { required: true, message: '请输入验证码', trigger: 'blur' },
-        { len: 6, message: '验证码必须是6位数字', trigger: 'blur' },
-        { pattern: /^\d+$/, message: '验证码必须是数字', trigger: 'blur' }
+        { required: true, message: t('message.validation.otpRequired'), trigger: 'blur' },
+        { len: 6, message: t('message.validation.otpLength'), trigger: 'blur' },
+        { pattern: /^\d+$/, message: t('message.validation.otpFormat'), trigger: 'blur' }
     ],
-};
+});
 
 const handleSendOtp = () => {
 
 
-    if(cooldown.value > 0) {
+    if (cooldown.value > 0) {
         return;
     }
 
@@ -78,11 +81,11 @@ const onFinish = async () => {
 
     const data = await post(URL.user.resetLoginPassword, body, true);
     if (!data.err) {
-        message.success('密码重置成功');
+        message.success(t('message.notifications.resetSuccess'));
         open.value = false;
         switchSelected('');
     } else {
-        message.error('密码重置失败');
+        message.error(t('message.notifications.resetFailed'));
     }
 
 };
@@ -112,9 +115,9 @@ onMounted(async () => {
             };
             const data = await post(URL.user.smsCode, body, true);
             if (!data.err) {
-                message.success('验证码发送成功');
+                message.success(t('message.notifications.codeSendSuccess'));
             } else {
-                message.error('验证码发送失败');
+                message.error(t('message.notifications.codeSendFailed'));
             }
 
             cooldown.value = 30;
@@ -141,48 +144,51 @@ onMounted(async () => {
         <GeneralModal v-model:open="open" width="29.1667vw" :mainTitle="userInfo.loginPassword ? '重置密码' : '设置密码'"
             :centered="true">
             <div class="flex flex-col items-center justify-center gap-y-6 w-full px-8 pt-6">
-                <Form class="w-full" ref="formRef" :model="formState" :rules="rules" autocomplete="on" @finish="onFinish"
-                    name="password_reset_form">
+                <Form class="w-full" ref="formRef" :model="formState" :rules="rules" autocomplete="on"
+                    @finish="onFinish" name="password_reset_form">
                     <div class="flex flex-col items-center justify-center w-full gap-y-2">
                         <div class="flex flex-col items-center justify-center w-full gap-y-2">
                             <div class="text-[#595a61] py-3 text-[0.833333vw]">
-                                请输入您的新登陆密码
+                                {{ t('message.passwordReset.enterNewPassword') }}
                             </div>
                             <FormItem name="password_new">
-                                <InputPassword class="input-style w-full" v-model:value="formState.password_new" size="large" />
+                                <InputPassword class="input-style w-full" v-model:value="formState.password_new"
+                                    size="large" />
                             </FormItem>
                         </div>
                         <div class="flex flex-col items-center justify-start w-full gap-y-2">
                             <div class="text-[#595a61] py-3 text-[.833333vw]">
-                                请再次输入您的新登陆密码以确认
+                                {{ t('message.passwordReset.confirmNewPassword') }}
                             </div>
                             <FormItem name="password_confirm">
-                                <InputPassword class="input-style" v-model:value="formState.password_confirm" size="large" />
+                                <InputPassword class="input-style" v-model:value="formState.password_confirm"
+                                    size="large" />
                             </FormItem>
                         </div>
                         <div class="flex flex-col items-center justify-center w-full gap-y-2">
                             <div class="flex items-center gap-x-4 text-[#595a61] py-3 text-[.833333vw]">
-                                <span>请输入验证码</span>
+                                <span>{{ t('message.passwordReset.enterVerificationCode') }}</span>
                                 <span class="text-gray-400 ">
-                                    将发送至 +86 {{ userInfo.phoneNumber }}
+                                    {{ t('message.passwordReset.sendTo') }} +86 {{ userInfo.phoneNumber }}
                                 </span>
                             </div>
                             <FormItem name="otp">
                                 <div class="flex items-center justify-between gap-x-6 w-full">
-                                    <Input v-model:value="formState.otp" placeholder="请输入验证码" size="large"
+                                    <Input v-model:value="formState.otp" :placeholder="t('message.passwordReset.verificationCodePlaceholder')" size="large"
                                         class="input-style border-radius-custom">
-                                        <template #suffix>
-                                            <a @click="handleSendOtp" :class="`${cooldown>0?cooldownClass:readyClass} text-[.9375vw]`">
-                                               {{ cooldown>0? `${cooldown}s` : '发送验证码' }}
-                                            </a>
-                                        </template>
+                                    <template #suffix>
+                                        <a @click="handleSendOtp"
+                                            :class="`${cooldown > 0 ? cooldownClass : readyClass} text-[.9375vw]`">
+                                            {{ cooldown>0? `${cooldown}s` : t('message.passwordReset.sendVerificationCode') }}
+                                        </a>
+                                    </template>
                                     </Input>
                                 </div>
                             </FormItem>
                             <FormItem>
                                 <button type="submit" html-type="submit"
                                     class="button-style hover:bg-blue-400 duration-100 rounded-3xl bg-blue-500 text-white">
-                                    确认
+                                    {{ t('message.passwordReset.confirm') }}
                                 </button>
                             </FormItem>
                         </div>
@@ -194,13 +200,11 @@ onMounted(async () => {
     </template>
 </template>
 <style scoped>
-::v-deep(.ant-input-affix-wrapper-lg ) {
+::v-deep(.ant-input-affix-wrapper-lg) {
     padding: 12px 30px !important;
 }
 
-::v-deep(.ant-input-affix-wrapper .ant-input-password) {
-    
-}
+::v-deep(.ant-input-affix-wrapper .ant-input-password) {}
 
 .button-style {
     font-size: 1.041667vw;
