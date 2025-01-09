@@ -10,6 +10,8 @@ import { convertGt } from '../../../utils/converGt.js';
 
 import URL from '../../../api/api-list.js';
 import post from '../../../api/post.js';
+import { Crisp } from 'crisp-sdk-web';
+import { getClientToken } from '../../../utils/clientToken.js';
 
 
 const captchaReady = ref(false)
@@ -51,7 +53,18 @@ const login = async () => {
             }, 1000)
     if (!res.err) {
 
-        localStorage.setItem('token', res.data.token)
+
+
+
+        localStorage.setItem('token', res.data.token);
+       
+        const userCard = res.data.userCard;
+        const clientToken = getClientToken(userCard.userId);
+
+        Crisp.setTokenId(clientToken);
+
+        Crisp.load();
+
         loginState.value = false
         message.success('登录成功')
         closeModal()

@@ -10,9 +10,10 @@ import post from '../../../api/post.js'
 import URL from '../../../api/api-list.js'
 import { modalStore } from '../../../states/modalStore.js'
 import { useRoute } from 'vue-router'
+import { getClientToken } from '../../../utils/clientToken.js'
 
 import { useI18n } from 'vue-i18n'
-
+import { Crisp } from 'crisp-sdk-web'
 
 const cooldown = ref(0);
 const cooldownClass = ref('text-gray-500 cursor-not-allowed');
@@ -119,17 +120,24 @@ const register = async () => {
 
     const res = await post(URL.user.register, body, false)
     cooldown.value = 30;
-            const timer = setInterval(() => {
-                cooldown.value--;
-                if (cooldown.value <= 0) {
-                    clearInterval(timer);
-                    cooldown.value = 0;
-                }
-            }, 1000)
+    const timer = setInterval(() => {
+        cooldown.value--;
+        if (cooldown.value <= 0) {
+            clearInterval(timer);
+            cooldown.value = 0;
+        }
+    }, 1000)
     if (!res.err) {
         router.replace('/')
 
-        localStorage.setItem('token', res.data.token)
+        localStorage.setItem('token', res.data.token);
+       
+       const userCard = res.data.userCard;
+       const clientToken = getClientToken(userCard.userId);
+
+       Crisp.setTokenId(clientToken);
+
+       Crisp.load();
         message.success(t('notifications.registerSuccess'))
     }
 
@@ -225,7 +233,8 @@ onMounted(async () => {
                         <Input v-model:value="formState.otp" :placeholder="t('message.enterCode')" size="large"
                             class="input-style border-radius-custom">
                         <template #suffix>
-                            <a @click="handleSendOtp" :class="`${cooldown>0?cooldownClass:readyClass} text-[.9375vw]`">
+                            <a @click="handleSendOtp"
+                                :class="`${cooldown > 0 ? cooldownClass : readyClass} text-[.9375vw]`">
                                 {{ cooldown > 0 ? `${cooldown}s` : t('message.getCode') }}
                             </a>
                         </template>
