@@ -38,14 +38,14 @@ const lastName = defineModel('lastName');
                 <div>
                     输入您的名字
                 </div>
-                <Input v-model:value="firstName" placeholder="First Name" />
+                <Input v-model:value="firstName"/>
             </div>
 
             <div class="flex flex-col items-start gap-y-2 w-1/3">
                 <div>
                     输入您的姓氏
                 </div>
-                <Input v-model:value="lastName" placeholder="Last Name" />
+                <Input v-model:value="lastName"/>
             </div>
 
 

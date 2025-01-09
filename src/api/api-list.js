@@ -1,10 +1,11 @@
 
 const BASE_URL = 'http://192.168.193.75:8085';
 // const BASE_URL = 'http://3.86.106.168:8085';
-
+const FRONTEND_URL = 'http://localhost:5173'
 
 const URL = {
     base: BASE_URL,
+    frontend:FRONTEND_URL,
     user:{
         verifyPassword:`${BASE_URL}/v1/user/verifyPassword`,
         smsLogin:`${BASE_URL}/v1/user/smsLogin`,

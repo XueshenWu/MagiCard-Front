@@ -141,14 +141,6 @@ const update = async ([current, selectByStatus, selectByMonth]) => {
 
 watch([current, selectByStatus, selectByMonth], (val) => update(val), { immediate: true })
 
-
-
-
-
-
-
-
-
 watchEffect(async () => {
     const res = (await get(URL.invitation.summary, null, true))
     if (res.err) {
@@ -158,9 +150,6 @@ watchEffect(async () => {
     }
 });
 
-
-
-
 const statusMap = {
     all: '全部',
     registered: '仅注册',
@@ -169,12 +158,12 @@ const statusMap = {
 };
 const { toClipboard } = useClipboard();
 
-const copy = async (text) => {
+const copyInviteCode = async () => {
     try {
-        await toClipboard(text);
-        message.success(t('message.clipboard.success'));
+        await toClipboard(`${URL.frontend}?refId=${inviteStatistics.value.inviteCode}`);
+        message.success(t('message.invitationBanner.copy.success'));
     } catch (error) {
-        message.error(t('message.clipboard.error'));
+        message.error(t('message.invitationBanner.copy.failed'));
     }
 };
 
@@ -325,7 +314,7 @@ const handleCloseWithdrewRewardAmount = () => {
                             @click="handleOpenChangeInvitationCode">
                     </div>
                     <div>
-                        <button @click="() => copy(inviteStatistics.inviteCode)"
+                        <button @click="() => copyInviteCode()"
                             class="bg-[#eeeeee] text-black px-8 py-3 rounded-lg duration-100 cursor-pointer text-xl font-normal">
                             {{ t('message.invitation.copyLink') }}
                         </button>

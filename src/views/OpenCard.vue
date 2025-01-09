@@ -98,13 +98,15 @@ const pollPaymentStatus = () => {
 }
 
 const finishOpenCard = async () => {
-
     if (reqPending.value) {
         return;
     }
-
     if (!validateName(firstName.value) || !validateName(lastName.value)) {
         message.error('请填写姓名信息')
+        return;
+    }
+    if(!paymentInfo.value.outOrderId){
+        message.error('订单号不能为空')
         return;
     }
     reqPending.value = true;
@@ -113,7 +115,7 @@ const finishOpenCard = async () => {
     const res = await post(URL.card.create, {
         firstName: firstName.value,
         lastName: lastName.value,
-        outOrderId: '4760b12fadf5499d85b661451c74b53d'
+        outOrderId: paymentInfo.value.outOrderId
     })
     reqPending.value = false;
     if (!res.err) {

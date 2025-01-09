@@ -90,7 +90,7 @@ watch(open, async (newVal) => {
 
 const copyInviteCode = async () => {
     try {
-        await toClipboard(`${URL.base}?refId=${invitationInfo.value.inviteCode}`);
+        await toClipboard(`${URL.frontend}?refId=${invitationInfo.value.inviteCode}`);
         message.success(t('message.invitationBanner.copy.success'));
     } catch (error) {
         message.error(t('message.invitationBanner.copy.failed'));
