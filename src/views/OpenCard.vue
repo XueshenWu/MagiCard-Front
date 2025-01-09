@@ -24,16 +24,77 @@ const lastName = ref('');
 
 
 const router = useRouter();
-const cardType = ref(0);
+const cardType = ref('multi-media');
 provide('cardType', cardType);
 
-const yearTerm = ref(0);
+const yearTerm = ref(2);
 provide('yearTerm', yearTerm);
 
 
 const validateName = (name) => {
     const regex = /^[a-zA-Z\u4e00-\u9fa5]+$/;
     return regex.test(name);
+}
+
+
+const isPolling = ref(false)
+
+const pollPaymentStatus = () => {
+    
+    if (paymentInfo.value === null) {
+        return
+    } else {
+        isPolling.value = true;
+
+
+        (new Promise((resolve, reject) => {
+            const timeoutJob = async () => {
+                if (!current.value === 2 || !openPayUrlModal.value) {
+                    reject()
+                    return
+                }
+
+                const res = await post(URL.payment.checkOrderStatus, { data: paymentInfo.value.outOrderId }, true)
+
+
+                if (res.err) {
+
+                    isPolling.value = false
+                    reject()
+                }
+
+                const fulfilled = res.data === 2
+
+
+                if (fulfilled) {
+
+                    resolve()
+                } else {
+                    setTimeout(timeoutJob, 3000)
+                }
+            }
+
+            timeoutJob()
+        }))
+            .then((data) => {
+                message.success("支付成功, 请填写姓名信息")
+
+                current.value = 3
+    
+            })
+            .catch((error) => {
+                console.log('Error:', error)
+                message.error('支付失败')
+                current.value = 1
+         
+            })
+            .finally(() => {
+                isPolling.value = false  
+                openPayUrlModal.value = false
+            })
+
+
+    }
 }
 
 const finishOpenCard = async () => {
@@ -64,7 +125,7 @@ const finishOpenCard = async () => {
 }
 
 
-const current = ref(3);
+const current = ref(0);
 const next = () => {
 
     if (current.value === 1) {
@@ -74,12 +135,14 @@ const next = () => {
     }
 
 };
+
 const prev = () => {
     current.value--;
     if (current.value < 0) {
         router.replace('cards')
     }
 };
+
 const steps = [
     {
         title: '选择服务年限',
@@ -105,13 +168,10 @@ const items = steps.map(item => ({
     title: item.title,
 }));
 
-const paymentInfo = ref({
-    orderId: '',
-    outOrderId: '',
-    payUrl: ''
-})
+const paymentInfo = ref(null)
 
 const handlePurchaseOnline = async () => {
+    
     const res = await post(URL.payment.openCardPayment, {
         cardType: cardType.value === 'multi-media' ? 1 : cardType.value === 'creativity' ? 2 : -1,
         yearTerm: yearTerm.value
@@ -124,6 +184,8 @@ const handlePurchaseOnline = async () => {
         }
         await nextTick()
         openPayUrlModal.value = true;
+        current.value = 2;
+
 
     } else {
         message.error('支付失败')
@@ -139,34 +201,39 @@ const handlePurchaseOnline = async () => {
 
 
         <div class="steps-content h-[440px] w-full">
-            <CardDurationSelector v-model="cardType" v-if="current === 0" />
-            <ServiceSelector v-model="yearTerm" v-else-if="current === 1" />
+            <CardDurationSelector v-if="current === 0" />
+            <ServiceSelector v-else-if="current === 1" />
             <UserInfoInput v-model:firstName="firstName" v-model:lastName="lastName" v-else-if="current === 3" />
             <CheckoutResult v-else-if="current === 4" v-model:current="current" />
-            <div v-else>
-                <div>其他步骤</div>
+            <div v-else-if="current === 2">
+
             </div>
         </div>
 
         <a-steps progress-dot size="large" class="" :current="current" :items="items" />
         <div class="steps-action flex justify-end items-center gap-x-4 *:w-64 *:text-xl *:h-12 w-full py-4 pr-12">
-            <a-button class="bg-gray-100 border-none" v-if="current >= 0" style="margin-left: 8px"
+            <a-button class="bg-gray-100 border-none" v-if="current === 0 || current === 1" style="margin-left: 8px"
                 @click="prev">上一步</a-button>
 
             <a-button v-show="current === 0" type="primary" @click="next">下一步</a-button>
             <a-button v-show="current === 1" type="primary" @click="handlePurchaseOnline">线上购买</a-button>
 
             <Spin :spinning="reqPending" wrapperClassName="w-64 h-12 text-xl">
-                <a-button class="w-64 h-12 text-xl" v-show="current === 3" type="primary" @click="finishOpenCard">完成开卡</a-button>
+                <a-button class="w-64 h-12 text-xl" v-show="current === 3" type="primary"
+                    @click="finishOpenCard">完成开卡</a-button>
             </Spin>
         </div>
         <GeneralModal v-model:open="openPayUrlModal" :maskClosable="false" width="29.1667vw"
             :mainTitle="t('message.qrCode.title')" :subTitle="t('message.qrCode.subtitle')">
             <div class="flex flex-col items-center justify-center payment-style space-y-[1.320833vw] ">
                 <QRCode class="w-[8.85416667vw] h-[8.85416667vw]" :value="paymentInfo.payUrl" />
-                <button class="py-[.520833vw] px-[1.5625vw]  text-white bg-[#3189ef] rounded-[0.625vw]">
-                    {{ t('message.qrCode.complete') }}
-                </button>
+
+                <Spin :spinning="isPolling" wrapperClassName="w-full grid place-content-center">
+                    <button @click="pollPaymentStatus"
+                        class="py-[.520833vw] px-[1.7625vw]  text-white bg-[#3189ef] rounded-[0.625vw]">
+                        {{ t('message.qrCode.complete') }}
+                    </button>
+                </Spin>
             </div>
         </GeneralModal>
 

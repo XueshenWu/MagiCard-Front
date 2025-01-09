@@ -14,7 +14,9 @@ export default {
         title: "扫码缴费",
         subtitle: "请使用微信或支付宝扫描二维码完成支付",
         complete: "我已支付完成"
-      }
+      },
+      rechargeSuccess: "充值成功",
+      rechargeFailed: "充值失败",
     }
   },
   en: {
@@ -32,7 +34,9 @@ export default {
         title: "Scan to pay",
         subtitle: "Please scan QR code with WeChat or Alipay to complete payment",
         complete: "Payment completed"
-      }
+      },
+      rechargeSuccess: "Recharge success",
+      rechargeFailed: "Recharge failed",
     }
   }
 }

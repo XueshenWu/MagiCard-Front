@@ -56,7 +56,7 @@ const handleMenuClick = ({ key }) => {
                 <Menu.Item key="3">{{ t('message.modifyPaymentPassword') }}</Menu.Item>
                 <Menu.Item key="4">{{ t('message.modifyLoginPassword') }}</Menu.Item>
                 <Menu.Item key="5">{{ t('message.applyMonthlyStatement') }}</Menu.Item>
-                <Menu.Item key="6">{{ t('message.feedback') }}</Menu.Item>
+                <Menu.Item key="6">{{ t('message.feedbackForm') }}</Menu.Item>
                 <Menu.Item key="7">{{ t('message.logout') }}</Menu.Item>
             </Menu>
         </template>

@@ -32,7 +32,7 @@ export const router = createRouter({
 })
 
 
-const i18n = createI18n(i18nConfig)
+export const i18n = createI18n(i18nConfig)
 
 
 

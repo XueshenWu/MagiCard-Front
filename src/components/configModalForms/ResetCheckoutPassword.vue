@@ -8,6 +8,10 @@ import URL from '../../api/api-list.js';
 import { Input } from 'ant-design-vue';
 import { convertGt } from '../../utils/converGt.js';
 import { message } from '../Message.js';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
+
 const switchSelected = inject('switchSelected')
 
 const cooldown = ref(0);
@@ -55,10 +59,10 @@ onMounted(async () => {
 
             const data = await post(URL.user.smsCode, body)
             if (!data.err) {
-                message.success('验证码发送成功');
+                message.success(t('message.paymentPassword.messages.otpSuccess'));
 
             } else {
-                message.error('验证码发送失败');
+                message.error(t('message.paymentPassword.messages.otpFailed'));
             }
 
             cooldown.value = 30;
@@ -98,10 +102,10 @@ const onFinish = async () => {
     }
     const data = await post(URL.user.resetPaymentPassword, body)
     if (!data.err) {
-        message.success('修改成功');
+        message.success(t('message.paymentPassword.messages.modifySuccess'));
         switchSelected("")
     } else {
-        message.error('修改失败');
+        message.error(t('message.paymentPassword.messages.modifyFailed'));
     }
 };
 
@@ -119,29 +123,27 @@ const validateConfirmPassword = async (rule, value) => {
 const rules = {
 
     checkoutpwd_new: [
-        { required: true, message: '请输入新支付密码', trigger: 'blur' },
-        { len: 6, message: '支付密码必须是6位数字', trigger: 'blur' }
+        { required: true, message: t('message.paymentPassword.validation.required'), trigger: 'blur' },
+        { len: 6, message: t('message.paymentPassword.validation.length'), trigger: 'blur' }
     ],
     checkoutpwd_confirm: [
-        { required: true, message: '请再次输入新支付密码', trigger: 'blur' },
-        { len: 6, message: '支付密码必须是6位数字', trigger: 'blur' },
+        { required: true, message:  t('message.paymentPassword.validation.length'), trigger: 'blur' },
+        { len: 6, message: t('message.paymentPassword.validation.length'), trigger: 'blur' },
         { validator: validateConfirmPassword, trigger: 'blur' }
     ],
     otp: [
-        { required: true, message: '请输入验证码', trigger: 'blur' },
-        { len: 6, message: '验证码必须是6位数字', trigger: 'blur' }
+        { required: true, message: t('message.paymentPassword.validation.otpRequired'), trigger: 'blur' },
+        { len: 6, message: t('message.paymentPassword.validation.otpLength'), trigger: 'blur' }
     ]
 };
 </script>
 <template>
     <template v-if="!userInfo">
-        <div>
-            加载中...
-        </div>
+      
     </template>
 
     <template v-else>
-        <GeneralModal v-model:open="open" width="29.1667vw" :mainTitle="userInfo.paymentPassword ? '修改支付密码' : '设置支付密码'"
+        <GeneralModal v-model:open="open" width="29.1667vw" :mainTitle="userInfo.paymentPassword ? t('message.paymentPassword.titles.modify') : t('message.paymentPassword.titles.set')"
             :centered="true">
             <div class="flex flex-col items-center justify-center gap-y-6 px-8 py-8">
 
@@ -149,7 +151,7 @@ const rules = {
                     class="w-full">
                     <div class="flex flex-col items-center justify-start gap-y-4 w-full">
                         <div class="text-lg text-gray-500">
-                            输入新支付密码
+                            {{ t('message.paymentPassword.input.new') }}
                         </div>
                         <FormItem name="checkoutpwd_new">
                             <NumberBoxInput v-model:value="formState.checkoutpwd_new" />
@@ -158,7 +160,7 @@ const rules = {
 
                     <div class="flex flex-col items-center justify-start gap-y-4 w-full">
                         <div class="text-lg text-gray-500">
-                            确认新支付密码
+                            {{ t('message.paymentPassword.input.confirm') }}
                         </div>
                         <FormItem name="checkoutpwd_confirm">
                             <NumberBoxInput v-model:value="formState.checkoutpwd_confirm" />
@@ -171,14 +173,14 @@ const rules = {
                                     class="input-style border-radius-custom">
                                 <template #suffix>
                                     <a @click="handleSendOtp" :class="`${cooldown>0? cooldownClass:readyClass } text-[.9375vw]`">
-                                        {{ cooldown>0? `${cooldown}s` : '发送验证码' }}
+                                        {{ cooldown > 0 ? `${cooldown}s` : t('message.paymentPassword.buttons.sendOtp') }}
                                     </a>
                                 </template>
                                 </Input>
 
                             </div>
                             <div class=" text-gray-500 text-lg text-center mt-4">
-                                发送至 +86 {{ userInfo.phoneNumber }}
+                                {{ t('message.paymentPassword.input.sendTo', { phone: userInfo.phoneNumber }) }}
                             </div>
                         </FormItem>
                     </div>
@@ -187,7 +189,7 @@ const rules = {
                         <div class="w-full flex items-center justify-center">
                             <button type="submit" html-type="submit"
                                 class="w-full bg-blue-500 text-white rounded-xl text-xl button-style hover:bg-blue-400 duration-100">
-                                {{ userInfo.paymentPassword ? '修改' : '设置' }}支付密码
+                                {{ userInfo.paymentPassword ? t('message.paymentPassword.buttons.modify') : t('message.paymentPassword.buttons.set') }}
                             </button>
                         </div>
                     </FormItem>

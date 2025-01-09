@@ -1,3 +1,7 @@
+import { i18n } from "../main";
+
+
+
 const typeToImg = (txType) => {
 
     switch (txType) {
@@ -12,14 +16,16 @@ const typeToImg = (txType) => {
     }
 }
 
+
+
 const typeToString = (txType) => {
     switch (txType) {
         case 'TransferIn':
-            return '充值';
+            return i18n.global.t('message.transactionHistory.types.transferIn');
         case 'TransferOut':
-            return '提现';
+            return i18n.global.t('message.transactionHistory.types.transferOut');
         case 'Consumption':
-            return '消费';
+            return i18n.global.t('message.transactionHistory.types.consumption');
         default:
             return '';
     }

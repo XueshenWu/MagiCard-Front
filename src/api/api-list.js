@@ -36,6 +36,7 @@ const URL = {
         create: `${BASE_URL}/v1/card/create`,
         recharge: `${BASE_URL}/v1/card/recharge`,
         unfreeze: `${BASE_URL}/v1/card/unfreeze`,
+        withdrawl: `${BASE_URL}/v1/card/withdrew`,
     },
     transaction:{
         summary: `${BASE_URL}/v1/transaction/summary`,

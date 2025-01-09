@@ -7,6 +7,10 @@ import { message } from '../Message';
 import get from '../../api/get';
 import URL from '../../api/api-list';
 import post from '../../api/post';
+import {useI18n} from 'vue-i18n';
+
+const { t } = useI18n();
+
 const switchSelected = inject('switchSelected')
 
 const cardOptions = ref([])
@@ -18,7 +22,7 @@ watchEffect(async () => {
     if (!res.err) {
         userInfo.value = res.data;
         if(!res.data.email){
-            message.error('请先绑定邮箱');
+            message.error(t('message.monthlyStatement.error.emailRequired'));
             open.value = false;
             switchSelected('');
         }
@@ -54,7 +58,7 @@ const card = ref(cardOptions[0]);
 const handleApply = async () => {
 
     if(!currentCard.value){
-        message.error('请选择卡片');
+        message.error(t('message.monthlyStatement.error.cardRequired'));
         return;
     }
 
@@ -65,25 +69,25 @@ const handleApply = async () => {
         month: month.value
     })
     if (res.err) {
-        message.error('月结单发送失败');
+        message.error(t('message.monthlyStatement.error.sendFailed'));
         return;
     }
 
-    message.success('月结单已发送至您的邮箱');
+    message.success(t('message.monthlyStatement.success.sent'));
     open.value = false;
     switchSelected('');
 }
 </script>
 
 <template>
-    <GeneralModal v-model:open="open" width="540px" :centered="true" mainTitle="申请月结单">
+    <GeneralModal v-model:open="open" width="540px" :centered="true" :mainTitle=" t('message.monthlyStatement.title') ">
         <div class="gap-y-8 px-8 pt-8 flex flex-col items-center justify-center w-full">
             <div class="text-center">
                 <p>
-                    生成的月结单包含选择当月消费的记录。
+                    {{ t('message.monthlyStatement.description.records') }}
                 </p>
                 <p>
-                    请选择您申请月结单的月份：
+                    {{ t('message.monthlyStatement.description.selectMonth') }}
                 </p>
             </div>
             <Form>
@@ -92,7 +96,7 @@ const handleApply = async () => {
 
                         <div class="text-left flex flex-col gap-y-4">
                             <div class="text-gray-600">
-                                请选择申请帐单的卡片
+                                {{ t('message.monthlyStatement.description.selectCard') }}
                             </div>
                             <div class="content_select">
                                 <Select v-model:value="card" class="w-full" size="large"
@@ -121,7 +125,7 @@ const handleApply = async () => {
                         <div class="content_select">
                             <Select v-model:value="month" class="w-full" size="large"
                                 :getPopupContainer="triggerNode => triggerNode.parentNode">
-                                <Select.Option v-for="month in 12" :key="month" :value="month">{{ month }}月
+                                <Select.Option v-for="month in 12" :key="month" :value="month">{{ month }}{{ t('message.monthlyStatement.description.month') }}
                                 </Select.Option>
                             </Select>
                         </div>
@@ -131,7 +135,7 @@ const handleApply = async () => {
             </Form>
         </div>
         <div class="text-center text-gray-600">
-            月结单将会在1-3个工作日内发送至您的邮箱地址：
+            {{ t('message.monthlyStatement.description.deliveryNotice') }}
             <div class="text-lg font-bold">
                 {{ userInfo?.email }}
             </div>
@@ -139,7 +143,7 @@ const handleApply = async () => {
         <div class="grid place-content-center">
             <button @click="handleApply"
                 class="h-12 w-fit px-10 bg-primary text-xl py-2 text-white rounded-lg mt-8 bg-blue-500 hover:bg-blue-400 duration-75">
-                确认发送
+                {{ t('message.monthlyStatement.button.confirm') }}
             </button>
         </div>
         <template #footer></template>

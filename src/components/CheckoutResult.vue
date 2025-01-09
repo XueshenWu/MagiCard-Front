@@ -1,6 +1,10 @@
 <script setup>
 
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+
+
+const {t} = useI18n()
 
 const router = useRouter();
 
@@ -14,15 +18,21 @@ const toBuy = () => {
 
 const current = defineModel('current')
 
+const props = defineProps(['outOrderId'])
+
 </script>
 
 
 <template>
-    <a-result status="success" title="支付成功！" sub-title="订单号: 2017182818828182881 充值到账预计在 1-5 分钟, 请耐心等待。">
+ <a-result 
+    status="success" 
+    :title="t('message.checkoutResult.success')"
+    :sub-title="t('message.checkoutResult.subtitle', { orderId: props.outOrderId===undefined?'':props.outOrderId })"
+>
         <template #extra>
             <div class="">
-                <a-button key="console" type="primary" @click="toMyCard" style="margin-right: 10px">我的卡片</a-button>
-                <a-button key="buy" @click="toBuy">再次购买</a-button>
+                <a-button key="console" type="primary" @click="toMyCard" style="margin-right: 10px">{{ t('message.checkoutResult.buttons.myCards') }}</a-button>
+                <a-button key="buy" @click="toBuy">{{ t('message.checkoutResult.buttons.buyAgain') }}</a-button>
             </div>
 
         </template>

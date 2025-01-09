@@ -1,6 +1,6 @@
 <script setup>
 import { Dropdown, Menu, MenuItem, MenuDivider, Modal, Spin, QRCode } from 'ant-design-vue';
-import { inject, ref, nextTick } from 'vue';
+import { inject, ref, nextTick, watch } from 'vue';
 import { EllipsisOutlined } from '@ant-design/icons-vue';
 import GeneralModal from '../Modal/GeneralModal.vue';
 import { message } from '../Message';
@@ -10,9 +10,10 @@ import get from '../../api/get';
 import post from '../../api/post';
 
 
+
 const reqPending = ref(false);
 
-const openResultModal = ref(false);
+
 
 const { t } = useI18n();
 const { cardId, balance, cardStatus } = defineProps({
@@ -65,26 +66,32 @@ const pollPaymentStatus = () => {
 
             (new Promise((resolve, reject) => {
                 const timeoutJob = async () => {
-                    console.log('Starting timeoutJob')
+                    
+                    if(openRecoverModal.value === false){
+                        reject()
+                        return
+                    }
+
+
                     const res = await post(URL.payment.checkOrderStatus, { data: paymentInfo.value.outOrderId }, true)
-                    console.log('CheckOrderStatus response:', res)
+                  
 
                     if (res.err) {
-                        console.log('Rejecting due to error')
+                   
                         isPolling.value = false
                         reject()
                     }
 
                     const fulfilled = res.data === 2
-                    console.log('Fulfilled:', fulfilled)
+                
 
                     if (fulfilled) {
-                        console.log('Before unfreeze call')
+                 
                         const unfreezeRes = await post(URL.card.unfreeze, {
                             cardId: cardId,
                             outOrderId: paymentInfo.value.outOrderId
                         })
-                        console.log('After unfreeze call', unfreezeRes)
+         
 
                         try {
                             if (unfreezeRes.err) {
@@ -109,6 +116,8 @@ const pollPaymentStatus = () => {
             }))
             .then((data) => {
                 console.log('Success:', data)
+                message.success(t('message.cardOptions.recoverCard.success'))
+                updateCardData()
             })
             .catch((error) => {
                 console.log('Error:', error)
@@ -116,7 +125,7 @@ const pollPaymentStatus = () => {
             .finally(() => {
                 isPolling.value = false
                 openRecoverModal.value = false
-                openResultModal.value = true
+            
             })
 
 
@@ -219,6 +228,10 @@ const finishFreezeCard = async () => {
 
 const paymentInfo = ref(null)
 
+watch(openRecoverModal, ()=>{
+    paymentInfo.value = null
+},{immediate:true})
+
 
 const createRecoverCardPayment = async () => {
     reqPending.value = true;
@@ -288,7 +301,9 @@ const createRecoverCardPayment = async () => {
     </GeneralModal>
 
     <GeneralModal :maskClosable="false" v-model:open="openRecoverModal" width="29.166667vw" :centered="true"
-        :mainTitle="t(paymentInfo === null ? 'message.cardOptions.cautionTitle' : 'message.cardOptions.paymentTitle')">
+        :mainTitle="t(paymentInfo === null ? 'message.cardOptions.cautionTitle' : 'message.cardOptions.paymentTitle')"
+        :subTitle="t(paymentInfo === null ? '' : t('message.qrCode.subtitle'))"
+        >
         <div v-if="paymentInfo === null"
             class="flex flex-col items-center justify-center mt-[1.875vw] mb-[1.875vw] text-[1.09375vw] text-center">
             <p>{{ t('message.cardOptions.recoverCard.warning1') }}</p>
@@ -312,9 +327,9 @@ const createRecoverCardPayment = async () => {
             <div v-else class="flex flex-col items-center justify-center payment-style space-y-[1.320833vw] ">
                 <QRCode class="w-[8.85416667vw] h-[8.85416667vw]" :value="paymentInfo.payUrl" />
 
-                <Spin :spinning="isPolling" wrapperClassName="h-[2.708333vw] w-[100%]">
+                <Spin :spinning="isPolling" wrapperClassName="h-[2.708333vw] w-[100%] grid place-content-center">
                     <button @click="pollPaymentStatus"
-                        :class="`py-[.520833vw] px-[1.5625vw] w-full text-white  ${isPolling ? pollingClass : 'bg-[#3189ef]'} rounded-[0.625vw]`">
+                        :class="`py-[.520833vw] px-[1.7625vw]  text-white  ${isPolling ? pollingClass : 'bg-[#3189ef]'} rounded-[0.625vw]`">
                         {{ t('message.qrCode.complete') }}
                     </button>
                 </Spin>
@@ -325,11 +340,6 @@ const createRecoverCardPayment = async () => {
     </GeneralModal>
 
 
-    <GeneralModal v-model:open="openResultModal" width="29.166667vw" :centered="true">
-        <div>
-            <p>{{ t('message.cardOptions.recoverCard.success') }}</p>
-        </div>
-    </GeneralModal>
 
 
 

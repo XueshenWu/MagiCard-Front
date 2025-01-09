@@ -275,7 +275,7 @@ const freezed = computed(() => cardData.cardStatus !== 'Active');
                     </div>
                     <div class="flex flex-row items-center text-xl gap-x-6">
 
-                        <CashoutButton :disabled="freezed" :availableBalance="cardData['balance']" />
+                        <CashoutButton :cardId="cardId" :disabled="freezed" :availableBalance="cardData['balance']" />
 
                         <RechargeButton :disabled="freezed" :cardId="cardId" />
                         <button @click="() => router.replace('/openCard')"
@@ -293,7 +293,7 @@ const freezed = computed(() => cardData.cardStatus !== 'Active');
                 style="background: radial-gradient(circle at top , rgb(241, 253, 255) 0%, rgb(249, 249, 249) 100%);">
                 
                 <div v-if="freezed" id="info" class="absolute z-50 top-0 left-0 w-full h-full flex items-center justify-center gap-x-4">
-                    <button @click="openRecoverModal=true" class="bg-[#3189ef]  text-[1.9vw] text-white px-[3vw] py-[1.2vw] rounded-[0.625vw] hover:bg-blue-400 duration-100">
+                    <button @click="openRecoverModal=true" class="bg-[#3189ef]  text-xl text-white px-8 py-3 rounded-xl hover:bg-blue-400 duration-100">
                         {{ t('message.cardDetailRecover') }}
                     </button>
                 </div>

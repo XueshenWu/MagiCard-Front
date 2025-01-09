@@ -5,7 +5,10 @@ import CardNumber from '../CardNumber.vue';
 import NumberInput from '../NumberInput.vue';
 import get from '../../api/get';
 import URL from '../../api/api-list';
+import { useI18n } from 'vue-i18n';
 
+
+const {t} = useI18n()
 
 
 const rechargeAmount = ref(0);
@@ -100,8 +103,8 @@ watchEffect(async () => {
         <div class="flex flex-col gap-y-8">
             <div id="amountSelection" class="flex flex-col gap-y-6">
                 <div class="gap-x-2 flex flex-row items-center justify-start text-xl tracking-wider">
-                    <span class="text-gray-400 ">支付金额</span>
-                    <span class=" text-green-600">(失败会退回)</span>
+                    <span class="text-gray-400 ">{{ t('message.rechargeBoard.recharge.paymentAmount') }}</span>
+                    <span class=" text-green-600">{{ t('message.rechargeBoard.recharge.refundNotice') }}</span>
                 </div>
                 <div id="quickSelection" class="font-bold text-xl flex flex-row gap-x-4 *:rounded-lg ">
                     <div :class="` cursor-pointer px-12 py-4 border  ${rechargeAmount === Number(20) ? ' border-blue-400' : ''} cursor-pointer rounded-lg duration-100`"
@@ -120,14 +123,14 @@ watchEffect(async () => {
                 </div>
                 <div class="flex flex-col">
 
-                    <NumberInput className="h-14 text-xl" maxLength="4" placeholder="自定义金额"
+                    <NumberInput className="h-14 text-xl" maxLength="4" :placeholder=" t('message.rechargeBoard.recharge.customAmount') "
                         :status="valid ? '' : 'error'" v-model="rechargeAmount">
                         <template #prefix>
                             <div class="text-gray-400  h-11">$</div>
                         </template>
                     </NumberInput>
                     <div class="text-red-500 " v-show="!valid">
-                        自定义金额必须在$5到$60之间
+                        {{ t('message.rechargeBoard.recharge.amountError') }}
                     </div>
                 </div>
 
@@ -137,8 +140,8 @@ watchEffect(async () => {
          
                 <div   id="cardSelection" class="flex flex-col gap-y-2" ref="options">
                     <div class="flex flex-row justify-between items-center text-gray-400 text-xl tracking-wide">
-                        <span>支付卡号</span>
-                        <span>可用余额: $ *****</span>
+                        <span>{{ t('message.rechargeBoard.card.number') }}</span>
+                        <span>{{ t('message.rechargeBoard.card.balance') }}: $ *****</span>
                     </div>
 
                     <div class="content_select">
@@ -151,8 +154,8 @@ watchEffect(async () => {
             </Spin>
             <div  v-else id="cardSelection" class="flex flex-col gap-y-2" ref="options">
                     <div class="flex flex-row justify-between items-center text-gray-400 text-xl tracking-wide">
-                        <span>支付卡号</span>
-                        <span>可用余额: ${{ availableCards[currentCard].balance.toFixed(2) }}</span>
+                        <span>{{ t('message.rechargeBoard.card.number') }}</span>
+                        <span>{{ t('message.rechargeBoard.card.balance') }}: ${{ availableCards[currentCard].balance.toFixed(2) }}</span>
                     </div>
 
                     <div class="content_select">
@@ -169,18 +172,18 @@ watchEffect(async () => {
                         color: rgb(58, 173, 159);
                         border: 1px solid rgb(203, 239, 212);
                     ">
-                绑卡支付成功后，每个月都会自动进行扣费，如想取消下个月的自动扣费，请前往：
-                <a class="text-blue-500  underline underline-offset-4" href="#">取消订阅服务教程</a>
+            {{ t('message.rechargeBoard.card.autoDebitNotice') }}
+                <a class="text-blue-500  underline underline-offset-4" href="#">{{ t('message.rechargeBoard.card.cancelSubscription') }}</a>
             </div>
         </div>
         <div id="checkout"
             class=" border-l border-gray-200 pt-12 pl-16 ml-16 w-full flex flex-col h-full min-w-36 justify-between gap-y-16">
             <div class="flex flex-col items-start w-full justify-center gap-y-4">
                 <div class="text-3xl">
-                    账单
+                    {{ t('message.rechargeBoard.bill.title') }}
                 </div>
                 <div class="flex justify-between items-center text-xl w-full">
-                    <span>产品订阅费</span>
+                    <span>{{ t('message.rechargeBoard.bill.subscriptionFee') }}</span>
                     <span class="font-bold">${{ rechargeAmount.toFixed(2) }}</span>
                 </div>
             </div>
@@ -188,7 +191,7 @@ watchEffect(async () => {
 
                 <div
                     class="text-3xl border-t border-dashed w-full border-gray-200 pt-4  flex flex-row items-center gap-x-4 w-full">
-                    <span class="">总价</span>
+                    <span class="">{{ t('message.rechargeBoard.bill.total') }}</span>
                     <span class="font-semibold">${{ rechargeAmount.toFixed(2) }}</span>
                 </div>
             </div>

@@ -1,7 +1,9 @@
 <script setup>
 
-
+import { useI18n } from 'vue-i18n';
 const openHelpModal = defineModel('openFeedbackModal')
+
+const { t } = useI18n();
 
 
 
@@ -9,8 +11,8 @@ const openHelpModal = defineModel('openFeedbackModal')
 
 <template>
 
-    <GeneralModal v-model:open="openHelpModal" width="29.1667vw" mainTitle="请联系客服" subTitle="请扫描下方二维码联系客服"
-        :centered="true">
+    <GeneralModal v-model:open="openHelpModal" width="29.1667vw" :mainTitle="t('message.feedback.title')"
+        :subTitle="t('message.feedback.subtitle')" :centered="true">
         <template #footer>
             <div class="flex justify-center">
             </div>

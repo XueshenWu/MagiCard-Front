@@ -7,7 +7,7 @@ export default {
             modifyPaymentPassword: "修改支付密码",
             modifyLoginPassword: "修改登录密码",
             applyMonthlyStatement: "申请月结单",
-            feedback: "投诉建议",
+            feedbackForm: "投诉建议",
             logout: "退出登录"
         }
     },
@@ -19,7 +19,7 @@ export default {
             modifyPaymentPassword: "Modify Payment Password",
             modifyLoginPassword: "Modify Login Password",
             applyMonthlyStatement: "Apply Monthly Statement",
-            feedback: "Feedback",
+            feedbackForm: "Feedback",
             logout: "Logout"
         }
     }

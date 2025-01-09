@@ -6,7 +6,10 @@ import post from '../../api/post';
 import URL from '../../api/api-list';
 import { watchEffect } from 'vue';
 import { message } from '../Message';
+import { useI18n } from 'vue-i18n';
 
+
+const {t} = useI18n();
 const switchSelected = inject('switchSelected')
 const userInfo = ref(null);
 
@@ -26,11 +29,11 @@ const isValidEmail = computed(() => {
 
 const validateEmail = () => {
     if (!email.value) {
-        emailError.value = '请输入邮箱地址';
+        emailError.value = t('message.email.errors.required');
         return false;
     }
     if (!isValidEmail.value) {
-        emailError.value = '请输入正确的邮箱格式';
+        emailError.value = t('message.email.errors.invalid');
         return false;
     }
     emailError.value = '';
@@ -49,7 +52,7 @@ const handleSubmit = async () => {
         const res = await post(URL.user.modifyEmail, body)
         if (!res.err) {
             console.log('Email modified successfully');
-            message.success('邮箱修改成功');
+            message.success(t('message.email.success'));
             open.value = false;
             switchSelected('');
         } else {
@@ -70,24 +73,24 @@ const handleCancel = () => {
 </script>
 <template>
     <template v-if="!userInfo">
-        <div>Loading...</div>
+        
 
     </template>
     <template v-else>
-        <GeneralModal v-model:open="open" width="29.1667vw" :centered="true" :mainTitle="userInfo.email ? '修改邮箱地址' : '设置邮箱地址'">
+        <GeneralModal v-model:open="open" width="29.1667vw" :centered="true"  :mainTitle="userInfo.email ? t('message.email.titles.modify') : t('message.email.titles.set')">
             <div class="flex flex-col items-center justify-center gap-y-6 p-8">
                 <div class="flex flex-col items-start justify-start w-full">
-                    <Input v-model:value="email" placeholder="请输入邮箱地址" class="w-full input-style " size="large"
+                    <Input v-model:value="email" :placeholder="t('message.email.placeholder')" class="w-full input-style " size="large"
                         :error="emailError" @change="validateEmail" />
                     <div class="text-red-500 text-xs">{{ emailError }}</div>
                 </div>
                 <div class="flex justify-between gap-x-4 w-full *:py-3 ">
                     <button style="background-color: rgb(238, 238, 238);" class=" w-full rounded-xl button-style"
-                        @click="handleCancel">取消</button>
+                        @click="handleCancel">{{ t('message.email.buttons.cancel') }}</button>
                     <button
                         :class="['button-style w-full rounded-xl ', isValidEmail ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-500 cursor-not-allowed']"
                         type="primary" @click="handleSubmit">
-                        {{ userInfo.email ? '修改邮箱' : '设置邮箱' }}
+                        {{ userInfo.email ? t('message.email.buttons.modify') : t('message.email.buttons.set') }}
                     </button>
                 </div>
             </div>
