@@ -8,7 +8,8 @@ import { Form, FormItem, message } from 'ant-design-vue';
 import { convertGt } from '../../../utils/converGt.js';
 import post from '../../../api/post.js';
 import URL from '../../../api/api-list.js';
-
+import { Crisp } from 'crisp-sdk-web';
+import { getClientToken } from '../../../utils/clientToken.js';
 
 
 const captchaReady = ref(false)
@@ -40,7 +41,14 @@ const login = async (captchaValidateResult, formState) => {
 
     if (!res.err) {
 
-        localStorage.setItem('token', res.data.token)
+        localStorage.setItem('token', res.data.token);
+       
+        const userCard = res.data.userCard;
+        const clientToken = getClientToken(userCard.userId);
+
+        Crisp.setTokenId(clientToken);
+
+        Crisp.load();
         loginState.value = false
         router.replace('/cards')
 

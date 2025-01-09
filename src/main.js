@@ -14,6 +14,8 @@ import NotFound from './views/NotFound.vue'
 import OpenCard from './views/OpenCard.vue'
 import Record from './views/Record.vue'
 import InviteRecord from './views/InviteRecord.vue'
+import { Crisp } from 'crisp-sdk-web'
+import chatbotConfig from './utils/chatbotConfig'
 
 const routes = [
     { path: "/", component: Home },
@@ -34,6 +36,7 @@ export const router = createRouter({
 
 export const i18n = createI18n(i18nConfig)
 
+Crisp.configure(chatbotConfig.WEB_ID, chatbotConfig.Option)
 
 
 createApp(App)

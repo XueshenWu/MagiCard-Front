@@ -85,6 +85,9 @@ import { modalStore } from './states/modalStore';
 import get from './api/get';
 import URL from './api/api-list';
 import { message } from './components/Message';
+import { Crisp } from 'crisp-sdk-web';
+import post from './api/post';
+import { getClientToken } from './utils/clientToken';
 
 
 const route = useRoute();
@@ -140,8 +143,20 @@ onMounted(() => {
     //     maxCount: 4
     // })
 
-
-
+    
+    const token = localStorage.getItem('token');
+    if(token){
+        post(URL.user.userInfo, {}, true).then((res)=>{
+            if(!res.err){
+                const data = res.data;
+            
+                Crisp.setTokenId(getClientToken(data.userId))
+               
+               
+                Crisp.load()
+            }
+        })
+    }
 
 
     const updateScale = () => {

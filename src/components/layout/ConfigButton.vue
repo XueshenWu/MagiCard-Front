@@ -10,6 +10,7 @@ import ModifyPhoneNumber from '../configModalForms/ModifyPhoneNumber.vue';
 import ResetCheckoutPassword from '../configModalForms/ResetCheckoutPassword.vue';
 import Feedback from '../configModalForms/Feedback.vue';
 import { useI18n } from 'vue-i18n';
+import { Crisp } from 'crisp-sdk-web';
 
 const openModifyPhoneNumberModal = ref(false);
 const openModifyEmailModal = ref(false);
@@ -38,6 +39,10 @@ const handleMenuClick = ({ key }) => {
 
     if(key === '7'){
         localStorage.removeItem('token');
+
+        Crisp.setTokenId();
+        Crisp.session.reset();
+
         window.location.reload();
     }
 

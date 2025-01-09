@@ -86,7 +86,7 @@ const onFinish = async () => {
         alipayAccount: data.alipay_account,
         alipayName: data.alipay_name
     });
-    debugger
+
     reqPending.value = false;
 
     updateCardData();
