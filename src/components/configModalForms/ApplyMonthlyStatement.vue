@@ -41,12 +41,12 @@ watchEffect(async ()=>{
     }
 })
 
-const currentCard = ref(null);
+// const currentCard = ref(null);
 
 
-const handleCardChange = (value)=>{
-    currentCard.value = cardOptions.value.find(card=>card.cardNumber === value);
-}
+// const handleCardChange = (value)=>{
+//     currentCard.value = cardOptions.value.find(card=>card.cardNumber === value);
+// }
 
 const open = defineModel('openApplyMonthlyStatementModal', { type: Boolean });
 
@@ -57,7 +57,7 @@ const year = ref(2023);
 const card = ref(cardOptions[0]);
 const handleApply = async () => {
 
-    if(!currentCard.value){
+    if(!card.value){
         message.error(t('message.monthlyStatement.error.cardRequired'));
         return;
     }

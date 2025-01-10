@@ -6,14 +6,7 @@ export default {
                 title: "提现",
                 subtitle: "您可提现的金额为",
                 withdrawAll: "全部提现",
-                alipayAccount: {
-                    label: "支付宝账账号",
-                    placeholder: "请输入您的支付宝账号"
-                },
-                alipayName: {
-                    label: "支付宝真实姓名",
-                    placeholder: "请输入您的支付宝真实姓名"
-                },
+               
                 modalTitle: "邀请奖励余额",
                 submitButton: "申请提现",
                 validation: {
@@ -25,6 +18,16 @@ export default {
                 messages: {
                     success: "提现成功",
                     error: "提现失败"
+                },
+                form:{
+                    alipayAccount: {
+                        label: "支付宝账账号",
+                        placeholder: "请输入您的支付宝账号"
+                    },
+                    alipayName: {
+                        label: "支付宝真实姓名",
+                        placeholder: "请输入您的支付宝真实姓名"
+                    },
                 }
             }
         }
@@ -36,14 +39,7 @@ export default {
                 title: "Withdraw",
                 subtitle: "Available withdrawal amount",
                 withdrawAll: "Withdraw All",
-                alipayAccount: {
-                    label: "Alipay Account",
-                    placeholder: "Please enter your Alipay account"
-                },
-                alipayName: {
-                    label: "Alipay Real Name",
-                    placeholder: "Please enter your real name on Alipay"
-                },
+               
                 modalTitle: "Invitation Reward Balance",
                 submitButton: "Request Withdrawal",
                 validation: {
@@ -55,6 +51,16 @@ export default {
                 messages: {
                     success: "Withdrawal successful",
                     error: "Withdrawal failed"
+                },
+                form:{
+                    alipayAccount: {
+                        label: "Alipay Account",
+                        placeholder: "Please enter your Alipay account"
+                    },
+                    alipayName: {
+                        label: "Alipay Real Name",
+                        placeholder: "Please enter your real name on Alipay"
+                    },
                 }
             }
         }

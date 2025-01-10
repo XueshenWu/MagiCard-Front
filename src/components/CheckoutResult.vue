@@ -35,18 +35,10 @@ const handleCopy = () => {
 
 <template>
     <a-result status="success" :title="t('message.checkoutResult.success')"
-        :sub-title="t(props.paymentType === 'openCard' ? 'message.checkoutResult.subtitle.openCard' : 'message.checkoutResult.subtitle.subscription', { outOrderId: props.outOrderId === undefined ? '' : props.outOrderId })">
+        :sub-title="t(props.paymentType === 'openCard' ? 'message.checkoutResult.subtitle.openCard' : 'message.checkoutResult.subtitle.subscription')">
         <template #extra>
             <div class="space-y-4">
-                <div class="space-y-4">
-                    <div class="text-xl font-semibold">
-                        请妥善保存您的订单号，以便日后查询
-                    </div>
-                    <a @click="handleCopy" class=" block cursor-pointer font-bold ">
-                        订单号: {{ props.outOrderId }}
-                    </a>
-
-                </div>
+              
                 <div class="">
                     <a-button key="console" type="primary" @click="toMyCard" style="margin-right: 10px">{{
                         t('message.checkoutResult.buttons.myCards') }}</a-button>

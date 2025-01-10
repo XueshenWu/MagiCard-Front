@@ -1,10 +1,9 @@
 <script setup>
-import { reactive, ref, inject } from 'vue';
+import { reactive, ref, inject, computed } from 'vue';
 import GeneralModal from '../Modal/GeneralModal.vue';
 import { message } from '../Message';
 import URL from '../../api/api-list';
 
-import get from '../../api/get';
 
 
 import { Input, Form, FormItem, Spin } from 'ant-design-vue';
@@ -14,6 +13,11 @@ const { t } = useI18n();
 
 const updateCardData = inject('updateCardData');
 const openWithdrawlModal = ref(false);
+
+const isCheckoutCodeValid = computed(() => {
+    return checkoutCode.value.length === 6;
+});
+
 
 const open = ref(false);
 const { cardId, availableBalance, className, disabled } = defineProps(['cardId', 'availableBalance', 'className', 'disabled']);
@@ -36,24 +40,24 @@ const rules = ref({
     alipay_account: [
         {
             required: true,
-            message: t('message.withdrawl.validation.accountRequired'),
+            message: t('message.withdrawal.validation.accountRequired'),
             trigger: 'blur'
         },
         {
             min: 4,
-            message: t('message.withdrawl.validation.accountLength'),
+            message: t('message.withdrawal.validation.accountLength'),
             trigger: 'blur'
         }
     ],
     alipay_name: [
         {
             required: true,
-            message: t('message.withdrawl.validation.nameRequired'),
+            message: t('message.withdrawal.validation.nameRequired'),
             trigger: 'blur'
         },
         {
             min: 2,
-            message: t('message.withdrawl.validation.nameLength'),
+            message: t('message.withdrawal.validation.nameLength'),
             trigger: 'blur'
         }
     ]
@@ -63,13 +67,32 @@ const handleOpenWithdrawlModal = () => {
     if (availableBalance <= 0) {
         return;
     }
-    openWithdrawlModal.value = true;
+    // openWithdrawlModal.value = true;
+    openCheckoutCodeModal.value = true;
     open.value = false;
 }
 
 const formRef = ref(null);
 
+const checkoutCode = ref('');
+
 const reqPending = ref(false);
+
+const openCheckoutCodeModal = ref(false);
+
+const verifyCheckoutCode = async () =>{
+  
+    const res = await post(URL.card.verifyPaymentPassword, {
+        paymentPassword: checkoutCode.value
+    })
+
+    if(!res.err){
+        openWithdrawlModal.value = true;
+        openCheckoutCodeModal.value = false;
+    }else{
+        message.error(t('message.withdrawal.messages.error'));
+    }
+}
 
 const onFinish = async () => {
 
@@ -91,9 +114,9 @@ const onFinish = async () => {
 
     updateCardData();
     if (res.err) {
-        message.error(t('message.withdrawl.messages.error'));
+        message.error(t('message.withdrawal.messages.error'));
     } else {
-        message.success(t('message.withdrawl.messages.success'));
+        message.success(t('message.withdrawal.messages.success'));
         openWithdrawlModal.value = false;
     }
 
@@ -122,37 +145,60 @@ const onFinish = async () => {
 
     </GeneralModal>
 
-    <GeneralModal v-model:open="openWithdrawlModal" width="29.1667vw" :mainTitle="'邀请奖励余额'" :centered="true">
+    <GeneralModal v-model:open="openCheckoutCodeModal" width="29.1667vw" :centered="true">
+
+        <div class="flex items-center flex-col justify-center p-8 gap-y-8">
+            <div class="text-[1.458333vw]">
+                {{ t('message.modal.enterPaymentPassword') }}
+            </div>
+            <div class="flex flex-col items-center justify-center gap-y-2">
+                <div class="w-full text-center text-[0.8vw] mb-8">
+                    {{ t('message.modal.passwordProtection') }}
+                </div>
+                <NumberBoxInput v-model:value="checkoutCode" />
+            </div>
+            <button @click="verifyCheckoutCode" :disabled="!isCheckoutCodeValid"
+                :class="{ 'bg-[#3189ef] hover:bg-blue-400 cursor-pointer': isCheckoutCodeValid, 'bg-gray-400 cursor-not-allowed': !isCheckoutCodeValid }"
+                class="text-white font-normal text-[1.04167vw] w-[14.0625vw] h-[2.70833vw] px-14 rounded-xl duration-100">
+                {{ t('message.modal.confirmPassword') }}
+            </button>
+        </div>
+
+        <template #footer></template>
+    </GeneralModal>
+
+    <GeneralModal v-model:open="openWithdrawlModal" width="29.1667vw" :mainTitle="''" :centered="true">
         <div class="flex flex-col items-center justify-center gap-y-6 px-8 py-8">
 
             <Form ref="formRef" :model="formState" :rules="rules" name="checkout_password_form" @finish="onFinish"
                 class="w-full space-y-[1vw]">
                 <div class="flex px-[3vw] flex-col items-start justify-start gap-y-4 w-full">
                     <div class="text-[0.8333vw] text-gray-500">
-                        {{ t('message.withdrawl.alipayAccount.label') }}
+                        {{ t('message.withdrawal.form.alipayAccount.label') }}
                     </div>
                     <FormItem class="w-full " name="alipay_account">
-                        <Input :placeholder="t('message.withdrawl.alipayAccount.placeholder')" class="input-style w-full"
-                            v-model:value="formState.alipay_account" />
+                        <Input :placeholder="t('message.withdrawal.form.alipayAccount.placeholder')"
+                            class="input-style w-full" v-model:value="formState.alipay_account" />
                     </FormItem>
                 </div>
 
                 <div class="flex flex-col px-[3vw] items-start justify-start gap-y-4 w-full">
                     <div class="text-[0.8333vw] text-gray-500">
-                        {{ t('message.withdrawl.alipayName.label') }}
+                        {{ t('message.withdrawal.form.alipayName.label') }}
                     </div>
                     <FormItem class="w-full " name="alipay_name">
-                        <Input :placeholder="t('message.withdrawl.alipayName.placeholder')" class="input-style" v-model:value="formState.alipay_name" />
+                        <Input :placeholder="t('message.withdrawal.form.alipayName.placeholder')" class="input-style"
+                            v-model:value="formState.alipay_name" />
                     </FormItem>
                 </div>
 
 
                 <FormItem>
                     <div class="w-full flex items-center justify-center mt-[2.08333vw]">
-                        <Spin :spinning="reqPending" wrapperClassName="w-full gird place-items-center"> 
+                        <Spin :spinning="reqPending" wrapperClassName="w-full gird place-items-center">
                             <button type="submit" html-type="submit"
                                 class="w-full bg-blue-500 text-white rounded-xl text-xl button-style hover:bg-blue-400 duration-100">
-                                {{ t('message.withdrawl.submitButton') }}
+                                {{ t('message.withdrawal.submitButton') }}
                             </button>
                         </Spin>
                     </div>

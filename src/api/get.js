@@ -2,6 +2,8 @@ import { message } from "../components/Message.js";
 
 import { router } from "../main.js";
 import fetchMock from "./fetch-mock.js";
+import { Crisp } from "crisp-sdk-web";
+
 
 
 
@@ -23,7 +25,8 @@ const get = async (url, params, token = true) => {
 
         const headers = {
             "Content-Type": "application/json",
-            "Authorization": token ? localStorage.getItem('token') : ""
+            "Authorization": token ? localStorage.getItem('token') : "",
+            "Platform":"h5"
         }
 
         const url_with_params = withParams(url, params)
@@ -52,7 +55,10 @@ const get = async (url, params, token = true) => {
                 return { err: false, ...res }
             case 401:
                 message.error("请先登录")
+                localStorage.removeItem('token')
+                Crisp.session.reset();
                 router.replace("/login")
+                window.location.reload()
                 return { err: true, data: null }
                 
                 break
