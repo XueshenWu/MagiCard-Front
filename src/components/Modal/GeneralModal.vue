@@ -27,7 +27,7 @@
 
 <script setup>
 import { Modal } from 'ant-design-vue';
-import { watch, ref } from 'vue';
+import { watch, ref, onMounted } from 'vue';
 import { inject } from 'vue';
 
 const {
@@ -80,6 +80,9 @@ const props = defineProps({
 const emit = defineEmits(['update:open', 'close']);
 
 const innerOpen = ref(props.open);
+
+
+
 
 watch(
     () => props.open,

@@ -1,10 +1,12 @@
 <script setup>
 import { Button } from 'ant-design-vue';
-import { ref, provide, nextTick, inject } from 'vue';
+import { ref, provide, nextTick, inject,watch } from 'vue';
 import CardContainer from './CardContainer.vue';
 import GeneralModal from '../Modal/GeneralModal.vue';
 import { modalStore } from '../../states/modalStore';
 import { useI18n } from 'vue-i18n';
+import ForceLightOff from './ForceLightOff.vue';
+
 
 const {
     turnOnLight,
@@ -19,7 +21,7 @@ const closeModal = () => {
    turnOnLight();
 }
 
-
+const shouldTurnOffLight = ref(false);
 
 
 provide('closeLoginRegisterModal', closeModal);
@@ -29,6 +31,15 @@ provide('closeLoginRegisterModal', closeModal);
 const handleClick = () => {
    modalStore.loginModalOpen = true;
 }
+
+watch(()=>modalStore.loginModalOpen, (newVal) => {
+   if (newVal) {
+      turnOffLight();
+      shouldTurnOffLight.value = true;
+   } else {
+      turnOnLight();
+   }
+}, { immediate: true });
 
 const handleOk = () => {
 
@@ -45,7 +56,7 @@ const handleOk = () => {
       <GeneralModal v-model:open="modalStore.loginModalOpen" width="29.17vw" :centered="true">
          <template #footer>
 
-
+            <ForceLightOff v-if="shouldTurnOffLight"/>
          </template>
          <template #title>
 

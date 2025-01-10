@@ -15,6 +15,7 @@ const modalStore = reactive({
         loginModalOpen.value = value
     },
     registerRefId: null,
+    loginModalFirstOpen:false
 })
 
 export {modalStore}
