@@ -5,7 +5,7 @@ const FRONTEND_URL = 'http://localhost:5173'
 
 //local
 // const BASE_URL = 'http://54.166.253.244:8085';
-// const FRONTEND_URL = 'http://54.166.253.244:5173'
+// const FRONTEND_URL = 'http://54.166.253.244'
 
 const URL = {
     base: BASE_URL,
