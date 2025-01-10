@@ -64,9 +64,9 @@ provide('lightSwitch', {
 onMounted(() => {
 
 
- 
     
-    Crisp.load();
+    Crisp.load()
+   
 
     const token = localStorage.getItem('token');
     if(token){
