@@ -1,7 +1,11 @@
 
-const BASE_URL = 'http://192.168.193.75:8085';
-// const BASE_URL = 'http://3.86.106.168:8085';
-const FRONTEND_URL = 'http://localhost:5173'
+// public
+// const BASE_URL = 'http://192.168.193.75:8085';
+// const FRONTEND_URL = 'http://localhost:5173'
+
+//local
+const BASE_URL = 'http://54.166.253.244:8085';
+const FRONTEND_URL = 'http://54.166.253.244:5173'
 
 const URL = {
     base: BASE_URL,
