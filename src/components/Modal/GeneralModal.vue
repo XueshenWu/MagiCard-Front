@@ -1,5 +1,8 @@
 <template>
-    <Modal wrapClassName="" 
+    <Modal 
+    
+    :maskStyle = "{backgroundColor: 'rgba(0, 0, 0, 0)'}"
+    wrapClassName="" 
     :maskClosable="maskClosable"
     :mask="true" v-model:open="innerOpen" :width="width" :centered="centered" :bodyStyle="bodyStyle"
         :class="modalClass" :confirmLoading="true"
@@ -31,6 +34,9 @@ const {
     turnOnLight,
     turnOffLight
 } = inject('lightSwitch');
+
+// const turnOnLight = () => {};
+// const turnOffLight = () => {};
 
 const props = defineProps({
     open: {
@@ -84,6 +90,8 @@ watch(
         } else {
             turnOnLight();
         }
+    },{
+        immediate: true
     }
 );
 
@@ -112,4 +120,9 @@ function handleClose() {
     font-weight: 500;
     color: grey;
 }
+
+
+// :deep(.ant-modal-root .ant-modal-mask){
+//     background-color: rgba(0, 0, 0, 0) !important;
+// }
 </style>

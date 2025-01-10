@@ -85,9 +85,7 @@ onMounted(() => {
       
        
         Crisp.load()
-
-        
-     
+    
     }
 
 
@@ -131,14 +129,14 @@ onMounted(() => {
 <template>
 
     <div class="scrollbar-hide ">
-        <Header :class="`fixed top-0 left-0 w-full z-50  ${lightOff ? 'brightness-50' : 'brightness-100'}`" />
+        <Header :class="`fixed top-0 left-0 w-full z-50  ${lightOff ? 'brightness-[0.2]' : 'brightness-100'}`" />
 
 
         <div id="content-wrapper" class="scrollbar-hide w-full h-fit overflow-x-hidden "
             :style="{ paddingTop: headerHeight + 'px' }">
             <div id="scale-container" :class="`origin-top-left absolute left-0 `">
 
-                <div id="app" :class="`flex flex-col min-h-[1080px]  ${lightOff ? 'brightness-50' : 'brightness-100'}`">
+                <div id="app" :class="`flex flex-col min-h-[1080px]  ${lightOff ? 'brightness-[0.2]' : 'brightness-100'}`">
                     <div id="body"
                         style="background: linear-gradient(180deg, rgba(228,246,255,1) 0%, rgba(255,255,255,1) 100%);"
                         class="w-full flex-1 flex flex-row items-start px-48 py-16 gap-x-6 overflow-y-hidden">
