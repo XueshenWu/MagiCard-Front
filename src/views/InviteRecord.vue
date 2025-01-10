@@ -18,6 +18,20 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 
+const getStatusTemplate = (msg, concise = false, convertAll = false) => {
+
+
+    if (convertAll && msg === 'message.invitation.table.status.all') {
+        return 'message.invitation.table.status.filterStatus.concise'
+    }
+
+
+    if (concise) {
+        return msg + '.concise'
+    } else {
+        return msg + '.full'
+    }
+}
 
 
 
@@ -37,10 +51,10 @@ const inviteStatistics = ref({
 });
 
 const status_to_number = {
-    按状态筛选: undefined,
-    仅注册: 1,
-    未支付: 2,
-    已支付: 3
+    'message.invitation.table.status.filterStatus': undefined,
+    'message.invitation.table.status.registered': 1,
+    'message.invitation.table.status.subscribed': 2,
+    'message.invitation.table.status.recharged': 3
 }
 
 const openBonusCashout = ref(false);
@@ -52,11 +66,31 @@ async function getinvitationInfo() {
 
 const date_to_number = (t) => {
 
-    if (t === "按月筛选" || t === "全部") {
-        return undefined;
+    //    if( t instanceof Array){
+    //         return `${t[0]}-${t[1].padStart(2, '0')}`;
+    //    }else{
+    //     return undefined
+    //    }
+
+    if (t instanceof Array) {
+        if (t[0] === 'message.invitation.table.all') {
+            return undefined
+        }
+        return `${t[1].year}-${String(t[1].month).padStart(2, '0')}`;
     }
-    const [year, month] = t.match(/(\d{4})年(\d{1,2})月/).slice(1, 3);
-    return `${year}-${month.padStart(2, '0')}`;
+
+
+    if (t === 'all') {
+        return undefined
+    }
+    try {
+        const [year, month] = t.match(/(\d{4})年(\d{1,2})月/).slice(1, 3);
+        return `${year}-${month.padStart(2, '0')}`;
+    } catch (e) {
+        console.log(t)
+        return undefined
+    }
+
 }
 
 const withdrawlLoading = ref(false);
@@ -86,8 +120,8 @@ const handleBonusCashout = async () => {
 
 
 
-const selectByStatus = ref("按状态筛选");
-const selectByMonth = ref("按月筛选");
+const selectByStatus = ref("message.invitation.table.status.filterStatus");
+const selectByMonth = ref("message.invitation.table.filterMonth");
 
 const pageSize = 10;
 
@@ -126,17 +160,23 @@ const update = async ([current, selectByStatus, selectByMonth]) => {
             const minutes = String(formattedDate.getMinutes()).padStart(2, '0');
             const formattedDateString = `${year}-${month}-${day} ${hours}:${minutes}`;
 
+
+            const status = item.status === "1" ? 'message.invitation.table.status.registered' : item.status === "2" ? 'message.invitation.table.status.subscribed' : 'message.invitation.table.status.recharged';
+
+
             return {
                 queryDate: formattedDateString,
-                status: item.status,
+                status: getStatusTemplate(status, false),
                 invitedPhoneNumber: item.invitedPhoneNumber,
-                rewardAmount: item.rewardAmount,
+                rewardAmount: status+".reward"
             }
         });
         total.value = res.total;
     }
     loading.value = false;
 }
+
+
 
 
 watch([current, selectByStatus, selectByMonth], (val) => update(val), { immediate: true })
@@ -150,11 +190,24 @@ watchEffect(async () => {
     }
 });
 
+
+const translateMonthSelection = (str, convertAll = false) => {
+    if (str instanceof Array) {
+        return t(str[0], str[1])
+    } else {
+        if (convertAll && str === 'message.invitation.table.all') {
+            return t('message.invitation.table.filterMonth')
+        }
+
+        return t(str)
+    }
+}
+
 const statusMap = {
-    all: '全部',
-    registered: '仅注册',
-    unpaid: '未支付',
-    paid: '已支付'
+    all: 'message.invitation.table.status.all',
+    registered: 'message.invitation.table.status.registered',
+    unpaid: 'message.invitation.table.status.subscribed',
+    paid: 'message.invitation.table.status.recharged'
 };
 const { toClipboard } = useClipboard();
 
@@ -216,12 +269,12 @@ const handleRefresh = () => {
 }
 
 function generatePreviousMonths() {
-    const monthsMap = { all: '全部' };
+    const monthsMap = { all: ['message.invitation.table.all', {}] };
     const currentDate = new Date();
     for (let i = 0; i < 16; i++) {
         const year = currentDate.getFullYear();
         const month = currentDate.getMonth() + 1; // 月份从 0 开始
-        monthsMap[`month_${year}_${month}`] = `${year}年${month}月`;
+        monthsMap[`month_${year}_${month}`] = ['message.invitation.table.dateFormat', { year, month }];
         currentDate.setMonth(currentDate.getMonth() - 1); // 往前推一个月
     }
 
@@ -242,6 +295,10 @@ const onClickStatus = ({ key }) => {
 };
 
 const onClickTime = ({ key }) => {
+    if (key === 'all') {
+        selectByMonth.value = 'message.invitation.table.filterMonth';
+        return;
+    }
     selectByMonth.value = months.value[key];
 };
 
@@ -254,20 +311,20 @@ const columns = ref([
         dataIndex: 'queryDate',
         key: 'queryDate',
         sorter: (a, b) => a.queryDate.localeCompare(b.queryDate),
-      
+
     },
     {
-        title: '状态',
+        title: 'message.invitation.table.columns.status',
         dataIndex: 'status',
         key: 'status',
     },
     {
-        title: '被邀请人',
+        title: 'message.invitation.table.columns.invitee',
         dataIndex: 'invitedPhoneNumber',
         key: 'inviteePhoneNumber',
     },
     {
-        title: '奖励金额',
+        title: 'message.invitation.table.columns.reward',
         dataIndex: 'rewardAmount',
         key: 'rewardAmount',
     }
@@ -390,20 +447,20 @@ const handleCloseWithdrewRewardAmount = () => {
             <div class="w-[90%] flex flex-row justify-between items-center">
                 <div>
                     <a-tabs v-model:activeKey="activeKey">
-                        <a-tab-pane key="1" tab="支付会员邀请"></a-tab-pane>
+                        <a-tab-pane key="1" :tab="t('message.invitation.table.title')"></a-tab-pane>
                     </a-tabs>
                 </div>
                 <div class="flex flex-row items-center">
                     <div class="mr-6">
                         <a-dropdown :trigger="['click']">
                             <a class="ant-dropdown-link text-[#3189ef] flex items-center cursor-pointer" @click.prevent>
-                                {{ selectByStatus }}
+                                {{ t(getStatusTemplate(selectByStatus, true, true)) }}
                                 <DownOutlined class="ml-2 w-[15px] h-[15px]" />
                             </a>
                             <template #overlay>
                                 <a-menu style="max-height: 300px; overflow-y: auto;" @click="onClickStatus">
                                     <a-menu-item v-for="(label, key) in statusMap" :key="key">
-                                        <a href="javascript:;">{{ label }}</a>
+                                        <a href="javascript:;">{{ t(getStatusTemplate(label, true)) }}</a>
                                     </a-menu-item>
                                 </a-menu>
                             </template>
@@ -412,13 +469,14 @@ const handleCloseWithdrewRewardAmount = () => {
                     <div class="mr-6">
                         <a-dropdown :trigger="['click']">
                             <a class="ant-dropdown-link text-[#3189ef] flex items-center cursor-pointer" @click.prevent>
-                                {{ selectByMonth }}
+                                {{ translateMonthSelection(selectByMonth, true) }}
                                 <DownOutlined class="ml-2 w-[15px] h-[15px]" />
                             </a>
                             <template #overlay>
                                 <a-menu style="max-height: 300px; overflow-y: auto;" @Click="onClickTime">
                                     <a-menu-item v-for="(month, index) in months" :key="index">
-                                        <a href="javascript:;">{{ month }}</a>
+
+                                        <a href="javascript:;">{{ t(month[0], month[1]) }}</a>
                                     </a-menu-item>
                                 </a-menu>
                             </template>
@@ -428,15 +486,13 @@ const handleCloseWithdrewRewardAmount = () => {
 
                         <img :style="{ transform: `rotate(${rotateDegree}deg)`, transition: 'transform 0.5s ease' }"
                             :class='` w-4 h-4`' src="/invitation/refresh.png" alt="refresh" />
-                        <span @click="() => update([current, selectByStatus, selectByMonth])" class="text-lg">刷新</span>
+                        <span @click="() => update([current, selectByStatus, selectByMonth])" class="text-lg">{{
+                            t("message.invitation.table.refresh") }}</span>
                     </div>
                 </div>
             </div>
             <div class="rounded-lg overflow-hidden shadow-sm w-[90%] ">
-                <Table 
-                :showSorterTooltip = "false"
-                
-                :loading="loading" @change="(pagination, filters, sorter, { action, currentDataSource }) => {
+                <Table :showSorterTooltip="false" :loading="loading" @change="(pagination, filters, sorter, { action, currentDataSource }) => {
                     current = pagination.current
                 }" :pagination="{
                     current: current,
@@ -451,6 +507,12 @@ const handleCloseWithdrewRewardAmount = () => {
                         </div>
                     </template>
 
+
+                    <template v-slot:bodyCell="{ record, column }">
+                        <div class="text-lg py-2 px-1">
+                            {{ t(record[column.dataIndex]) }}
+                        </div>
+                    </template>
 
                 </Table>
             </div>
