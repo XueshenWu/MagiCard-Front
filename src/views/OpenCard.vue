@@ -206,7 +206,7 @@ const handlePurchaseOnline = async () => {
             <CardDurationSelector v-if="current === 0" />
             <ServiceSelector v-else-if="current === 1" />
             <UserInfoInput v-model:firstName="firstName" v-model:lastName="lastName" v-else-if="current === 3" />
-            <CheckoutResult v-else-if="current === 4" v-model:current="current" />
+            <CheckoutResult :paymentType="'openCard'" :outOrderId="paymentInfo.outOrderId" v-else-if="current === 4" v-model:current="current" />
             <div v-else-if="current === 2">
 
             </div>

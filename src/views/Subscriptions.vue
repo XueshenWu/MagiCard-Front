@@ -186,7 +186,7 @@ const handleCheckoutModalConfirm = async () => {
             <SelectionBoard v-if="current === 0" />
             <CardRechargeBoard v-if="current === 1" v-model:cardId="cardId" v-model:price="price"
                 v-model:valid="valid" />
-            <CheckoutResult :outOrderId="paymentInfo?.outOrderId??''" v-if="current === 2" v-model:current="current" />
+            <CheckoutResult :paymentType="'subscription'" :outOrderId="paymentInfo?.outOrderId??''" v-if="current === 2" v-model:current="current" />
         </div>
         <a-steps :current="current" :items="items" />
         <div class="steps-action flex justify-end items-center gap-x-4 *:w-32 *:text-xl *:py-3 *:h-14 *:px-6 ">

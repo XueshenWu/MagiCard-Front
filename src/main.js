@@ -15,7 +15,11 @@ import OpenCard from './views/OpenCard.vue'
 import Record from './views/Record.vue'
 import InviteRecord from './views/InviteRecord.vue'
 import { Crisp } from 'crisp-sdk-web'
+
+
+
 import chatbotConfig from './utils/chatbotConfig'
+// import { Crisp } from './cws/src'
 
 const routes = [
     { path: "/", component: Home },

@@ -14,6 +14,7 @@ import { getClientToken } from '../../../utils/clientToken.js'
 
 import { useI18n } from 'vue-i18n'
 import { Crisp } from 'crisp-sdk-web'
+// import { Crisp } from '../../../cws'
 
 const cooldown = ref(0);
 const cooldownClass = ref('text-gray-500 cursor-not-allowed');

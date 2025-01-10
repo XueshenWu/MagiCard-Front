@@ -24,8 +24,10 @@
     "vue3-geetest": "^1.0.19"
   },
   "devDependencies": {
+    "@types/express": "^5.0.0",
     "@vitejs/plugin-vue": "^5.2.1",
     "autoprefixer": "^10.4.20",
+    "express": "^4.21.2",
     "less": "^4.2.1",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
