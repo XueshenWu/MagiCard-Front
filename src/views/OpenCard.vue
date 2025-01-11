@@ -214,7 +214,7 @@ const handlePurchaseOnline = async () => {
 
         <a-steps progress-dot size="large" class="" :current="current" :items="items" />
         <div class="steps-action flex justify-end items-center gap-x-4 *:w-64 *:text-xl *:h-12 w-full py-4 pr-12">
-            <a-button class="bg-gray-100 border-none" v-if="current === 0 || current === 1" style="margin-left: 8px"
+            <a-button class="bg-gray-100 border-none" v-if="current in [0,1]" style="margin-left: 8px"
                 @click="prev">上一步</a-button>
 
             <a-button v-show="current === 0" type="primary" @click="next">下一步</a-button>
@@ -225,7 +225,10 @@ const handlePurchaseOnline = async () => {
                     @click="finishOpenCard">完成开卡</a-button>
             </Spin>
         </div>
-        <GeneralModal v-model:open="openPayUrlModal" :maskClosable="false" width="29.1667vw"
+        <GeneralModal 
+        
+        :onClose="()=>{openPayUrlModal= false; current = 1}"
+        v-model:open="openPayUrlModal" :maskClosable="false" width="29.1667vw"
             :mainTitle="t('message.qrCode.title')" :subTitle="t('message.qrCode.subtitle')">
             <div class="flex flex-col items-center justify-center payment-style space-y-[1.320833vw] ">
                 <QRCode class="w-[8.85416667vw] h-[8.85416667vw]" :value="paymentInfo.payUrl" />

@@ -139,6 +139,8 @@ const register = async () => {
        Crisp.setTokenId(clientToken);
 
        Crisp.load();
+
+       window.location.reload();
         message.success(t('notifications.registerSuccess'))
     }
 
@@ -146,7 +148,6 @@ const register = async () => {
     turnOnLight()
     loginState.value = false
     closeModal()
-
 
 }
 

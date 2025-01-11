@@ -76,6 +76,10 @@ const props = defineProps({
     maskClosable:{
         type: Boolean,
         default: true
+    },
+    onClose: {
+        type: Function,
+        default: () => {}
     }
 });
 
@@ -105,6 +109,7 @@ function handleClose() {
     turnOnLight();
     emit('update:open', false);
     emit('close');
+    props.onClose();
 }
 </script>
 

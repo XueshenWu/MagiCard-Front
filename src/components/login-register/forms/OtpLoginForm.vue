@@ -67,6 +67,7 @@ const login = async () => {
 
         Crisp.load();
 
+        window.location.reload();
         loginState.value = false
         message.success('登录成功')
         closeModal()

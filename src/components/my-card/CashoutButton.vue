@@ -28,6 +28,7 @@ const handleClick = () => {
         return;
     }
     open.value = true;
+    checkoutCode.value = '';
 }
 
 const formState = reactive({

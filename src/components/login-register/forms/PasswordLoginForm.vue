@@ -50,6 +50,8 @@ const login = async (captchaValidateResult, formState) => {
         Crisp.setTokenId(clientToken);
 
         Crisp.load();
+
+        window.location.reload();
         loginState.value = false
         router.replace('/cards')
 

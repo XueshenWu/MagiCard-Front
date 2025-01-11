@@ -129,12 +129,7 @@ const total = ref(0);
 
 const current = ref(1);
 const dataSource = ref([
-    {
-        queryDate: '2024-12-28 07:24',
-        status: "已支付",
-        invitedPhoneNumber: '151****1712',
-        rewardAmount: '+$2.00',
-    }
+    
 ]);
 
 
