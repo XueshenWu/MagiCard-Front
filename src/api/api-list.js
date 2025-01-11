@@ -3,9 +3,9 @@
 // const BASE_URL = 'http://192.168.193.75:8085';
 // const FRONTEND_URL = 'http://localhost:5173'
 
-// // public
-const BASE_URL = 'http://54.166.253.244:8085';
-const FRONTEND_URL = 'http://54.166.253.244'
+// public
+const BASE_URL = 'http://43.199.192.103:8085';
+const FRONTEND_URL = 'http://43.199.192.103'
 
 const URL = {
     base: BASE_URL,
