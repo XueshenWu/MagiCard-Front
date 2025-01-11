@@ -139,11 +139,12 @@ const rules = {
 </script>
 <template>
     <template v-if="!userInfo">
-      
+      123123
     </template>
 
     <template v-else>
-        <GeneralModal v-if="open" v-model:open="open" width="29.1667vw" :mainTitle="userInfo.paymentPassword ? t('message.paymentPassword.titles.modify') : t('message.paymentPassword.titles.set')"
+     
+        <GeneralModal  :open="true" width="29.1667vw" :mainTitle="userInfo.paymentPassword ? t('message.paymentPassword.titles.modify') : t('message.paymentPassword.titles.set')"
             :centered="true">
             <div class="flex flex-col items-center justify-center gap-y-6 px-8 py-8">
 
@@ -180,7 +181,7 @@ const rules = {
 
                             </div>
                             <div class=" text-gray-500 text-lg text-center mt-4">
-                                {{ t('message.paymentPassword.input.sendTo', { phone: userInfo.phoneNumber }) }}
+                                {{ t('message.paymentPassword.input.sendTo', { phone: userInfo.phoneNumber, phoneCode:userInfo.phoneCode }) }}
                             </div>
                         </FormItem>
                     </div>

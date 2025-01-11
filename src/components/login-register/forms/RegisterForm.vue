@@ -3,7 +3,7 @@ import { ref, reactive, onMounted, inject } from 'vue'
 import { useRouter } from 'vue-router'
 import PhoneNumberInput from '../../PhoneNumberInput.vue'
 import Agreement from '../Agreement.vue'
-import { Form, FormItem, Input } from 'ant-design-vue'
+import { Form, FormItem, Input, Select, SelectOption } from 'ant-design-vue'
 import { message } from '../../Message.js'
 import { convertGt } from '../../../utils/converGt.js'
 import post from '../../../api/post.js'
@@ -43,11 +43,14 @@ const closeModal = inject('closeLoginRegisterModal');
 const formState = reactive({
     phoneNumber: '',
     otp: '',
-    checkedAgreement: false
+    checkedAgreement: false,
+    phoneCode: "+86"
 })
 
+const openDowndown = ref(false)
+
 const validatePhoneNumberSync = (value) => {
-    const phoneRegex = /^1[3-9]\d{9}$/
+    const phoneRegex = formState.phoneCode==='+86'? /^1[3-9]\d{9}$/ : /^5\d{8}$/
     return phoneRegex.test(value)
 }
 
@@ -116,7 +119,8 @@ const register = async () => {
     const body = {
         phone: formState.phoneNumber,
         code: formState.otp,
-        inviteCode: route.query.refId ?? ""
+        inviteCode: route.query.refId ?? "",
+        phoneCode: formState.phoneCode
     }
 
 
@@ -133,15 +137,15 @@ const register = async () => {
         router.replace('/')
 
         localStorage.setItem('token', res.data.token);
-       
-       const userCard = res.data.userCard;
-       const clientToken = getClientToken(userCard.userId);
 
-       Crisp.setTokenId(clientToken);
+        const userCard = res.data.userCard;
+        const clientToken = getClientToken(userCard.userId);
 
-       Crisp.load();
+        Crisp.setTokenId(clientToken);
 
-    //    window.location.reload();
+        Crisp.load();
+
+        //    window.location.reload();
         message.registerForm.success(t('message.notifications.registerSuccess'))
 
 
@@ -207,7 +211,7 @@ onMounted(async () => {
                 phone: formState.phoneNumber,
                 geeTest: convertGt(gtResult),
                 action: 'register',
-                phoneCode: '+86'
+                phoneCode: formState.phoneCode
             }
 
             const data = await post(URL.user.smsCode, body, false)
@@ -234,22 +238,38 @@ onMounted(async () => {
 
 
 <template>
-    <div class="flex flex-col items-center justify-center h-full gap-y-8 w-full px-12 py-6">
+    <div class="flex flex-col items-center justify-center h-full gap-y-[2vw] w-full px-12 py-6">
         <div class="text-[1.458333vw] ">
             {{ t('message.registerForm.enterPhoneAndCode') }}
         </div>
 
         <Form ref="formRef" @finish="onFinish" @finishFailed="onFinishFailed" :model="formState" :rules="rules"
             autocomplete="on" class="flex flex-col items-center  w-full">
-            <div class=" w-full">
-                <FormItem name="phoneNumber" class="w-full">
-                    <PhoneNumberInput v-model:phoneNumber="formState.phoneNumber" />
-                </FormItem>
+            <div class=" w-full space-y-[1vw]">
+                <div class="flex flex-row items-center justify-between gap-x-[.86vw] w-full">
+
+                    <Select @click="openDowndown=!openDowndown" :open="openDowndown" size="large" v-model:value=formState.phoneCode
+                        :getPopupContainer="triggerNode => triggerNode.parentNode">
+                        <SelectOption value="+86">+86</SelectOption>
+                        <SelectOption value="+852">+852</SelectOption>
+
+                        <template #dropdownRender="{ menuNode, props }">
+                            <div v-for="item in ['+86','+852']" class="text-[.9375vw] py-[1vw] grid place-content-center">
+                                <div @click.stop="()=>{formState.phoneCode = item; openDowndown=false}">{{ item }}</div>
+                            </div>
+                        </template>
+                    </Select>
+
+                    <FormItem name="phoneNumber" class="w-full h-full">
+                        <PhoneNumberInput v-model:phoneNumber="formState.phoneNumber" />
+                    </FormItem>
+                </div>
+
 
                 <FormItem name="otp" class="w-full">
                     <div class="flex items-center justify-between gap-x-2   w-full">
-                        <Input v-model:value="formState.otp" :placeholder="t('message.registerForm.enterCode')" size="large"
-                            class="input-style border-radius-custom">
+                        <Input v-model:value="formState.otp" :placeholder="t('message.registerForm.enterCode')"
+                            size="large" class="input-style border-radius-custom">
                         <template #suffix>
                             <a @click="handleSendOtp"
                                 :class="`${cooldown > 0 ? cooldownClass : readyClass} text-[.9375vw]`">
@@ -307,6 +327,22 @@ onMounted(async () => {
 
 ::v-deep(.ant-form-item) {
     margin-bottom: 1.875vw !important;
+}
+
+
+::v-deep(.ant-select-selector) {
+    height: 3.09vw !important;
+    line-height: 3.19vw;
+    font-size: 1.1vw !important;
+    transform: translate(0, -0.9vw);
+    display: flex !important;
+    align-items: center !important;
+    border-radius: 0.625vw !important;
+    margin-right: 1vw !important;
+}
+
+::v-deep(.ant-select-arrow) {
+    display: none !important;
 }
 
 .border-radius-custom {

@@ -169,7 +169,7 @@ onMounted(async () => {
                             <div class="flex items-center gap-x-4 text-[#595a61] py-3 text-[.833333vw]">
                                 <span>{{ t('message.passwordReset.enterVerificationCode') }}</span>
                                 <span class="text-gray-400 ">
-                                    {{ t('message.passwordReset.sendTo') }} +86 {{ userInfo.phoneNumber }}
+                                    {{ t('message.passwordReset.sendTo') }} {{ userInfo.phoneCode }} {{ userInfo.phoneNumber }}
                                 </span>
                             </div>
                             <FormItem name="otp">

@@ -144,7 +144,7 @@ watch(activeKey, async (newVal) => {
 
 
 <template>
-    <ResetCheckoutPassword v-if="openResetCheckoutPasswordModal" v-model:open="openResetCheckoutPasswordModal" />
+  
 
     <div class="flex px-10 py-4 flex-col items-start justify-start gap-y-6  h-full">
 

@@ -15,10 +15,8 @@ const phoneNumber = defineModel('phoneNumber')
 <template>
     <div class="flex items-center justify-start gap-x-2 h-12 w-full">
         <Input v-model:value="phoneNumber" :placeholder="t('message.phoneNumberInput.placeHolder')"
-            class="input-style border-radius-custom before:placeholder:[+86]">
-        <template #prefix>
-            <span class="font-bold text-[1.041667vw]">+86</span>
-        </template>
+            class="input-style border-radius-custom ">
+
         </Input>
     </div>
 </template>
@@ -28,7 +26,7 @@ const phoneNumber = defineModel('phoneNumber')
 .input-style {
     padding: .989583vw 2.03125vw;
     height: 3.39vw;
-    width: 24.17vw;
+ width: 100%;
     font-size: .9375vw;
 
 }

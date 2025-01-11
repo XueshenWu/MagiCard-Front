@@ -4,7 +4,7 @@ import PhoneNumberInput from '../../PhoneNumberInput.vue';
 import { ref, onMounted, reactive, inject } from 'vue';
 import { useRouter } from 'vue-router';
 import Agreement from '../Agreement.vue';
-import { Form, FormItem, Input, Modal } from 'ant-design-vue';
+import { Form, FormItem, Input, Modal, Select } from 'ant-design-vue';
 import { message } from '../../Message.js'
 import { convertGt } from '../../../utils/converGt.js';
 
@@ -15,6 +15,8 @@ import { Crisp } from 'crisp-sdk-web'
 
 import { getClientToken } from '../../../utils/clientToken.js';
 import { yetAnotherStore } from '../../../states/yastore.js';
+
+const openDowndown = ref(false)
 
 
 const captchaReady = ref(false)
@@ -33,7 +35,8 @@ const closeModal = inject('closeLoginRegisterModal');
 const formState = reactive({
     phoneNumber: '',
     otp: '',
-    checkedAgreement: false
+    checkedAgreement: false,
+    phoneCode: '+86'
 })
 
 const login = async () => {
@@ -43,24 +46,25 @@ const login = async () => {
 
     const body = {
         phone: formState.phoneNumber,
-        code: formState.otp
+        code: formState.otp,
+        phoneCode: formState.phoneCode
     }
     const res = await post(URL.user.smsLogin, body, false)
     cooldown.value = 30;
-            const timer = setInterval(() => {
-                cooldown.value--;
-                if (cooldown.value <= 0) {
-                    clearInterval(timer);
-                    cooldown.value = 0;
-                }
-            }, 1000)
+    const timer = setInterval(() => {
+        cooldown.value--;
+        if (cooldown.value <= 0) {
+            clearInterval(timer);
+            cooldown.value = 0;
+        }
+    }, 1000)
     if (!res.err) {
 
 
 
 
         localStorage.setItem('token', res.data.token);
-       
+
         const userCard = res.data.userCard;
         const clientToken = getClientToken(userCard.userId);
 
@@ -114,7 +118,7 @@ onMounted(async () => {
                 phone: formState.phoneNumber,
                 action: "login",
                 geeTest: convertGt(captchaResult),
-                phoneCode: '+86'
+                phoneCode: formState.phoneCode
             }
 
             const data = await post(URL.user.smsCode, body, false)
@@ -141,9 +145,9 @@ onMounted(async () => {
 
 
 const validatePhoneNumberSync = (value) => {
-    const phoneRegex = /^1[3-9]\d{9}$/;
+    const phoneRegex = formState.phoneCode==='+86'? /^1[3-9]\d{9}$/ : /^5\d{8}$/
     return phoneRegex.test(value)
-};
+}
 
 const validatePhoneNumber = async (_rule, value) => {
     if (!value) {
@@ -227,16 +231,34 @@ const handleSendOtp = () => {
     <Form class="w-full" ref="formRef" @finish="onFinish" @finishFailed="onFinishFailed" :model="formState"
         :rules="rules" autocomplete="on">
         <div class="w-full px-12">
-            <FormItem name="phoneNumber" class="w-full">
-                <PhoneNumberInput v-model:phoneNumber="formState.phoneNumber" />
-            </FormItem>
+
+            <div class="flex flex-row items-center justify-between gap-x-[.86vw] w-full">
+                <Select @click="openDowndown = !openDowndown" :open="openDowndown" size="large"
+                    v-model:value=formState.phoneCode :getPopupContainer="triggerNode => triggerNode.parentNode">
+                    <SelectOption value="+86">+86</SelectOption>
+                    <SelectOption value="+852">+852</SelectOption>
+
+                    <template #dropdownRender="{ menuNode, props }">
+                        <div v-for="item in ['+86', '+852']" class="text-[.9375vw] py-[1vw] grid place-content-center">
+                            <div @click.stop="() => { formState.phoneCode = item; openDowndown = false }">{{ item }}
+                            </div>
+                        </div>
+                    </template>
+                </Select>
+                <FormItem name="phoneNumber" class="w-full">
+                    <PhoneNumberInput v-model:phoneNumber="formState.phoneNumber" />
+                </FormItem>
+            </div>
+
+
             <FormItem name="otp">
                 <div class="flex items-center justify-between gap-x-2">
                     <Input v-model:value="formState.otp" placeholder="请输入验证码" size="large"
                         class="input-style border-radius-custom">
                     <template #suffix>
-                        <a @click="handleSendOtp" :class="`${cooldown>0?cooldownClass:readyClass} text-[.9375vw]`">
-                           {{ cooldown > 0 ? `${cooldown}s` : '发送验证码' }}
+                        <a @click="handleSendOtp"
+                            :class="`${cooldown > 0 ? cooldownClass : readyClass} text-[.9375vw]`">
+                            {{ cooldown > 0 ? `${cooldown}s` : '发送验证码' }}
                         </a>
                     </template>
                     </Input>
@@ -244,8 +266,7 @@ const handleSendOtp = () => {
             </FormItem>
             <FormItem>
                 <div class="flex flex-col gap-y-2">
-                    <a-button class="button-style w-full " type="primary"
-                        html-type="submit">登录</a-button>
+                    <a-button class="button-style w-full " type="primary" html-type="submit">登录</a-button>
                     <slot />
                 </div>
             </FormItem>
@@ -283,5 +304,20 @@ const handleSendOtp = () => {
 
 .border-radius-custom {
     border-radius: .625vw;
+}
+
+::v-deep(.ant-select-selector) {
+    height: 3.09vw !important;
+    line-height: 3.19vw;
+    font-size: 1.1vw !important;
+    transform: translate(0, -0.9vw);
+    display: flex !important;
+    align-items: center !important;
+    border-radius: 0.625vw !important;
+    margin-right: 1vw !important;
+}
+
+::v-deep(.ant-select-arrow) {
+    display: none !important;
 }
 </style>

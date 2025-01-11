@@ -65,6 +65,8 @@ const handleMenuClick = ({ key }) => {
     openApplyMonthlyStatementModal.value = key === '5';
     openFeedbackModal.value = key === '6';
 
+ 
+
     if (key === '7') {
         localStorage.removeItem('token');
 
@@ -106,6 +108,8 @@ const handleMenuClick = ({ key }) => {
         v-model:openModifyPhoneNumberModal="openModifyPhoneNumberModal" />
     <ModifyEmail v-if="openModifyEmailModal" v-model:openModifyEmailModal="openModifyEmailModal" />
     <ResetCheckoutPassword v-if="openResetCheckoutPasswordModal" v-model:open="openResetCheckoutPasswordModal" />
+
+  
     <ResetPassword v-if="openResetPasswordModal" v-model:openResetPasswordModal="openResetPasswordModal" />
     <ApplyMonthlyStatement v-if="openApplyMonthlyStatementModal"
         v-model:openApplyMonthlyStatementModal="openApplyMonthlyStatementModal" />

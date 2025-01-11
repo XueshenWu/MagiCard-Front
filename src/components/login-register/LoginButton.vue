@@ -54,7 +54,7 @@ const handleOk = () => {
          class="bg-black text-white text-[0.75vw] px-[1vw] h-[1.75vw] rounded-xl hover:bg-slate-800 duration-150">
          {{ t('message.login') }}
       </button>
-      <GeneralModal v-model:open="modalStore.loginModalOpen" width="29.17vw" :centered="true">
+      <GeneralModal v-model:open="modalStore.loginModalOpen" width="33.17vw" :centered="true">
          <template #footer>
 
             <ForceLightOff v-if="shouldTurnOffLight"/>

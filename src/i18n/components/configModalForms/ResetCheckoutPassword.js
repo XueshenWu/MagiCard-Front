@@ -10,7 +10,7 @@ export default {
                     new: '输入新支付密码',
                     confirm: '确认新支付密码',
                     otp: '请输入验证码',
-                    sendTo: '发送至 +86 {phone}'
+                    sendTo: '发送至 {phoneCode} {phone}'
                 },
                 buttons: {
                     sendOtp: '发送验证码',
@@ -47,7 +47,7 @@ export default {
                     new: 'Enter New Payment Password',
                     confirm: 'Confirm New Payment Password',
                     otp: 'Enter Verification Code',
-                    sendTo: 'Send to +86 {phone}'
+                    sendTo: 'Send to {phoneCode} {phone}'
                 },
                 buttons: {
                     sendOtp: 'Send Code',

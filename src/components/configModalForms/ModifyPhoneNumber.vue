@@ -1,6 +1,6 @@
 <script setup>
 import { reactive, ref, onMounted, watchEffect, inject } from 'vue';
-import { Form, FormItem, Input } from 'ant-design-vue';
+import { Form, FormItem, Input, Select, SelectOption } from 'ant-design-vue';
 import GeneralModal from '../Modal/GeneralModal.vue';
 import { message } from '../Message.js';
 import post from '../../api/post.js';
@@ -10,7 +10,7 @@ import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 
-
+const openDowndown = ref(false)
 const step = ref(1);
 
 const formRef = ref(null);
@@ -56,6 +56,7 @@ const formState = reactive({
     otp_old: '',
     phoneNumber_new: '',
     otp_new: '',
+    phoneCode_new: '+86',
 })
 
 const handleChange = (e) => {
@@ -89,7 +90,10 @@ const finishModify = async () => {
 }
 
 const validatePhoneNumber = (phonenumber) => {
-    return /^1[3456789]\d{9}$/.test(phonenumber)
+
+    const phoneFormat = formState.phoneCode_new === '+86' ? /^1[3456789]\d{9}$/ : /^5\d{8}$/
+
+    return phoneFormat.test(phonenumber)
 }
 
 const toStep2 = async () => {
@@ -165,13 +169,15 @@ onMounted(async () => {
 
 
 <template>
-    <GeneralModal v-if="userInfo" v-model:open="open" width="29.1667vw" :mainTitle="t('message.modifyPhonenumber.modal.title')"
-    :subTitle="step === 1 ? t('message.modifyPhonenumber.modal.verifyCurrentPhone') : t('message.modifyPhonenumber.modal.verifyNewPhone')" :centered="true">
+    <GeneralModal v-if="userInfo" v-model:open="open" width="29.1667vw"
+        :mainTitle="t('message.modifyPhonenumber.modal.title')"
+        :subTitle="step === 1 ? t('message.modifyPhonenumber.modal.verifyCurrentPhone') : t('message.modifyPhonenumber.modal.verifyNewPhone')"
+        :centered="true">
         <div class="p-8 gap-y-12  flex flex-col items-center justify-center">
             <Form class="w-full">
                 <div class="w-full space-y-8">
                     <template v-if="step === 1">
-                    
+
                         <div class="flex flex-col items-start justify-center w-full gap-y-4 ">
                             <div class="text-gray-500">
                                 {{ t('message.modifyPhonenumber.form.phoneNumberLabel') }}
@@ -179,7 +185,7 @@ onMounted(async () => {
                             <div
                                 class=" input-style border-radius-custom  w-full flex flex-row items-center justify-between border-radius-custom border  border-gray-300 ">
                                 <div class="text-gray-300 font-bold text-left pr-8 border-r border-gray-400">
-                                    +86
+                                    {{ userInfo.phoneCode }}
                                 </div>
                                 <div
                                     class=" font-semibold  px-8 rounded outline-none w-full focus:outline-none focus:ring-0 ">
@@ -192,12 +198,14 @@ onMounted(async () => {
                                 {{ t('message.modifyPhonenumber.form.verificationCodeLabel') }}
                             </div>
                             <div class="flex flex-row items-center justify-between w-full gap-x-4">
-                                <Input v-model:value="formState.otp_old" :placeholder="t('message.modifyPhonenumber.form.verificationCodePlaceholder')" size="large"
-                                    class="input-style border-radius-custom">
+                                <Input v-model:value="formState.otp_old"
+                                    :placeholder="t('message.modifyPhonenumber.form.verificationCodePlaceholder')"
+                                    size="large" class="input-style border-radius-custom">
                                 <template #suffix>
                                     <a @click="handleSendOtp"
                                         :class="`text-[.9375vw] ${cooldown > 0 ? cooldownClass : readyClass}`">
-                                        {{ cooldown <= 0 ? t('message.modifyPhonenumber.form.getVerificationCode') : cooldown + 's' }} </a>
+                                        {{ cooldown <= 0 ? t('message.modifyPhonenumber.form.getVerificationCode') :
+                                            cooldown + 's' }} </a>
                                 </template>
                                 </Input>
                             </div>
@@ -205,37 +213,53 @@ onMounted(async () => {
                     </template>
 
                     <template v-if="step === 2">
-                        <FormItem>
-                            <div class="flex flex-col items-start justify-center w-full gap-y-4 ">
-                                <div class="text-gray-500">
-                                    {{ t('message.modifyPhonenumber.form.phoneNumberLabel') }}
-                                </div>
-                                <div
-                                    class=" input-style border-radius-custom  w-full flex flex-row items-center justify-between border-radius-custom border  border-gray-300 ">
-                                    <div class="text-gray-300 font-bold text-left pr-8 border-r border-gray-400">
-                                        +86
-                                    </div>
-                                    <div ref="divInputRef" @change="handleChange"
-                                        class=" font-semibold  px-8 rounded outline-none w-full focus:outline-none focus:ring-0 "
-                                        contenteditable>
-                                        {{ formState.phoneNumber_new }}
-                                    </div>
-                                </div>
+
+                        <div class="flex flex-col items-start justify-center w-full gap-y-4 ">
+                            <div class="text-gray-500">
+                                {{ t('message.modifyPhonenumber.form.phoneNumberLabel') }}
                             </div>
-                        </FormItem>
+                            <div
+                                class="   w-full flex flex-row items-center justify-between gap-x-[1vw]   ">
+                                <Select @click="openDowndown = !openDowndown" :open="openDowndown" size="large"
+                                    v-model:value=formState.phoneCode_new
+                                    :getPopupContainer="triggerNode => triggerNode.parentNode">
+                                    <SelectOption value="+86">+86</SelectOption>
+                                    <SelectOption value="+852">+852</SelectOption>
+
+                                    <template #dropdownRender="{ menuNode, props }">
+                                        <div v-for="item in ['+86', '+852']"
+                                            class="text-[.9375vw] py-[1vw] grid place-content-center">
+                                            <div
+                                                @click.stop="() => { formState.phoneCode_new = item; openDowndown = false }">
+                                                {{ item }}</div>
+                                        </div>
+                                    </template>
+                                </Select>
+
+                                <div ref="divInputRef" @change="handleChange"
+                                    class="border border-gray-200 input-style rounded-[0.625vw] w-full font-semibold  px-8  outline-none  focus:outline-none focus:ring-0 "
+                                    contenteditable>
+                                    {{ formState.phoneNumber_new }}
+                                </div>
+
+                            </div>
+                        </div>
+
                         <FormItem>
                             <div class="text-gray-500 mb-4">
                                 {{ t('message.modifyPhonenumber.form.verificationCodeLabel') }}
                             </div>
                             <div class="flex flex-row items-center justify-between w-full gap-x-4">
-                                <Input v-model:value="formState.otp_new" :placeholder="t('message.modifyPhonenumber.form.verificationCodePlaceholder')" size="large"
-                                    class="input-style border-radius-custom">
+                                <Input v-model:value="formState.otp_new"
+                                    :placeholder="t('message.modifyPhonenumber.form.verificationCodePlaceholder')"
+                                    size="large" class="input-style border-radius-custom">
                                 <template #suffix>
 
 
                                     <a @click="handleSendOtp"
                                         :class="`text-[.9375vw] ${cooldown > 0 ? cooldownClass : readyClass}`">
-                                        {{ cooldown <= 0 ? t('message.modifyPhonenumber.form.getVerificationCode') : cooldown + 's' }} </a>
+                                        {{ cooldown <= 0 ? t('message.modifyPhonenumber.form.getVerificationCode') :
+                                            cooldown + 's' }} </a>
                                 </template>
                                 </Input>
                             </div>
@@ -243,8 +267,8 @@ onMounted(async () => {
                     </template>
 
                     <div class="flex flex-row justify-between w-full text-xl gap-x-4 ">
-                        <button v-show="step === 1" @click="open = false"
-                            class="button-style bg-gray-200 rounded-xl">{{ t('message.modifyPhonenumber.buttons.cancel') }}</button>
+                        <button v-show="step === 1" @click="open = false" class="button-style bg-gray-200 rounded-xl">{{
+                            t('message.modifyPhonenumber.buttons.cancel') }}</button>
                         <button @click="toStep2" v-show="step === 1"
                             class="button-style text-white bg-blue-500 rounded-xl">
                             {{ t('message.modifyPhonenumber.buttons.next') }}
@@ -263,7 +287,7 @@ onMounted(async () => {
         </div>
     </GeneralModal>
     <div v-else>
-        
+
     </div>
 </template>
 <style scoped>
@@ -285,5 +309,22 @@ onMounted(async () => {
 
 .border-radius-custom {
     border-radius: .625vw;
+}
+
+
+::v-deep(.ant-select-selector) {
+    height: 3.29vw !important;
+    line-height: 3.19vw;
+    font-size: 1.1vw !important;
+    border:0;
+    display: flex !important;
+    align-items: center !important;
+    border-radius: 0.625vw !important;
+    margin-right: 1vw !important;
+
+}
+
+::v-deep(.ant-select-arrow) {
+    display: none !important;
 }
 </style>
