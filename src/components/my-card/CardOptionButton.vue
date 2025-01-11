@@ -55,65 +55,69 @@ const isPolling = ref(false)
 
 const pollingClass = ref('bg-slate-200 cursor-not-allowed')
 
+const openPaymentInfoConfirmModal = ref(false)
 
 const pollPaymentStatus = () => {
 
-    if (paymentInfo.value === null) {
+
+    openPaymentInfoConfirmModal.value = true
+
+    if (paymentInfo.value === null || isPolling.value) {
         return
     } else {
         isPolling.value = true;
 
 
-            (new Promise((resolve, reject) => {
-                const timeoutJob = async () => {
-                    
-                    if(openRecoverModal.value === false){
-                        reject()
-                        return
-                    }
+        (new Promise((resolve, reject) => {
+            const timeoutJob = async () => {
 
-
-                    const res = await post(URL.payment.checkOrderStatus, { data: paymentInfo.value.outOrderId }, true)
-                  
-
-                    if (res.err) {
-                   
-                        isPolling.value = false
-                        reject()
-                    }
-
-                    const fulfilled = res.data === 2
-                
-
-                    if (fulfilled) {
-                 
-                        const unfreezeRes = await post(URL.card.unfreeze, {
-                            cardId: cardId,
-                            outOrderId: paymentInfo.value.outOrderId
-                        })
-         
-
-                        try {
-                            if (unfreezeRes.err) {
-                                console.log('About to reject')
-                                reject()
-                                console.log('After reject')
-                            } else {
-                                console.log('About to resolve with:', unfreezeRes.data)
-                                resolve(unfreezeRes.data)
-                                console.log('After resolve')
-                            }
-                        } catch (e) {
-                            console.log('Error during resolve/reject:', e)
-                        }
-                    } else {
-                        console.log('Setting next timeout')
-                        setTimeout(timeoutJob, 3000)
-                    }
+                if (openRecoverModal.value === false) {
+                    reject()
+                    return
                 }
 
-                timeoutJob()
-            }))
+
+                const res = await post(URL.payment.checkOrderStatus, { data: paymentInfo.value.outOrderId }, true)
+
+
+                if (res.err) {
+
+                    isPolling.value = false
+                    reject()
+                }
+
+                const fulfilled = res.data === 2
+
+
+                if (fulfilled) {
+
+                    const unfreezeRes = await post(URL.card.unfreeze, {
+                        cardId: cardId,
+                        outOrderId: paymentInfo.value.outOrderId
+                    })
+
+
+                    try {
+                        if (unfreezeRes.err) {
+                            console.log('About to reject')
+                            reject()
+                            console.log('After reject')
+                        } else {
+                            console.log('About to resolve with:', unfreezeRes.data)
+                            resolve(unfreezeRes.data)
+                            console.log('After resolve')
+                        }
+                    } catch (e) {
+                        console.log('Error during resolve/reject:', e)
+                    }
+                } else {
+                    console.log('Setting next timeout')
+                    setTimeout(timeoutJob, 3000)
+                }
+            }
+
+            timeoutJob()
+        }))
             .then((data) => {
                 console.log('Success:', data)
                 message.success(t('message.cardOptions.recoverCard.success'))
@@ -125,7 +129,8 @@ const pollPaymentStatus = () => {
             .finally(() => {
                 isPolling.value = false
                 openRecoverModal.value = false
-            
+                openPaymentInfoConfirmModal.value = false
+
             })
 
 
@@ -228,9 +233,9 @@ const finishFreezeCard = async () => {
 
 const paymentInfo = ref(null)
 
-watch(openRecoverModal, ()=>{
+watch(openRecoverModal, () => {
     paymentInfo.value = null
-},{immediate:true})
+}, { immediate: true })
 
 
 const createRecoverCardPayment = async () => {
@@ -302,8 +307,7 @@ const createRecoverCardPayment = async () => {
 
     <GeneralModal :maskClosable="false" v-model:open="openRecoverModal" width="29.166667vw" :centered="true"
         :mainTitle="t(paymentInfo === null ? 'message.cardOptions.cautionTitle' : 'message.cardOptions.paymentTitle')"
-        :subTitle="t(paymentInfo === null ? '' : t('message.qrCode.subtitle'))"
-        >
+        :subTitle="t(paymentInfo === null ? '' : t('message.qrCode.subtitle'))">
         <div v-if="paymentInfo === null"
             class="flex flex-col items-center justify-center mt-[1.875vw] mb-[1.875vw] text-[1.09375vw] text-center">
             <p>{{ t('message.cardOptions.recoverCard.warning1') }}</p>
@@ -327,12 +331,12 @@ const createRecoverCardPayment = async () => {
             <div v-else class="flex flex-col items-center justify-center payment-style space-y-[1.320833vw] ">
                 <QRCode class="w-[8.85416667vw] h-[8.85416667vw]" :value="paymentInfo.payUrl" />
 
-                <Spin :spinning="isPolling" wrapperClassName="h-[2.708333vw] w-[100%] grid place-content-center">
+                <!-- <Spin :spinning="isPolling" wrapperClassName="h-[2.708333vw] w-[100%] grid place-content-center"> -->
                     <button @click="pollPaymentStatus"
-                        :class="`py-[.520833vw] px-[1.7625vw]  text-white  ${isPolling ? pollingClass : 'bg-[#3189ef]'} rounded-[0.625vw]`">
+                        :class="`py-[.520833vw] px-[1.7625vw]  text-white  ${ 'bg-[#3189ef]'} rounded-[0.625vw]`">
                         {{ t('message.qrCode.complete') }}
                     </button>
-                </Spin>
+                <!-- </Spin> -->
 
             </div>
 
@@ -365,6 +369,28 @@ const createRecoverCardPayment = async () => {
         </template>
 
     </GeneralModal>
+ 
+
+    <Modal :zIndex="1500" :centered="true" v-model:open="openPaymentInfoConfirmModal" :maskClosable="false" width="29.1667vw">
+            <div class="flex flex-col items-center justify-center space-y-[1.320833vw]">
+                <div class="text-[1.458333vw]">
+                    {{ t('message.tip') }}
+                </div>
+                <div class="text-[.833333vw]">
+                    {{ t('message.checking') }}
+                </div>
+            </div>
+            <template #footer>
+                <div class="grid place-content-center">
+                    <button @click="openPaymentInfoConfirmModal = false" class="
+                px-[1.041667vw]
+                bg-[#eee] border border-[#eee] rounded-[0.625vw] text-[.833333vw]  h-[2.708333vw]">
+                        {{ t('message.retry') }}
+                    </button>
+                </div>
+
+            </template>
+        </Modal>
 
 </template>
 <style scoped>

@@ -7,11 +7,12 @@ import ServiceSelector from '../components/open-card/ServiceSelector.vue';
 import CheckoutResult from '../components/CheckoutResult.vue';
 import post from '../api/post'
 import URL from '../api/api-list';
-import { QRCode, Spin } from 'ant-design-vue';
+import { QRCode, Spin, Modal } from 'ant-design-vue';
 import GeneralModal from '../components/Modal/GeneralModal.vue';
 import UserInfoInput from '../components/open-card/UserInfoInput.vue';
 import { message } from '../components/Message';
 import { useI18n } from 'vue-i18n';
+
 
 const { t } = useI18n();
 
@@ -39,9 +40,13 @@ const validateName = (name) => {
 
 const isPolling = ref(false)
 
+const openPaymentInfoConfirmModal = ref(false)
+
 const pollPaymentStatus = () => {
+
+    openPaymentInfoConfirmModal.value = true
     
-    if (paymentInfo.value === null) {
+    if (paymentInfo.value === null || isPolling.value) {
         return
     } else {
         isPolling.value = true;
@@ -91,6 +96,7 @@ const pollPaymentStatus = () => {
             .finally(() => {
                 isPolling.value = false  
                 openPayUrlModal.value = false
+                openPaymentInfoConfirmModal.value = false
             })
 
 
@@ -233,14 +239,34 @@ const handlePurchaseOnline = async () => {
             <div class="flex flex-col items-center justify-center payment-style space-y-[1.320833vw] ">
                 <QRCode class="w-[8.85416667vw] h-[8.85416667vw]" :value="paymentInfo.payUrl" />
 
-                <Spin :spinning="isPolling" wrapperClassName="w-full grid place-content-center">
+                <!-- <Spin :spinning="isPolling" wrapperClassName="w-full grid place-content-center"> -->
                     <button @click="pollPaymentStatus"
                         class="py-[.520833vw] px-[1.7625vw]  text-white bg-[#3189ef] rounded-[0.625vw]">
                         {{ t('message.qrCode.complete') }}
                     </button>
-                </Spin>
+                <!-- </Spin> -->
             </div>
         </GeneralModal>
+        <Modal :zIndex="1500" :centered="true" v-model:open="openPaymentInfoConfirmModal" :maskClosable="false" width="29.1667vw">
+            <div class="flex flex-col items-center justify-center space-y-[1.320833vw]">
+                <div class="text-[1.458333vw]">
+                    {{ t('message.tip') }}
+                </div>
+                <div class="text-[.833333vw]">
+                    {{ t('message.checking') }}
+                </div>
+            </div>
+            <template #footer>
+                <div class="grid place-content-center">
+                    <button @click="openPaymentInfoConfirmModal = false" class="
+                px-[1.041667vw]
+                bg-[#eee] border border-[#eee] rounded-[0.625vw] text-[.833333vw]  h-[2.708333vw]">
+                        {{ t('message.retry') }}
+                    </button>
+                </div>
+
+            </template>
+        </Modal>
 
     </div>
 </template>

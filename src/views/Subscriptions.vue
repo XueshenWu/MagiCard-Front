@@ -9,6 +9,7 @@ import get from '../api/get';
 import URL from '../api/api-list';
 import { message } from '../components/Message';
 import { QRCode, Spin } from 'ant-design-vue';
+import { Modal } from 'ant-design-vue';
 
 import { useI18n } from 'vue-i18n';
 
@@ -24,6 +25,9 @@ const openCheckoutConfirm = ref(false);
 const openCheckoutCodeModal = ref(false);
 
 const paymentInfo = ref(null)
+
+
+const openPaymentInfoConfirmModal = ref(false)
 
 
 const feeRate = ref(null)
@@ -42,7 +46,9 @@ const isPolling = ref(false)
 
 const pollPaymentStatus = () => {
 
-    if (paymentInfo.value === null) {
+    openPaymentInfoConfirmModal.value = true
+
+    if (paymentInfo.value === null || isPolling.value) {
         return
     } else {
         isPolling.value = true;
@@ -51,7 +57,7 @@ const pollPaymentStatus = () => {
         (new Promise((resolve, reject) => {
             const timeoutJob = async () => {
 
-                if (!current.value===1) {
+                if (!current.value === 1) {
                     reject()
                     return
                 }
@@ -70,7 +76,7 @@ const pollPaymentStatus = () => {
 
 
                 if (fulfilled) {
-           
+
                     const res = await post(URL.card.recharge, {
                         cardId: cardId.value,
                         outOrderId: paymentInfo.value.outOrderId
@@ -106,6 +112,7 @@ const pollPaymentStatus = () => {
             .finally(() => {
                 isPolling.value = false
                 openCheckoutCodeModal.value = false
+                openPaymentInfoConfirmModal.value = false
             })
 
 
@@ -186,14 +193,17 @@ const handleCheckoutModalConfirm = async () => {
             <SelectionBoard v-if="current === 0" />
             <CardRechargeBoard v-if="current === 1" v-model:cardId="cardId" v-model:price="price"
                 v-model:valid="valid" />
-            <CheckoutResult :paymentType="'subscription'" :outOrderId="paymentInfo?.outOrderId??''" v-if="current === 2" v-model:current="current" />
+            <CheckoutResult :paymentType="'subscription'" :outOrderId="paymentInfo?.outOrderId ?? ''"
+                v-if="current === 2" v-model:current="current" />
         </div>
         <a-steps :current="current" :items="items" />
         <div class="steps-action flex justify-end items-center gap-x-4 *:w-32 *:text-xl *:py-3 *:h-14 *:px-6 ">
             <a-button class="bg-gray-100 border-none" v-if="current > 0 && current != 2" style="margin-left: 8px"
                 @click="prev">{{ t('message.subscription.buttons.previous') }}</a-button>
-            <a-button v-show="current === 1" type="primary" @click="handleCheckout">{{ t('message.subscription.buttons.pay') }}</a-button>
-            <a-button v-show="current === 0" type="primary" @click="next">{{ t('message.subscription.buttons.next') }}</a-button>
+            <a-button v-show="current === 1" type="primary" @click="handleCheckout">{{
+                t('message.subscription.buttons.pay') }}</a-button>
+            <a-button v-show="current === 0" type="primary" @click="next">{{ t('message.subscription.buttons.next')
+                }}</a-button>
 
 
         </div>
@@ -230,14 +240,35 @@ const handleCheckoutModalConfirm = async () => {
             :mainTitle="t('message.qrCode.title')" :subTitle="t('message.qrCode.subtitle')">
             <div class="flex flex-col items-center justify-center payment-style space-y-[1.320833vw] ">
                 <QRCode class="w-[8.85416667vw] h-[8.85416667vw]" :value="paymentInfo.payUrl" />
-                <Spin :spinning="isPolling" wrapperClassName="w-full">
-                    <button @click="pollPaymentStatus"
-                        class="w-full py-[.520833vw] px-[1.7625vw]  text-white bg-[#3189ef] rounded-[0.625vw]">
-                        {{ t('message.qrCode.complete') }}
-                    </button>
-                </Spin>
+                <!-- <Spin :spinning="isPolling" wrapperClassName="w-full"> -->
+                <button @click="pollPaymentStatus"
+                    class="w-full py-[.520833vw] px-[1.7625vw]  text-white bg-[#3189ef] rounded-[0.625vw]">
+                    {{ t('message.qrCode.complete') }}
+                </button>
+                <!-- </Spin> -->
             </div>
         </GeneralModal>
+        <Modal :zIndex="1500" :centered="true" v-model:open="openPaymentInfoConfirmModal" :maskClosable="false" width="29.1667vw">
+            <div class="flex flex-col items-center justify-center space-y-[1.320833vw]">
+                <div class="text-[1.458333vw]">
+                    {{ t('message.tip') }}
+                </div>
+                <div class="text-[.833333vw]">
+                    {{ t('message.checking') }}
+                </div>
+            </div>
+            <template #footer>
+                <div class="grid place-content-center">
+                    <button @click="openPaymentInfoConfirmModal = false" class="
+                px-[1.041667vw]
+                bg-[#eee] border border-[#eee] rounded-[0.625vw] text-[.833333vw]  h-[2.708333vw]">
+                        {{ t('message.retry') }}
+                    </button>
+                </div>
+
+            </template>
+        </Modal>
+
     </div>
 </template>
 

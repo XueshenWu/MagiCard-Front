@@ -11,7 +11,7 @@ import { useI18n } from 'vue-i18n';
 const {t} = useI18n()
 
 
-const rechargeAmount = ref(0);
+const rechargeAmount = ref(5);
 
 const currentCard = ref(0);
 
@@ -36,17 +36,24 @@ watchEffect(() => {
 })
 
 
+const handleBlur = ()=>{
+    if (rechargeAmount.value < 5 || rechargeAmount.value > 999) {
+        rechargeAmount.value = 5;
+    }
+}
+
+
 watch(rechargeAmount, (val) => {
     const amount = Number(val)
-    if (isNaN(amount) || amount <= 0 || amount > 999) {
-        rechargeAmount.value = 0;
+    if (isNaN(amount) || amount < 5 || amount > 999) {
+        rechargeAmount.value = 5;
     } else {
         rechargeAmount.value = amount;
         valid.value = true
     }
     price.value = getPrice(amount);
 
-})
+}, { immediate: true })
 
 
 function getPrice(amount) {
@@ -123,7 +130,9 @@ watchEffect(async () => {
                 </div>
                 <div class="flex flex-col">
 
-                    <NumberInput className="h-14 text-xl" maxLength="4" :placeholder=" t('message.rechargeBoard.recharge.customAmount') "
+                    <NumberInput 
+                    
+                    :className="`h-14 text-xl ` " maxLength="4" :placeholder=" t('message.rechargeBoard.recharge.customAmount') "
                         :status="valid ? '' : 'error'" v-model="rechargeAmount">
                         <template #prefix>
                             <div class="text-gray-400  h-11">$</div>
