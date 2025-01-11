@@ -1,6 +1,6 @@
 <template>
     <Modal 
-    
+    v-if="innerOpen"
     :maskStyle = "{backgroundColor: 'rgba(0, 0, 0, 0)'}"
     wrapClassName="" 
     :maskClosable="maskClosable"
@@ -21,6 +21,7 @@
 
         <template #footer>
             <slot name="footer"></slot>
+           
         </template>
     </Modal>
 </template>
@@ -29,6 +30,7 @@
 import { Modal } from 'ant-design-vue';
 import { watch, ref, onMounted } from 'vue';
 import { inject } from 'vue';
+import ForceLightOff from '../login-register/ForceLightOff.vue';
 
 const {
     turnOnLight,

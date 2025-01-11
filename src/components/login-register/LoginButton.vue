@@ -38,6 +38,7 @@ watch(()=>modalStore.loginModalOpen, (newVal) => {
       shouldTurnOffLight.value = true;
    } else {
       turnOnLight();
+      shouldTurnOffLight.value = false;
    }
 }, { immediate: true });
 

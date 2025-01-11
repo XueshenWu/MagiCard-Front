@@ -2,7 +2,12 @@
 import LoginCard from './LoginCard.vue';
 import RegisterForm from './forms/RegisterForm.vue';
 import { ref } from 'vue';
+import { inject } from 'vue';
 
+const {
+    turnOnLight,
+    turnOffLight
+} = inject('lightSwitch');
 
 const viewType = ref('register')
 
@@ -11,7 +16,10 @@ const viewType = ref('register')
 
 
 <template>
-    <div class="py-6 flex flex-col items-center justify-center gap-y-8 w-full">
+    <div 
+    
+    @click="()=>turnOffLight()"
+    class="py-6 flex flex-col items-center justify-center gap-y-8 w-full">
         <LoginCard v-if="viewType === 'login'" />
         <RegisterForm v-else />
         <div class="flex flex-row w-full items-center justify-center text-[1.197917vw] ">
