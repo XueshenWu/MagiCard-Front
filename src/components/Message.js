@@ -20,4 +20,11 @@ export const message = {
             icon: h(MessageIcon, { success: false, content }),
         })
     },
+    info: (content) => {
+        ant_message.info({
+            class:"text-[1vw]",
+            content: " ",
+            icon: h(MessageIcon, { success: true, content }),
+        })
+    },
 }

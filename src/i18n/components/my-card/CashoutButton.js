@@ -17,7 +17,8 @@ export default {
                 },
                 messages: {
                     success: "提现成功",
-                    error: "提现失败"
+                    error: "提现失败",
+                    noPaymentPassword: "请先设置支付密码"
                 },
                 form:{
                     alipayAccount: {
@@ -50,7 +51,8 @@ export default {
                 },
                 messages: {
                     success: "Withdrawal successful",
-                    error: "Withdrawal failed"
+                    error: "Withdrawal failed",
+                    noPaymentPassword: "Please set payment password first"
                 },
                 form:{
                     alipayAccount: {

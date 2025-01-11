@@ -1,6 +1,6 @@
 <script setup>
 
-import { ref, provide, nextTick } from 'vue';
+import { ref, provide, nextTick, watch, onMounted, inject } from 'vue';
 import { useRouter } from 'vue-router';
 import CardDurationSelector from '../components/open-card/CardDurationSelector.vue';
 import ServiceSelector from '../components/open-card/ServiceSelector.vue';
@@ -12,6 +12,7 @@ import GeneralModal from '../components/Modal/GeneralModal.vue';
 import UserInfoInput from '../components/open-card/UserInfoInput.vue';
 import { message } from '../components/Message';
 import { useI18n } from 'vue-i18n';
+import get from '../api/get';
 
 
 const { t } = useI18n();
@@ -22,6 +23,50 @@ const reqPending = ref(false);
 
 const firstName = ref('');
 const lastName = ref('');
+
+const firstTimeAndReferred = ref(false);
+const parentInviteCode = ref(null)
+
+
+const updateParentInviteCode = async () => {
+    const referred_res = await post(URL.card.parentInviteCode, null, true)
+    if (referred_res.err) {
+        return
+    }
+
+    parentInviteCode.value = referred_res.data
+}
+
+provide("updateParentInviteCode", updateParentInviteCode)
+
+const debug = true
+
+onMounted(async () => {
+
+    if(debug){
+        firstTimeAndReferred.value = true
+        parentInviteCode.value = 'TESTAA'
+        return
+    }
+
+    const cardList_res = await get(URL.card.cardList, null, true)
+    if (cardList_res.err) {
+        return
+    }
+
+    const cardList = cardList_res.data
+    if (cardList.length > 0) {
+        return
+    }
+
+    const referred_res = await post(URL.card.parentInviteCode, null, true)
+    if (referred_res.err) {
+        return
+    }
+    firstTimeAndReferred.value = referred_res.data !== null
+    parentInviteCode.value = referred_res.data
+
+})
 
 
 const router = useRouter();
@@ -45,7 +90,7 @@ const openPaymentInfoConfirmModal = ref(false)
 const pollPaymentStatus = () => {
 
     openPaymentInfoConfirmModal.value = true
-    
+
     if (paymentInfo.value === null || isPolling.value) {
         return
     } else {
@@ -85,16 +130,16 @@ const pollPaymentStatus = () => {
                 message.success("支付成功, 请填写姓名信息")
 
                 current.value = 3
-    
+
             })
             .catch((error) => {
                 console.log('Error:', error)
                 message.error('支付失败')
                 current.value = 1
-         
+
             })
             .finally(() => {
-                isPolling.value = false  
+                isPolling.value = false
                 openPayUrlModal.value = false
                 openPaymentInfoConfirmModal.value = false
             })
@@ -111,7 +156,7 @@ const finishOpenCard = async () => {
         message.error('请填写姓名信息')
         return;
     }
-    if(!paymentInfo.value.outOrderId){
+    if (!paymentInfo.value.outOrderId) {
         message.error('订单号不能为空')
         return;
     }
@@ -179,7 +224,7 @@ const items = steps.map(item => ({
 const paymentInfo = ref(null)
 
 const handlePurchaseOnline = async () => {
-    
+
     const res = await post(URL.payment.openCardPayment, {
         cardType: cardType.value === 'multi-media' ? 1 : cardType.value === 'creativity' ? 2 : -1,
         yearTerm: yearTerm.value
@@ -209,10 +254,11 @@ const handlePurchaseOnline = async () => {
 
 
         <div class="steps-content h-[440px] w-full">
-            <CardDurationSelector v-if="current === 0" />
+            <CardDurationSelector :parentInviteCode="parentInviteCode" :promo="firstTimeAndReferred" v-if="current === 0" />
             <ServiceSelector v-else-if="current === 1" />
             <UserInfoInput v-model:firstName="firstName" v-model:lastName="lastName" v-else-if="current === 3" />
-            <CheckoutResult :paymentType="'openCard'" :outOrderId="paymentInfo.outOrderId" v-else-if="current === 4" v-model:current="current" />
+            <CheckoutResult :paymentType="'openCard'" :outOrderId="paymentInfo.outOrderId" v-else-if="current === 4"
+                v-model:current="current" />
             <div v-else-if="current === 2">
 
             </div>
@@ -220,7 +266,7 @@ const handlePurchaseOnline = async () => {
 
         <a-steps progress-dot size="large" class="" :current="current" :items="items" />
         <div class="steps-action flex justify-end items-center gap-x-4 *:w-64 *:text-xl *:h-12 w-full py-4 pr-12">
-            <a-button class="bg-gray-100 border-none" v-if="current in [0,1]" style="margin-left: 8px"
+            <a-button class="bg-gray-100 border-none" v-if="current in [0, 1]" style="margin-left: 8px"
                 @click="prev">上一步</a-button>
 
             <a-button v-show="current === 0" type="primary" @click="next">下一步</a-button>
@@ -231,23 +277,22 @@ const handlePurchaseOnline = async () => {
                     @click="finishOpenCard">完成开卡</a-button>
             </Spin>
         </div>
-        <GeneralModal 
-        
-        :onClose="()=>{openPayUrlModal= false; current = 1}"
-        v-model:open="openPayUrlModal" :maskClosable="false" width="29.1667vw"
-            :mainTitle="t('message.qrCode.title')" :subTitle="t('message.qrCode.subtitle')">
+        <GeneralModal :onClose="() => { openPayUrlModal = false; current = 1 }" v-model:open="openPayUrlModal"
+            :maskClosable="false" width="29.1667vw" :mainTitle="t('message.qrCode.title')"
+            :subTitle="t('message.qrCode.subtitle')">
             <div class="flex flex-col items-center justify-center payment-style space-y-[1.320833vw] ">
                 <QRCode class="w-[8.85416667vw] h-[8.85416667vw]" :value="paymentInfo.payUrl" />
 
                 <!-- <Spin :spinning="isPolling" wrapperClassName="w-full grid place-content-center"> -->
-                    <button @click="pollPaymentStatus"
-                        class="py-[.520833vw] px-[1.7625vw]  text-white bg-[#3189ef] rounded-[0.625vw]">
-                        {{ t('message.qrCode.complete') }}
-                    </button>
+                <button @click="pollPaymentStatus"
+                    class="py-[.520833vw] px-[1.7625vw]  text-white bg-[#3189ef] rounded-[0.625vw]">
+                    {{ t('message.qrCode.complete') }}
+                </button>
                 <!-- </Spin> -->
             </div>
         </GeneralModal>
-        <Modal :zIndex="1500" :centered="true" v-model:open="openPaymentInfoConfirmModal" :maskClosable="false" width="29.1667vw">
+        <Modal :zIndex="1500" :centered="true" v-model:open="openPaymentInfoConfirmModal" :maskClosable="false"
+            width="29.1667vw">
             <div class="flex flex-col items-center justify-center space-y-[1.320833vw]">
                 <div class="text-[1.458333vw]">
                     {{ t('message.tip') }}

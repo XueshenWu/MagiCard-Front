@@ -1,10 +1,10 @@
-// // local
-// const BASE_URL = 'http://192.168.193.75:8085';
-// const FRONTEND_URL = 'http://localhost:5173'
+// local
+const BASE_URL = 'http://192.168.193.75:8085';
+const FRONTEND_URL = 'http://localhost:5173'
 
-// public
-const BASE_URL = 'http://43.199.192.103:8085';
-const FRONTEND_URL = 'http://43.199.192.103'
+// // public
+// const BASE_URL = 'http://43.199.192.103:8085';
+// const FRONTEND_URL = 'http://43.199.192.103'
 
 const URL = {
     base: BASE_URL,
@@ -42,6 +42,8 @@ const URL = {
         unfreeze: `${BASE_URL}/v1/card/unfreeze`,
         withdrawl: `${BASE_URL}/v1/card/withdrew`,
         verifyPaymentPassword: `${BASE_URL}/v1/card/verifyPaymentPwd`,
+        parentInviteCode: `${BASE_URL}/v1/card/parentInviteCode`,
+        changeInviteRelation: `${BASE_URL}/v1/card/changeInviteRelation`,
     },
     transaction:{
         summary: `${BASE_URL}/v1/transaction/summary`,

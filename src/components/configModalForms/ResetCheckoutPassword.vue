@@ -143,7 +143,7 @@ const rules = {
     </template>
 
     <template v-else>
-        <GeneralModal v-model:open="open" width="29.1667vw" :mainTitle="userInfo.paymentPassword ? t('message.paymentPassword.titles.modify') : t('message.paymentPassword.titles.set')"
+        <GeneralModal v-if="open" v-model:open="open" width="29.1667vw" :mainTitle="userInfo.paymentPassword ? t('message.paymentPassword.titles.modify') : t('message.paymentPassword.titles.set')"
             :centered="true">
             <div class="flex flex-col items-center justify-center gap-y-6 px-8 py-8">
 

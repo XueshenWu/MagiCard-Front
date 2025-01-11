@@ -14,6 +14,7 @@ import { Crisp } from 'crisp-sdk-web'
 // import { Crisp } from '../../cws'
 
 import { getClientToken } from '../../../utils/clientToken.js';
+import { yetAnotherStore } from '../../../states/yastore.js';
 
 
 const captchaReady = ref(false)
@@ -67,11 +68,22 @@ const login = async () => {
 
         Crisp.load();
 
-        window.location.reload();
+        // window.location.reload();
         loginState.value = false
         message.success('登录成功')
         closeModal()
         router.replace('/cards')
+        yetAnotherStore.isLoggedIn = true;
+
+        const res_userinfo = await post(URL.user.userInfo, {}, true)
+        if (!res_userinfo.err) {
+            const userInfo = res_userinfo.data;
+            if (!userInfo.loginPassword) {
+                yetAnotherStore.shouldShowResetPassword = true;
+            }
+        }
+
+
     } else {
         message.error('登录失败')
     }
@@ -101,7 +113,8 @@ onMounted(async () => {
             const body = {
                 phone: formState.phoneNumber,
                 action: "login",
-                geeTest: convertGt(captchaResult)
+                geeTest: convertGt(captchaResult),
+                phoneCode: '+86'
             }
 
             const data = await post(URL.user.smsCode, body, false)

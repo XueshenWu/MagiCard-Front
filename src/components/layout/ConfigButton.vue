@@ -1,7 +1,7 @@
 <script setup>
 import { Button, Dropdown, Menu, message } from 'ant-design-vue';
 import { DownOutlined } from '@ant-design/icons-vue';
-import { provide, ref } from 'vue';
+import { onMounted, provide, ref, watch, inject } from 'vue';
 
 import ModifyEmail from '../configModalForms/ModifyEmail.vue';
 import ResetPassword from '../configModalForms/ResetPassword.vue';
@@ -11,6 +11,8 @@ import ResetCheckoutPassword from '../configModalForms/ResetCheckoutPassword.vue
 import Feedback from '../configModalForms/Feedback.vue';
 import { useI18n } from 'vue-i18n';
 import { Crisp } from 'crisp-sdk-web';
+import post from '../../api/post';
+import { yetAnotherStore } from '../../states/yastore';
 
 const openModifyPhoneNumberModal = ref(false);
 const openModifyEmailModal = ref(false);
@@ -19,14 +21,40 @@ const openApplyMonthlyStatementModal = ref(false);
 const openResetCheckoutPasswordModal = ref(false);
 const openFeedbackModal = ref(false);
 
+
+// onMounted(async () => {
+//     const res= await post('/user/userInfo', {}, true);
+//     if(!res.err){
+//         const userInfo = res.data;
+//         if(!userInfo.loginPassword){
+//             openResetPasswordModal.value = true;
+//         }
+//     }
+// });
+
+
+
+
+
+
 const { t } = useI18n();
 
-const switchSelected = (i)=>{
-    handleMenuClick({key: i});
+const switchSelected = (i) => {
+    handleMenuClick({ key: i });
 }
 
 provide('switchSelected', switchSelected);
 
+
+watch(()=>yetAnotherStore.shouldShowResetPassword, (newVal) => {
+// debugger    
+    if(newVal){
+     
+        openResetPasswordModal.value = true;
+        yetAnotherStore.shouldShowResetPassword = false;
+    
+    }    
+}, { immediate: true });
 
 
 const handleMenuClick = ({ key }) => {
@@ -37,7 +65,7 @@ const handleMenuClick = ({ key }) => {
     openApplyMonthlyStatementModal.value = key === '5';
     openFeedbackModal.value = key === '6';
 
-    if(key === '7'){
+    if (key === '7') {
         localStorage.removeItem('token');
 
         Crisp.setTokenId();
@@ -49,10 +77,11 @@ const handleMenuClick = ({ key }) => {
 };
 
 
+
 </script>
 
 <template>
-   
+
     <Dropdown class="w-[5.36vw] h-[2.24vw] flex items-center justify-center text-[1.06vw]" overlayClassName="">
         <template #overlay>
             <Menu @click='handleMenuClick'>
@@ -73,11 +102,13 @@ const handleMenuClick = ({ key }) => {
 
     </Dropdown>
 
-    <ModifyPhoneNumber v-if="openModifyPhoneNumberModal" v-model:openModifyPhoneNumberModal="openModifyPhoneNumberModal" />
-    <ModifyEmail v-if="openModifyEmailModal" v-model:openModifyEmailModal="openModifyEmailModal" /> 
+    <ModifyPhoneNumber v-if="openModifyPhoneNumberModal"
+        v-model:openModifyPhoneNumberModal="openModifyPhoneNumberModal" />
+    <ModifyEmail v-if="openModifyEmailModal" v-model:openModifyEmailModal="openModifyEmailModal" />
     <ResetCheckoutPassword v-if="openResetCheckoutPasswordModal" v-model:open="openResetCheckoutPasswordModal" />
     <ResetPassword v-if="openResetPasswordModal" v-model:openResetPasswordModal="openResetPasswordModal" />
-    <ApplyMonthlyStatement v-if="openApplyMonthlyStatementModal" v-model:openApplyMonthlyStatementModal="openApplyMonthlyStatementModal" />
+    <ApplyMonthlyStatement v-if="openApplyMonthlyStatementModal"
+        v-model:openApplyMonthlyStatementModal="openApplyMonthlyStatementModal" />
     <Feedback v-if="openFeedbackModal" v-model:openFeedbackModal="openFeedbackModal" />
 </template>
 
@@ -90,7 +121,7 @@ const handleMenuClick = ({ key }) => {
 
 
 
-:v-deep(.ant-dropdown-trigger){
+:v-deep(.ant-dropdown-trigger) {
     height: 2.24vw !important;
     width: 5.36vw !important;
     border: 1px solid red !important;

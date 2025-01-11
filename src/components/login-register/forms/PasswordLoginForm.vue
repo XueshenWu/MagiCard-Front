@@ -11,6 +11,7 @@ import URL from '../../../api/api-list.js';
 import { Crisp } from 'crisp-sdk-web';
 // import { Crisp } from '../../../cws'
 import { getClientToken } from '../../../utils/clientToken.js';
+import { yetAnotherStore } from '../../../states/yastore.js';
 
 
 const captchaReady = ref(false)
@@ -39,9 +40,9 @@ const login = async (captchaValidateResult, formState) => {
         geeTest: convertGt(captchaValidateResult)
     }
     const res = await post(URL.user.passwordLogin, body, false)
-
+   
     if (!res.err) {
-
+       
         localStorage.setItem('token', res.data.token);
        
         const userCard = res.data.userCard;
@@ -51,9 +52,30 @@ const login = async (captchaValidateResult, formState) => {
 
         Crisp.load();
 
-        window.location.reload();
+        // window.location.reload();
         loginState.value = false
         router.replace('/cards')
+
+        yetAnotherStore.isLoggedIn = true;
+
+        const res_userInfo = await post(URL.user.userInfo, {}, true)
+
+        if (!res.err) {
+            const userInfo = res_userInfo.data;
+
+     
+
+
+            if (userInfo.loginPassword===null) {
+
+                yetAnotherStore.shouldShowResetPassword = true;
+            }
+        }
+
+
+
+
+
 
     } else {
         message.error('登录失败')

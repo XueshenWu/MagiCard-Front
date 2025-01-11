@@ -37,7 +37,7 @@ const parseDate = (dateStr) => {
 
 const openHelpModal = ref(false);
 
-
+const openResetCheckoutPasswordModal = ref(false);
 
 const cardData = ref({
     "cardNumber": "4910900031259940",
@@ -92,7 +92,14 @@ watchEffect(async () => {
     const _cardList = await getCardList();
     cardList.value = _cardList;
     activeKey.value = _cardList[0].cardId;
-    userInfo.value = await getUserInfo();
+    const _userInfo =  await getUserInfo();
+    userInfo.value = _userInfo;
+    // if(!_userInfo.loginPassword){
+    //     message.error(t('message.setLoginPassword.noPassword'));
+    //     openResetCheckoutPasswordModal.value = true;
+    // }
+
+
 }, { immediate: true, once: true });
 
 
@@ -137,6 +144,7 @@ watch(activeKey, async (newVal) => {
 
 
 <template>
+    <ResetCheckoutPassword v-if="openResetCheckoutPasswordModal" v-model:open="openResetCheckoutPasswordModal" />
 
     <div class="flex px-10 py-4 flex-col items-start justify-start gap-y-6  h-full">
 

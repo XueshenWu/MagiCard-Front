@@ -171,7 +171,7 @@ const handleCheckoutModalConfirm = async () => {
             paymentInfo.value = {
                 orderId: res.data.orderId,
                 outOrderId: res.data.outOrderId,
-                payUrl: res.data.paymentUrl
+                payUrl: res.data.payUrl
             }
             await nextTick()
 

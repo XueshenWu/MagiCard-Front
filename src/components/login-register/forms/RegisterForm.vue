@@ -11,6 +11,7 @@ import URL from '../../../api/api-list.js'
 import { modalStore } from '../../../states/modalStore.js'
 import { useRoute } from 'vue-router'
 import { getClientToken } from '../../../utils/clientToken.js'
+import { yetAnotherStore } from '../../../states/yastore.js'
 
 import { useI18n } from 'vue-i18n'
 import { Crisp } from 'crisp-sdk-web'
@@ -56,7 +57,7 @@ const validatePhoneNumber = async (_rule, value) => {
     }
     const res = validatePhoneNumberSync(value)
     if (!res) {
-        return Promise.reject(t('message.validationRegister.invalidPhone'))
+        return Promise.reject(t('message.registerForm.validationRegister.invalidPhone'))
     }
     return Promise.resolve()
 }
@@ -66,29 +67,29 @@ const validateOtp = async (_rule, value) => {
         return Promise.resolve()
     }
     if (value.length !== 6) {
-        return Promise.reject(t('message.validationRegister.invalidCode'))
+        return Promise.reject(t('message.registerForm.validationRegister.invalidCode'))
     }
     return Promise.resolve()
 }
 
 const validateAgreement = async (_rule, value) => {
     if (!value) {
-        return Promise.reject(t('message.validationRegister.agreementRequired'))
+        return Promise.reject(t('message.registerForm.validationRegister.agreementRequired'))
     }
     return Promise.resolve()
 }
 
 const rules = {
     phoneNumber: [
-        { required: true, message: t('message.validationRegister.phoneRequired'), trigger: ['change', 'blur'] },
+        { required: true, message: t('message.registerForm.validationRegister.phoneRequired'), trigger: ['change', 'blur'] },
         { validator: validatePhoneNumber, trigger: ['change', 'blur'] }
     ],
     otp: [
-        { required: true, message: t('message.validationRegister.codeRequired'), trigger: ['change', 'blur'] },
+        { required: true, message: t('message.registerForm.validationRegister.codeRequired'), trigger: ['change', 'blur'] },
         { validator: validateOtp, trigger: ['change', 'blur'] }
     ],
     checkedAgreement: [
-        { required: true, message: t('message.validationRegister.agreementRequired'), trigger: ['change'] },
+        { required: true, message: t('message.registerForm.validationRegister.agreementRequired'), trigger: ['change'] },
         { validator: validateAgreement, trigger: ['change'] }
     ]
 }
@@ -140,8 +141,22 @@ const register = async () => {
 
        Crisp.load();
 
-       window.location.reload();
-        message.success(t('notifications.registerSuccess'))
+    //    window.location.reload();
+        message.registerForm.success(t('message.notifications.registerSuccess'))
+
+
+        yetAnotherStore.isLoggedIn = true;
+
+        const res_userinfo = await post(URL.user.userInfo, {}, true)
+        if (!res.err) {
+            const userInfo = res_userinfo.data;
+            if (!userInfo.loginPassword) {
+                yetAnotherStore.shouldShowResetPassword = true;
+            }
+        }
+
+
+
     }
 
     formRef.value.resetFields()
@@ -160,7 +175,7 @@ const handleSendOtp = () => {
 
     const res = validatePhoneNumberSync(formState.phoneNumber)
     if (!res) {
-        message.error(t('message.validationRegister.invalidPhone'))
+        message.error(t('message.registerForm.validationRegister.invalidPhone'))
         return
     } else {
         captchaObj.value?.showCaptcha()
@@ -191,16 +206,17 @@ onMounted(async () => {
             const body = {
                 phone: formState.phoneNumber,
                 geeTest: convertGt(gtResult),
-                action: 'register'
+                action: 'register',
+                phoneCode: '+86'
             }
 
             const data = await post(URL.user.smsCode, body, false)
             if (!data.err) {
-                message.success(t('message.notifications.codeSent'))
+                message.success(t('message.registerForm.notifications.codeSent'))
 
             }
             else {
-                message.error(t('message.notifications.codeSendFailed'))
+                message.error(t('message.registerForm.notifications.codeSendFailed'))
             }
             cooldown.value = 30;
             const timer = setInterval(() => {
@@ -220,7 +236,7 @@ onMounted(async () => {
 <template>
     <div class="flex flex-col items-center justify-center h-full gap-y-8 w-full px-12 py-6">
         <div class="text-[1.458333vw] ">
-            {{ t('message.enterPhoneAndCode') }}
+            {{ t('message.registerForm.enterPhoneAndCode') }}
         </div>
 
         <Form ref="formRef" @finish="onFinish" @finishFailed="onFinishFailed" :model="formState" :rules="rules"
@@ -232,12 +248,12 @@ onMounted(async () => {
 
                 <FormItem name="otp" class="w-full">
                     <div class="flex items-center justify-between gap-x-2   w-full">
-                        <Input v-model:value="formState.otp" :placeholder="t('message.enterCode')" size="large"
+                        <Input v-model:value="formState.otp" :placeholder="t('message.registerForm.enterCode')" size="large"
                             class="input-style border-radius-custom">
                         <template #suffix>
                             <a @click="handleSendOtp"
                                 :class="`${cooldown > 0 ? cooldownClass : readyClass} text-[.9375vw]`">
-                                {{ cooldown > 0 ? `${cooldown}s` : t('message.getCode') }}
+                                {{ cooldown > 0 ? `${cooldown}s` : t('message.registerForm.getCode') }}
                             </a>
                         </template>
                         </Input>
@@ -248,7 +264,7 @@ onMounted(async () => {
                 <FormItem class="w-full">
                     <button htmlType="submit"
                         class="button-style w-full text-xl bg-blue-500 hover:bg-blue-400 duration-100 text-white rounded-xl py-3">
-                        {{ t('message.submit') }}
+                        {{ t('message.registerForm.submit') }}
                     </button>
                 </FormItem>
 
@@ -262,10 +278,10 @@ onMounted(async () => {
         </Form>
 
         <div class="text-[.625vw] font-light">
-            <p>{{ t('message.privacy.dataHandling') }}</p>
-            <p>{{ t('message.privacy.dataAnswer') }}</p>
-            <p>{{ t('message.privacy.advertising') }}</p>
-            <p>{{ t('message.privacy.advertisingAnswer') }}</p>
+            <p>{{ t('message.registerForm.privacy.dataHandling') }}</p>
+            <p>{{ t('message.registerForm.privacy.dataAnswer') }}</p>
+            <p>{{ t('message.registerForm.privacy.advertising') }}</p>
+            <p>{{ t('message.registerForm.privacy.advertisingAnswer') }}</p>
         </div>
     </div>
 </template>

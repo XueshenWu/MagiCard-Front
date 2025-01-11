@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref, inject, computed } from 'vue';
+import { reactive, ref, inject, computed, nextTick } from 'vue';
 import GeneralModal from '../Modal/GeneralModal.vue';
 import { message } from '../Message';
 import URL from '../../api/api-list';
@@ -11,22 +11,46 @@ import { useI18n } from 'vue-i18n';
 import post from '../../api/post';
 const { t } = useI18n();
 
+// const switchSelected = inject('switchSelected')
+// debugger
+
 const updateCardData = inject('updateCardData');
 const openWithdrawlModal = ref(false);
+const openResetCheckoutPasswordModal = ref(false);
 
 const isCheckoutCodeValid = computed(() => {
     return checkoutCode.value.length === 6;
 });
 
 
+
+
 const open = ref(false);
 const { cardId, availableBalance, className, disabled } = defineProps(['cardId', 'availableBalance', 'className', 'disabled']);
 
 
-const handleClick = () => {
+const handleClick = async () => {
     if (disabled) {
         return;
     }
+  
+    const res = await post(URL.user.userInfo, {}, true);
+    if(res.err){
+        message.error(t('message.withdrawal.messages.error'));
+        return;
+    }else{
+        const paymentPassword = res.data.paymentPassword;
+        if(!paymentPassword){
+           
+
+            openResetCheckoutPasswordModal.value = true;
+            await nextTick();
+            message.error(t('message.withdrawal.messages.noPaymentPassword'));
+            return;
+        }
+    }
+  
+
     open.value = true;
     checkoutCode.value = '';
 }
@@ -209,6 +233,8 @@ const onFinish = async () => {
         </div>
         <template #footer></template>
     </GeneralModal>
+    <ResetCheckoutPassword v-if="openResetCheckoutPasswordModal" v-model:open="openResetCheckoutPasswordModal" />
+
 
 
 </template>

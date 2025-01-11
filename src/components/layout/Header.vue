@@ -4,7 +4,7 @@
 import { RouterLink } from 'vue-router';
 import ConfigButton from './ConfigButton.vue';
 import LoginButton from '../login-register/LoginButton.vue';
-import { provide, ref, watchEffect } from 'vue';
+import { computed, provide, ref, watchEffect } from 'vue';
 import LocaleToggle from './LocaleToggle.vue';
 
 
