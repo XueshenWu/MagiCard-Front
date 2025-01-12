@@ -1,10 +1,21 @@
 import { test, expect } from '@playwright/test';
 import URL from '../src/api/api-list';
-import { beforeAll } from 'vitest';
+
+
+
+
+test.describe("Test OTP Login and Password Login", ()=>{
+
+    test.beforeAll(async ({ page }) => {
+        await page.goto(URL.frontend)
+    })
+
+
+})
+
+
 
 test("login", async ({ page }) => {
-
-
 
     await page.route(URL.user.passwordLogin, async route => {
         const postData = JSON.parse(route.request().postData() ?? "{}");
@@ -28,7 +39,6 @@ test("login", async ({ page }) => {
         // route.abort('failed')
 
     })
-
     await page.route(URL.user.userInfo, async route => {
         route.fulfill({
             json: {

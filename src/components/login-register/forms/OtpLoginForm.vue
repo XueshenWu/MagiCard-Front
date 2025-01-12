@@ -146,7 +146,7 @@ onMounted(async () => {
 
 
 const validatePhoneNumberSync = (value) => {
-    const phoneRegex = formState.phoneCode==='+86'? /^1[3-9]\d{9}$/ : /^5\d{8}$/
+    const phoneRegex = formState.phoneCode === '+86' ? /^1[3-9]\d{9}$/ : /^5\d{8}$/
     return phoneRegex.test(value)
 }
 
@@ -210,7 +210,7 @@ const onFinishFailed = () => {
     console.log('failed')
 }
 
-const handleSendOtp = () => {
+const handleSendOtp = async () => {
 
     if (cooldown.value > 0) {
         return;
@@ -221,6 +221,35 @@ const handleSendOtp = () => {
         message.error(t('message.otpLoginForm.phoneNumber.invalid'))
         return
     } else {
+
+        //E2E workaround
+        if (import.meta.env.VITE_TEST_E2E === 'Active') {
+            const body = {
+                phone: formState.phoneNumber,
+                action: "login",
+                geeTest: convertGt({}),
+                phoneCode: formState.phoneCode
+            }
+            const data = await post(URL.user.smsCode, body, false)
+            if (!data.err) {
+                message.success(t('message.otpLoginForm.otp.success'))
+
+            } else {
+                message.error(t('message.otpLoginForm.otp.failure'))
+            }
+
+            cooldown.value = 30;
+            const timer = setInterval(() => {
+                cooldown.value--;
+                if (cooldown.value <= 0) {
+                    clearInterval(timer);
+                    cooldown.value = 0;
+                }
+            }, 1000)
+            return
+        }
+        //End of E2E workaround
+
         captchaObj.value.showCaptcha()
     }
 
@@ -254,8 +283,8 @@ const handleSendOtp = () => {
 
             <FormItem name="otp">
                 <div class="flex items-center justify-between gap-x-2">
-                    <Input v-model:value="formState.otp" :placeholder="t('message.otpLoginForm.otp.placeholder')" size="large"
-                        class="input-style border-radius-custom">
+                    <Input v-model:value="formState.otp" :placeholder="t('message.otpLoginForm.otp.placeholder')"
+                        size="large" class="input-style border-radius-custom">
                     <template #suffix>
                         <a @click="handleSendOtp"
                             :class="`${cooldown > 0 ? cooldownClass : readyClass} text-[.9375vw]`">
@@ -267,7 +296,9 @@ const handleSendOtp = () => {
             </FormItem>
             <FormItem>
                 <div class="flex flex-col gap-y-2">
-                    <a-button class="button-style w-full " type="primary" html-type="submit">{{ t('message.otpLoginForm.button') }}</a-button>
+                    <a-button class="button-style w-full " type="primary" html-type="submit">{{
+                        t('message.otpLoginForm.button')
+                    }}</a-button>
                     <slot />
                 </div>
             </FormItem>

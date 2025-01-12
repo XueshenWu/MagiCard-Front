@@ -1,0 +1,2281 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "标题：card接口文档",
+    "contact": {
+      "name": "RuoYi"
+    },
+    "version": "版本号:3.8.8"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8085",
+      "description": "Inferred Url"
+    }
+  ],
+  "tags": [
+    {
+      "name": "test-controller",
+      "description": "Test Controller"
+    },
+    {
+      "name": "卡片模块",
+      "description": "Card Controller"
+    },
+    {
+      "name": "支付模块",
+      "description": "Payment Controller"
+    },
+    {
+      "name": "消费记录模块",
+      "description": "Consumption Controller"
+    },
+    {
+      "name": "用户模块",
+      "description": "User Controller"
+    },
+    {
+      "name": "邀请模块",
+      "description": "Invitation Controller"
+    }
+  ],
+  "paths": {
+    "/v1/card/create": {
+      "get": {
+        "tags": [
+          "卡片模块"
+        ],
+        "summary": "开新卡片",
+        "operationId": "createCardUsingGET",
+        "parameters": [
+          {
+            "name": "firstName",
+            "in": "query",
+            "description": "firstName",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lastName",
+            "in": "query",
+            "description": "lastName",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/card/delete": {
+      "get": {
+        "tags": [
+          "卡片模块"
+        ],
+        "summary": "删除卡片",
+        "operationId": "deleteCardUsingGET",
+        "parameters": [
+          {
+            "name": "cardId",
+            "in": "query",
+            "description": "cardId",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/card/freeze": {
+      "get": {
+        "tags": [
+          "卡片模块"
+        ],
+        "summary": "冻结卡片",
+        "operationId": "freezeCardUsingGET",
+        "parameters": [
+          {
+            "name": "cardId",
+            "in": "query",
+            "description": "cardId",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/card/info": {
+      "get": {
+        "tags": [
+          "卡片模块"
+        ],
+        "summary": "查询某张卡的详细信息",
+        "operationId": "getCardInfoUsingGET",
+        "parameters": [
+          {
+            "name": "cardId",
+            "in": "query",
+            "description": "cardId",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/card/list": {
+      "get": {
+        "tags": [
+          "卡片模块"
+        ],
+        "summary": "查询某个用户的卡列表",
+        "operationId": "getCardIdListUsingGET",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CardList"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/card/recharge": {
+      "get": {
+        "tags": [
+          "卡片模块"
+        ],
+        "summary": "充值卡片",
+        "operationId": "rechargeCardUsingGET",
+        "parameters": [
+          {
+            "name": "cardId",
+            "in": "query",
+            "description": "cardId",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "amount",
+            "in": "query",
+            "description": "amount",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/card/rechargeFee": {
+      "get": {
+        "tags": [
+          "卡片模块"
+        ],
+        "summary": "获取手续费",
+        "operationId": "rechargeFeeUsingGET",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/card/sensitive": {
+      "get": {
+        "tags": [
+          "卡片模块"
+        ],
+        "summary": "获取卡号,CVV,有效期",
+        "operationId": "getSensitiveDataUsingGET",
+        "parameters": [
+          {
+            "name": "cardId",
+            "in": "query",
+            "description": "cardId",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/card/unfreeze": {
+      "get": {
+        "tags": [
+          "卡片模块"
+        ],
+        "summary": "解冻卡片",
+        "operationId": "unfreezeCardUsingGET",
+        "parameters": [
+          {
+            "name": "cardId",
+            "in": "query",
+            "description": "cardId",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/card/withdrew": {
+      "get": {
+        "tags": [
+          "卡片模块"
+        ],
+        "summary": "提现请求",
+        "operationId": "withdrewCardUsingGET",
+        "parameters": [
+          {
+            "name": "cardId",
+            "in": "query",
+            "description": "cardId",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "amount",
+            "in": "query",
+            "description": "amount",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/transaction/all": {
+      "get": {
+        "tags": [
+          "消费记录模块"
+        ],
+        "summary": "查询用户消费列表",
+        "operationId": "getAllTransactionsListUsingGET",
+        "parameters": [
+          {
+            "name": "pageNum",
+            "in": "query",
+            "description": "pageNum",
+            "required": false,
+            "style": "form",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "pageSize",
+            "required": false,
+            "style": "form",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllTransactionResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/transaction/card": {
+      "get": {
+        "tags": [
+          "消费记录模块"
+        ],
+        "summary": "查询某张卡所有交易(分页查询)",
+        "operationId": "getTransactionsByCardIdUsingGET",
+        "parameters": [
+          {
+            "name": "cardId",
+            "in": "query",
+            "description": "cardId",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "limit",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "page",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/SingleCardTransactionsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/transaction/summary": {
+      "get": {
+        "tags": [
+          "消费记录模块"
+        ],
+        "summary": "查询用户消费统计参数",
+        "operationId": "getTransactionsSummaryUsingGET",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/invitation/List": {
+      "post": {
+        "tags": [
+          "邀请模块"
+        ],
+        "summary": "邀请用户列表",
+        "operationId": "getInviteListUsingPOST",
+        "parameters": [
+          {
+            "name": "invitationType",
+            "in": "query",
+            "description": "邀请类型（1:仅注册2:已开户,未充值3.已支付）",
+            "required": true,
+            "style": "form",
+            "allowReserved": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "description": "筛选当前月份（格式：YYYY-MM，例如 2024-12）",
+            "required": true,
+            "style": "form",
+            "allowReserved": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageNum",
+            "in": "query",
+            "description": "当前页码，默认为 1",
+            "required": true
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "每页显示记录数，默认为 10",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/TableDataInfo"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/invitation/reward/request": {
+      "get": {
+        "tags": [
+          "邀请模块"
+        ],
+        "summary": "发起邀请奖励提现",
+        "operationId": "invitationRewardRequestUsingGET",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/invitation/summary": {
+      "get": {
+        "tags": [
+          "邀请模块"
+        ],
+        "summary": "邀请总结",
+        "operationId": "invitationSummaryUsingGET",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/payment/openCardPayment": {
+      "post": {
+        "tags": [
+          "支付模块"
+        ],
+        "summary": "开卡支付(创建订单)",
+        "operationId": "openCardPaymentUsingPOST",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OpenCardPaymentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/payment/rechargePayment": {
+      "post": {
+        "tags": [
+          "支付模块"
+        ],
+        "summary": "充值支付(创建订单)",
+        "operationId": "rechargePaymentUsingPOST",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RechargePaymentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
+    "/test/user/list": {
+      "get": {
+        "tags": [
+          "test-controller"
+        ],
+        "summary": "获取用户列表",
+        "operationId": "userListUsingGET",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/R«List«UserEntity»»"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
+    "/test/user/save": {
+      "post": {
+        "tags": [
+          "test-controller"
+        ],
+        "summary": "新增用户",
+        "operationId": "saveUsingPOST",
+        "parameters": [
+          {
+            "name": "mobile",
+            "in": "query",
+            "description": "用户手机",
+            "required": false,
+            "style": "form",
+            "allowReserved": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "用户密码",
+            "required": false,
+            "style": "form",
+            "allowReserved": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "description": "用户id",
+            "required": false,
+            "style": "form",
+            "allowReserved": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "username",
+            "in": "query",
+            "description": "用户名称",
+            "required": false,
+            "style": "form",
+            "allowReserved": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/R«string»"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
+    "/test/user/update": {
+      "put": {
+        "tags": [
+          "test-controller"
+        ],
+        "summary": "更新用户",
+        "operationId": "updateUsingPUT",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserEntity"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/R«string»"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
+    "/test/user/{userId}": {
+      "get": {
+        "tags": [
+          "test-controller"
+        ],
+        "summary": "获取用户详细",
+        "operationId": "getUserUsingGET",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "用户ID",
+            "required": true,
+            "style": "simple",
+            "allowReserved": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/R«UserEntity»"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "test-controller"
+        ],
+        "summary": "删除用户信息",
+        "operationId": "deleteUsingDELETE",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "用户ID",
+            "required": true,
+            "style": "simple",
+            "allowReserved": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/R«string»"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/user/checkCurrentNumber": {
+      "post": {
+        "tags": [
+          "用户模块"
+        ],
+        "summary": "修改手机号step1",
+        "operationId": "checkCurrentNumberUsingPOST",
+        "parameters": [
+          {
+            "name": "phoneNumber",
+            "in": "query",
+            "description": "phoneNumber",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "smsCode",
+            "in": "query",
+            "description": "smsCode",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/user/modifyEmail": {
+      "post": {
+        "tags": [
+          "用户模块"
+        ],
+        "summary": "修改邮箱",
+        "operationId": "modifyEmailUsingPOST_1",
+        "parameters": [
+          {
+            "name": "newEmailAddress",
+            "in": "query",
+            "description": "newEmailAddress",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/user/modifyPhoneNumber": {
+      "post": {
+        "tags": [
+          "用户模块"
+        ],
+        "summary": "修改手机号step2",
+        "operationId": "modifyPhoneNumberUsingPOST",
+        "parameters": [
+          {
+            "name": "newPhoneNumber",
+            "in": "query",
+            "description": "newPhoneNumber",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "smsCode",
+            "in": "query",
+            "description": "smsCode",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/user/passwordLogin": {
+      "post": {
+        "tags": [
+          "用户模块"
+        ],
+        "summary": "密码登录-极验",
+        "operationId": "passwordLoginUsingPOST",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordLoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/user/register": {
+      "post": {
+        "tags": [
+          "用户模块"
+        ],
+        "summary": "注册账户",
+        "operationId": "registerAccountUsingPOST",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SmsRegisterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/user/requestStatement": {
+      "post": {
+        "tags": [
+          "用户模块"
+        ],
+        "summary": "申请月结单",
+        "operationId": "modifyEmailUsingPOST",
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "description": "year",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "description": "month",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/user/resetLoginPassword": {
+      "post": {
+        "tags": [
+          "用户模块"
+        ],
+        "summary": "修改/设置登录密码",
+        "operationId": "resetLoginPasswordUsingPOST",
+        "parameters": [
+          {
+            "name": "newPassword",
+            "in": "query",
+            "description": "newPassword",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "smsCode",
+            "in": "query",
+            "description": "smsCode",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/user/resetPaymentPassword": {
+      "post": {
+        "tags": [
+          "用户模块"
+        ],
+        "summary": "修改/设置支付密码",
+        "operationId": "resetPaymentPasswordUsingPOST",
+        "parameters": [
+          {
+            "name": "newPassword",
+            "in": "query",
+            "description": "newPassword",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "smsCode",
+            "in": "query",
+            "description": "smsCode",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/user/smsCode": {
+      "post": {
+        "tags": [
+          "用户模块"
+        ],
+        "summary": "获取短信验证码sms-极验",
+        "operationId": "getSmsCodeUsingPOST",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SmsCodeDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/user/smsLogin": {
+      "post": {
+        "tags": [
+          "用户模块"
+        ],
+        "summary": "手机验证码登录",
+        "operationId": "smsLoginUsingPOST",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SmsLoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/user/verifyPassword": {
+      "post": {
+        "tags": [
+          "用户模块"
+        ],
+        "summary": "验证支付密码",
+        "operationId": "verifyPasswordUsingPOST",
+        "parameters": [
+          {
+            "name": "paymentPassword",
+            "in": "query",
+            "description": "paymentPassword",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Authorization": [
+              "global"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AllTransactionResponse": {
+        "title": "AllTransactionResponse",
+        "type": "object",
+        "properties": {
+          "currentPage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "records": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TransactionRecord"
+            }
+          },
+          "totalRecords": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "CardList": {
+        "title": "CardList",
+        "type": "object",
+        "properties": {
+          "cardId": {
+            "type": "string",
+            "refType": null
+          },
+          "qbitCardNo": {
+            "type": "string",
+            "refType": null
+          }
+        }
+      },
+      "GeeTest": {
+        "title": "GeeTest",
+        "type": "object",
+        "properties": {
+          "captchaOutput": {
+            "type": "string",
+            "refType": null
+          },
+          "genTime": {
+            "type": "string",
+            "refType": null
+          },
+          "lotNumber": {
+            "type": "string",
+            "refType": null
+          },
+          "passToken": {
+            "type": "string",
+            "refType": null
+          }
+        }
+      },
+      "OpenCardPaymentDto": {
+        "title": "OpenCardPaymentDto",
+        "type": "object",
+        "properties": {
+          "cardType": {
+            "type": "string",
+            "refType": null
+          },
+          "yearTerm": {
+            "type": "string",
+            "refType": null
+          }
+        }
+      },
+      "PasswordLoginDto": {
+        "title": "PasswordLoginDto",
+        "type": "object",
+        "properties": {
+          "geeTest": {
+            "$ref": "#/components/schemas/GeeTest",
+            "refType": "GeeTest"
+          },
+          "password": {
+            "type": "string",
+            "refType": null
+          },
+          "phone": {
+            "type": "string",
+            "refType": null
+          }
+        }
+      },
+      "RechargePaymentDto": {
+        "title": "RechargePaymentDto",
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "format": "double",
+            "refType": null
+          },
+          "cardId": {
+            "type": "string",
+            "refType": null
+          }
+        }
+      },
+      "R«List«UserEntity»»": {
+        "title": "R«List«UserEntity»»",
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserEntity"
+            }
+          },
+          "msg": {
+            "type": "string"
+          }
+        }
+      },
+      "R«UserEntity»": {
+        "title": "R«UserEntity»",
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "data": {
+            "$ref": "#/components/schemas/UserEntity"
+          },
+          "msg": {
+            "type": "string"
+          }
+        }
+      },
+      "R«string»": {
+        "title": "R«string»",
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "data": {
+            "type": "string"
+          },
+          "msg": {
+            "type": "string"
+          }
+        }
+      },
+      "SingleCardTransactionsResponse": {
+        "title": "SingleCardTransactionsResponse",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Transaction"
+            }
+          },
+          "pageTotal": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "SmsCodeDto": {
+        "title": "SmsCodeDto",
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "refType": null
+          },
+          "geeTest": {
+            "$ref": "#/components/schemas/GeeTest",
+            "refType": "GeeTest"
+          },
+          "phone": {
+            "type": "string",
+            "refType": null
+          }
+        }
+      },
+      "SmsLoginDto": {
+        "title": "SmsLoginDto",
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "refType": null
+          },
+          "phone": {
+            "type": "string",
+            "refType": null
+          }
+        }
+      },
+      "SmsRegisterDto": {
+        "title": "SmsRegisterDto",
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "refType": null
+          },
+          "inviteCode": {
+            "type": "string",
+            "refType": null
+          },
+          "phone": {
+            "type": "string",
+            "refType": null
+          }
+        }
+      },
+      "TableDataInfo": {
+        "title": "TableDataInfo",
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "msg": {
+            "type": "string"
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "total": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "Transaction": {
+        "title": "Transaction",
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "format": "double",
+            "refType": null
+          },
+          "currency": {
+            "type": "string",
+            "refType": null
+          },
+          "detail": {
+            "type": "string",
+            "refType": null
+          },
+          "fee": {
+            "type": "number",
+            "format": "double",
+            "refType": null
+          },
+          "status": {
+            "type": "string",
+            "refType": null
+          },
+          "transactionTime": {
+            "type": "string",
+            "refType": null
+          },
+          "type": {
+            "type": "string",
+            "refType": null
+          }
+        }
+      },
+      "TransactionRecord": {
+        "title": "TransactionRecord",
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "format": "float",
+            "refType": null
+          },
+          "cardLastFourDigits": {
+            "type": "string",
+            "refType": null
+          },
+          "fee": {
+            "type": "number",
+            "format": "float",
+            "refType": null
+          },
+          "transactionDetail": {
+            "type": "string",
+            "refType": null
+          },
+          "transactionTime": {
+            "type": "string",
+            "format": "date-time",
+            "refType": null
+          },
+          "transactionType": {
+            "type": "string",
+            "refType": null
+          }
+        }
+      },
+      "UserEntity": {
+        "title": "UserEntity",
+        "type": "object",
+        "properties": {
+          "mobile": {
+            "type": "string",
+            "description": "用户手机",
+            "refType": null
+          },
+          "password": {
+            "type": "string",
+            "description": "用户密码",
+            "refType": null
+          },
+          "userId": {
+            "type": "integer",
+            "description": "用户ID",
+            "format": "int32",
+            "refType": null
+          },
+          "username": {
+            "type": "string",
+            "description": "用户名称",
+            "refType": null
+          }
+        },
+        "description": "用户实体"
+      }
+    },
+    "securitySchemes": {
+      "Authorization": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  }
+}

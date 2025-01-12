@@ -10,6 +10,9 @@ const { t, locale } = useI18n({ useScope: 'global' })
 
 onMounted(() => {
     locale.value = localStorage.getItem('locale') || 'cn'
+
+  
+
 })
 
 

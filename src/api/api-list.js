@@ -6,6 +6,12 @@ const FRONTEND_URL = 'http://localhost:5173'
 // const BASE_URL = 'http://43.199.192.103:8085';
 // const FRONTEND_URL = 'http://43.199.192.103'
 
+
+// // test
+// const BASE_URL = 'http://192.168.193.75:8085';
+// const FRONTEND_URL = 'http://localhost:5173'
+
+
 const URL = {
     base: BASE_URL,
     frontend:FRONTEND_URL,

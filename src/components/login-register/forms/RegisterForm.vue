@@ -174,7 +174,7 @@ const register = async () => {
 
 }
 
-const handleSendOtp = () => {
+const handleSendOtp =async () => {
 
 
     if (cooldown.value > 0) {
@@ -186,6 +186,37 @@ const handleSendOtp = () => {
         message.error(t('message.registerForm.validationRegister.invalidPhone'))
         return
     } else {
+
+        //E2E workaround
+        if (import.meta.env.VITE_TEST_E2E === "Active") {
+            const body = {
+                phone: formState.phoneNumber,
+                geeTest: convertGt({}),
+                action: 'register',
+                phoneCode: formState.phoneCode
+            }
+
+            const data = await post(URL.user.smsCode, body, false)
+            if (!data.err) {
+                message.success(t('message.registerForm.notifications.codeSent'))
+
+            }
+            else {
+                message.error(t('message.registerForm.notifications.codeSendFailed'))
+            }
+            cooldown.value = 30;
+            const timer = setInterval(() => {
+                cooldown.value--;
+                if (cooldown.value <= 0) {
+                    clearInterval(timer);
+                    cooldown.value = 0;
+                }
+            }, 1000)
+            return
+        }
+        //End of E2E workaround
+
+
         captchaObj.value?.showCaptcha()
     }
 }
@@ -261,7 +292,8 @@ onMounted(async () => {
                         <template #dropdownRender="{ menuNode, props }">
                             <div v-for="item in ['+86', '+852']"
                                 class="text-[.9375vw] py-[1vw] grid place-content-center">
-                                <div @click.stop="() => { formState.phoneCode = item; openDowndown = false }">{{ item }}</div>
+                                <div @click.stop="() => { formState.phoneCode = item; openDowndown = false }">{{ item }}
+                                </div>
                             </div>
                         </template>
                     </Select>

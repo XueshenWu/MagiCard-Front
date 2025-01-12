@@ -43,11 +43,11 @@ const login = async (captchaValidateResult, formState) => {
         geeTest: convertGt(captchaValidateResult)
     }
     const res = await post(URL.user.passwordLogin, body, false)
-   console.log('loginRes',res)
+    console.log('loginRes', res)
     if (!res.err) {
-       
+
         localStorage.setItem('token', res.data.token);
-       
+
         const userCard = res.data.userCard;
         const clientToken = getClientToken(userCard.userId);
 
@@ -66,10 +66,10 @@ const login = async (captchaValidateResult, formState) => {
         if (!res.err) {
             const userInfo = res_userInfo.data;
 
-     
 
 
-            if (userInfo.loginPassword===null) {
+
+            if (userInfo.loginPassword === null) {
 
                 yetAnotherStore.shouldShowResetPassword = true;
             }
@@ -115,7 +115,7 @@ onMounted(async () => {
             gtPromise.value.reject(null)
         })
 
-        
+
     })
 })
 
@@ -169,26 +169,27 @@ const onFinish = async () => {
 
     const _formState = await formRef.value.validate()
 
-
-    if(import.meta.env.VITE_E2E){
+    // E2E workaround
+    if (import.meta.env.VITE_TEST_E2E === 'Active') {
         await login({}, _formState)
         return
     }
+    // End of E2E workaround
 
     let gtResult = null
 
-    try{
+    try {
         gtResult = await new Promise(async (resolve, reject) => {
-        gtPromise.value = { resolve, reject }
-        await nextTick()
-        captchaObj.value.showCaptcha()
+            gtPromise.value = { resolve, reject }
+            await nextTick()
+            captchaObj.value.showCaptcha()
 
-    })
-    }catch(err){
+        })
+    } catch (err) {
         console.log('captcha failed')
-    
+
     }
-    
+
 
     if (gtResult === null) {
         return
@@ -211,17 +212,18 @@ const onFinishFailed = () => {
 </script>
 
 <template>
-    <Form class="text-lg w-full" ref="formRef" @finish="onFinish" @finishFailed="onFinishFailed"
-        :model="formState" :rules="rules" autocomplete="on">
+    <Form class="text-lg w-full" ref="formRef" @finish="onFinish" @finishFailed="onFinishFailed" :model="formState"
+        :rules="rules" autocomplete="on">
         <FormItem name="phoneNumber">
-            <PhoneNumberInput  v-model:phoneNumber="formState.phoneNumber" />
+            <PhoneNumberInput v-model:phoneNumber="formState.phoneNumber" />
         </FormItem>
         <FormItem name="password">
             <PasswordInput v-model:password="formState.password" />
         </FormItem>
         <FormItem>
             <div class="flex flex-col gap-y-2">
-                <a-button class="w-full button-style" size="large" type="primary" html-type="submit">{{ t('message.passwordLoginForm.button') }}</a-button>
+                <a-button class="w-full button-style" size="large" type="primary" html-type="submit">{{
+                    t('message.passwordLoginForm.button') }}</a-button>
                 <slot />
             </div>
         </FormItem>
@@ -241,6 +243,7 @@ const onFinishFailed = () => {
     padding: .625vw;
     border-radius: 0.625vw;
 }
+
 .input-style {
     padding: .989583vw 2.03125vw;
     height: 3.39vw;
@@ -248,9 +251,11 @@ const onFinishFailed = () => {
     font-size: .9375vw;
 
 }
+
 ::v-deep(.ant-form-item) {
     margin-bottom: 1.875vw !important;
 }
+
 .border-radius-custom {
     border-radius: .625vw;
 }
