@@ -24,11 +24,6 @@ const current = defineModel('current')
 
 const props = defineProps(['outOrderId', "paymentType"])
 
-const handleCopy = () => {
-    toClipboard(props.outOrderId).then(() => {
-        message.success('订单号已复制到您的剪贴板')
-    })
-}
 
 </script>
 

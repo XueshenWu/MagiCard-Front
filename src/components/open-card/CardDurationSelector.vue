@@ -2,12 +2,14 @@
 import { EditOutlined } from '@ant-design/icons-vue';
 import { inject, ref, watch } from 'vue';
 import { Input, message } from 'ant-design-vue';
+import { useI18n } from 'vue-i18n';
 import post from '../../api/post';
 import URL from '../../api/api-list';
 
 const circleImg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAD0AAAA8CAMAAADi4EJ+AAAAbFBMVEUAAAAgt1kgt1ggtVggt1ogr1Agt1ggtlggtVkgt1ggt1kgt1ggtlgguFkgt1kgt1kguFYgr2Agtlkgr1ggt1ggtlkgtlYgt1n///+Q26zx+/RKxHjV8eAuu2Nv0ZTj9uqd37eC16I8wG1YyYI+hkolAAAAF3RSTlMA3yBA7xCfoIBgv7+Qr0/vMBDPIIBwcDNAAXoAAAFdSURBVEjH3dfLcoMwDAXQgA3BYAhN2sqQhjz6///YRQaUGWlubS9zd1mckeJBWOzeM9XJGDNWGdD41tIztvUmxZr6KTm2NrG2JS2Fy7Lsy/+wJ5QG2vJIOMcS4AJA0T3EmGOMOcaYV4reU2x6iR3F5yujb86hSusbPzUlieDi6aXv8/WhFi8i8BRCuGnFXSQOy/rLqI1jPNGa+kXbVEwHxmM05pw2PaRjcptu0jE12qH9Lhgrx9bRmiWEnwvAnF7RU2AOMbWKfszMJdZ1T1vOzCXW9Z4EV7F+ag1pnDEecUcKx5gG9d3AHGIa1SlhfkO40CeUuYbVCR1IcIxpeNEfVnKBReNgys7X+U4EG+fiJHMBM1um7Ay4NP/zzEv4O0Er21Of0zf3nnz7528emGOMOcaY420P5RNiDy0u38Vs2a7QrYvd0MV9bntRF2XwnV1l503Ox8lojCmr3RvmDwiDwPS6BT/YAAAAAElFTkSuQmCC'
 
 const currentPlan = ref(0);
+const { t } = useI18n();
 
 const updateParentInviteCode = inject("updateParentInviteCode");
 
@@ -70,13 +72,13 @@ const handleClick = (idx) => {
 
         <div class="flex flex-col items-start justify-start w-[45%] gap-y-4 px-12">
             <div class="text-2xl font-bold">
-                选择卡片年限
+                {{ t('message.cardDurationSelection.title') }}
             </div>
 
             <div v-for="(item, idx) in rate" :key="idx" class="w-full">
                 <div @click="() => handleClick(idx)"
                     :class="`cursor-pointer tracking-wide text-2xl flex border w-full rounded-lg px-12 h-24 justify-between duration-75 items-center ${rate[currentPlan].duration === item.duration ? 'border-blue-500' : 'border-gray-100'}`">
-                    <span class="first-letter:font-semibold">{{ item.duration }}年</span>
+                    <span class="first-letter:font-semibold">{{ item.duration }}{{ t('message.cardDurationSelection.year') }}</span>
                     <span class="font-semibold ">${{ item.price }}</span>
                 </div>
             </div>
@@ -84,7 +86,7 @@ const handleClick = (idx) => {
                 class="flex mt-6 flex-row items-center justify-between rounded-xl border w-full border-[rgb(238,238,238)] px-6 py-6">
                 <template v-if="!editMode">
                     <div class="flex flex-row items-center gap-x-2  text-[#11a560]">
-                        <img class="w-[36px] h-[36px]" :src="circleImg" /> 已使用邀请码
+                        <img class="w-[36px] h-[36px]" :src="circleImg" /> {{ t('message.cardDurationSelection.inviteCode.used') }}
                     </div>
                     <div class="font-bold gap-x-2 flex flex-row items-center">
                         {{ parentInviteCode }}
@@ -93,8 +95,9 @@ const handleClick = (idx) => {
                 </template>
                 <template v-else>
                     <div class="flex flex-row items-center gap-x-10 w-full">
-                        <Input size="large" v-model:value="newParentInviteCode" class="w-full"/>
-                        <EditOutlined @click="handleExitEditMode" class="text-blue-500 cursor-pointer" />
+                        <Input size="large" v-model:value="newParentInviteCode" class="w-full flex-grow"/>
+                        <!-- <EditOutlined @click="handleExitEditMode" class="text-blue-500 cursor-pointer" /> -->
+                    <a  @click="handleExitEditMode" class="cursor-pointer inline text-sky-500 min-w-8 ">{{ t('message.cardDurationSelection.inviteCode.confirm') }}</a>
                     </div>
                     
                 </template>
@@ -116,19 +119,19 @@ const handleClick = (idx) => {
                     </div>
 
                     <div v-if="promo" class="text-lg font-light">
-                        会员费 <span class=" font-semibold">${{ rate[currentPlan].price.toFixed(2) }}</span> - 邀请奖励 <span
+                        {{ t('message.cardDurationSelection.pricing.membershipFee') }} <span class=" font-semibold">${{ rate[currentPlan].price.toFixed(2) }}</span> - {{ t('message.cardDurationSelection.pricing.inviteReward') }} <span
                             class=" font-semibold">$1.00</span>
                     </div>
                     <div class="flex flex-col items-start gap-y-2">
                         <div class="text-xl font-semibold">
-                            须知
+                            {{ t('message.cardDurationSelection.pricing.notice.title') }}
                         </div>
                         <div class="text-[#585858] tracking-wider space-y-1">
                             <div class="relative pl-4 before:content-['•'] before:absolute before:left-0 before:top-0">
-                                您所支付的费用为服务费，支付后<span class="text-[#f28d00]">不会转入账户余额</span>
+                                {{ t('message.cardDurationSelection.pricing.notice.serviceFee.A') }}<span class="text-[#f28d00]">  {{ t('message.cardDurationSelection.pricing.notice.serviceFee.B') }}</span>
                             </div>
                             <div class="relative pl-4 before:content-['•'] before:absolute before:left-0 before:top-0">
-                                因余额不足消费失败累计达5次或一小时内失败3次后，卡片将被冻结，并需支付1美元罚金才能解冻
+                                {{ t('message.cardDurationSelection.pricing.notice.warning') }}
                             </div>
                         </div>
                     </div>

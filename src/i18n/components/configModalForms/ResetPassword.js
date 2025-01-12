@@ -26,7 +26,9 @@ export default {
                 resetSuccess: '密码重置成功',
                 resetFailed: '密码重置失败',
                 codeSendSuccess: '验证码发送成功',
-                codeSendFailed: '验证码发送失败'
+                codeSendFailed: '验证码发送失败',
+                codeSent: "验证码发送成功",
+                registerSuccess: "注册成功",
             }
         }
     },
@@ -57,7 +59,9 @@ export default {
                 resetSuccess: 'Password reset successful',
                 resetFailed: 'Password reset failed',
                 codeSendSuccess: 'Verification code sent successfully',
-                codeSendFailed: 'Failed to send verification code'
+                codeSendFailed: 'Failed to send verification code',
+                codeSent: "Verification code sent successfully",
+                registerSuccess: "Registration successful",
             }
         }
     }

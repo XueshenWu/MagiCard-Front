@@ -3,7 +3,7 @@ import { ref, reactive, onMounted, inject } from 'vue'
 import { useRouter } from 'vue-router'
 import PhoneNumberInput from '../../PhoneNumberInput.vue'
 import Agreement from '../Agreement.vue'
-import { Form, FormItem, Input, Select, SelectOption } from 'ant-design-vue'
+import { Form, FormItem, Input, Select, SelectOption, Spin } from 'ant-design-vue'
 import { message } from '../../Message.js'
 import { convertGt } from '../../../utils/converGt.js'
 import post from '../../../api/post.js'
@@ -36,7 +36,7 @@ const captchaObj = ref(null)
 const route = useRoute()
 
 
-
+const reqPending = ref(false)
 
 const closeModal = inject('closeLoginRegisterModal');
 
@@ -50,7 +50,7 @@ const formState = reactive({
 const openDowndown = ref(false)
 
 const validatePhoneNumberSync = (value) => {
-    const phoneRegex = formState.phoneCode==='+86'? /^1[3-9]\d{9}$/ : /^5\d{8}$/
+    const phoneRegex = formState.phoneCode === '+86' ? /^1[3-9]\d{9}$/ : /^5\d{8}$/
     return phoneRegex.test(value)
 }
 
@@ -115,14 +115,16 @@ const onFinishFailed = () => {
 const register = async () => {
     // console.log(`formState ${JSON.stringify(formState)}`)
 
-
+    if (reqPending.value) {
+        return
+    }
     const body = {
         phone: formState.phoneNumber,
         code: formState.otp,
         inviteCode: route.query.refId ?? "",
         phoneCode: formState.phoneCode
     }
-
+    reqPending.value = true
 
     const res = await post(URL.user.register, body, false)
     cooldown.value = 30;
@@ -133,7 +135,8 @@ const register = async () => {
             cooldown.value = 0;
         }
     }, 1000)
-    if (!res.err) {
+    if (!res.err && res.data.token) {
+
         router.replace('/')
 
         localStorage.setItem('token', res.data.token);
@@ -146,7 +149,7 @@ const register = async () => {
         Crisp.load();
 
         //    window.location.reload();
-        message.registerForm.success(t('message.notifications.registerSuccess'))
+        message.success(t('message.registerForm.notifications.registerSuccess'))
 
 
         yetAnotherStore.isLoggedIn = true;
@@ -162,6 +165,7 @@ const register = async () => {
 
 
     }
+    reqPending.value = false
 
     formRef.value.resetFields()
     turnOnLight()
@@ -248,14 +252,16 @@ onMounted(async () => {
             <div class=" w-full space-y-[1vw]">
                 <div class="flex flex-row items-center justify-between gap-x-[.86vw] w-full">
 
-                    <Select @click="openDowndown=!openDowndown" :open="openDowndown" size="large" v-model:value=formState.phoneCode
+                    <Select @blur="openDowndown = false" @click="openDowndown = !openDowndown" :open="openDowndown"
+                        size="large" v-model:value=formState.phoneCode
                         :getPopupContainer="triggerNode => triggerNode.parentNode">
                         <SelectOption value="+86">+86</SelectOption>
                         <SelectOption value="+852">+852</SelectOption>
 
                         <template #dropdownRender="{ menuNode, props }">
-                            <div v-for="item in ['+86','+852']" class="text-[.9375vw] py-[1vw] grid place-content-center">
-                                <div @click.stop="()=>{formState.phoneCode = item; openDowndown=false}">{{ item }}</div>
+                            <div v-for="item in ['+86', '+852']"
+                                class="text-[.9375vw] py-[1vw] grid place-content-center">
+                                <div @click.stop="() => { formState.phoneCode = item; openDowndown = false }">{{ item }}</div>
                             </div>
                         </template>
                     </Select>
@@ -282,10 +288,12 @@ onMounted(async () => {
                 </FormItem>
 
                 <FormItem class="w-full">
-                    <button htmlType="submit"
-                        class="button-style w-full text-xl bg-blue-500 hover:bg-blue-400 duration-100 text-white rounded-xl py-3">
-                        {{ t('message.registerForm.submit') }}
-                    </button>
+                    <Spin :spinning="reqPending" wrapperClassName="w-full">
+                        <button htmlType="submit"
+                            class="button-style w-full text-xl bg-blue-500 hover:bg-blue-400 duration-100 text-white rounded-xl py-3">
+                            {{ t('message.registerForm.submit') }}
+                        </button>
+                    </Spin>
                 </FormItem>
 
                 <FormItem name="checkedAgreement" class="w-full">

@@ -45,7 +45,7 @@ const handleClick = async () => {
 
             openResetCheckoutPasswordModal.value = true;
             await nextTick();
-            message.error(t('message.withdrawal.messages.noPaymentPassword'));
+            message.info(t('message.withdrawal.messages.noPaymentPassword'));
             return;
         }
     }

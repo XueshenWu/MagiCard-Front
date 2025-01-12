@@ -61,7 +61,7 @@ onMounted(() => {
             } else {
                 const data = res.data;
                 if (data.length === 0) {
-                    message.error('请先开通会员')
+                    message.info('请先开通会员')
                     router.replace('openCard')
                 }
             }

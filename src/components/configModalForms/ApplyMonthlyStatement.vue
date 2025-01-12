@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, watchEffect,inject } from 'vue';
+import { ref, watch, watchEffect,inject, onBeforeMount } from 'vue';
 import GeneralModal from '../Modal/GeneralModal.vue';
 import { Form, FormItem, Select } from 'ant-design-vue';
 import CardNumber from '../CardNumber.vue';
@@ -17,14 +17,31 @@ const cardOptions = ref([])
 
 const userInfo = ref(null);
 
-watchEffect(async () => {
+// watchEffect(async () => {
+//     const res = await post(URL.user.userInfo, {});
+//     if (!res.err) {
+//         userInfo.value = res.data;
+//         if(!res.data.email){
+//             message.error(t('message.monthlyStatement.error.emailRequired'));
+//             open.value = false;
+//             switchSelected('2');
+//         }
+//     } else {
+//         userInfo.value = null;
+//     }
+// })
+
+const open = defineModel('openApplyMonthlyStatementModal', { type: Boolean });
+
+
+onBeforeMount(async ()=>{
     const res = await post(URL.user.userInfo, {});
     if (!res.err) {
         userInfo.value = res.data;
         if(!res.data.email){
-            message.error(t('message.monthlyStatement.error.emailRequired'));
+            message.info(t('message.monthlyStatement.error.emailRequired'));
             open.value = false;
-            switchSelected('');
+            switchSelected('2');
         }
     } else {
         userInfo.value = null;
@@ -48,7 +65,6 @@ watchEffect(async ()=>{
 //     currentCard.value = cardOptions.value.find(card=>card.cardNumber === value);
 // }
 
-const open = defineModel('openApplyMonthlyStatementModal', { type: Boolean });
 
 const month = ref(1);
 const year = ref(2023);

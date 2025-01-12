@@ -1,6 +1,6 @@
 <script setup>
 
-import { ref, provide, nextTick, watch, onMounted, inject } from 'vue';
+import { ref, provide, nextTick, watch, onMounted, inject, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import CardDurationSelector from '../components/open-card/CardDurationSelector.vue';
 import ServiceSelector from '../components/open-card/ServiceSelector.vue';
@@ -39,11 +39,11 @@ const updateParentInviteCode = async () => {
 
 provide("updateParentInviteCode", updateParentInviteCode)
 
-const debug = true
+const debug = false
 
 onMounted(async () => {
 
-    if(debug){
+    if (debug) {
         firstTimeAndReferred.value = true
         parentInviteCode.value = 'TESTAA'
         return
@@ -63,7 +63,7 @@ onMounted(async () => {
     if (referred_res.err) {
         return
     }
-    firstTimeAndReferred.value = referred_res.data !== null
+    firstTimeAndReferred.value = !!referred_res.data
     parentInviteCode.value = referred_res.data
 
 })
@@ -127,14 +127,14 @@ const pollPaymentStatus = () => {
             timeoutJob()
         }))
             .then((data) => {
-                message.success("支付成功, 请填写姓名信息")
+                message.success(t('message.cardOpenSteps.messages.paymentSuccess'))
 
                 current.value = 3
 
             })
             .catch((error) => {
                 console.log('Error:', error)
-                message.error('支付失败')
+                message.error(t('message.cardOpenSteps.messages.paymentFailed'))
                 current.value = 1
 
             })
@@ -153,11 +153,11 @@ const finishOpenCard = async () => {
         return;
     }
     if (!validateName(firstName.value) || !validateName(lastName.value)) {
-        message.error('请填写姓名信息')
+        message.error(t('message.cardOpenSteps.messages.invalidName'))
         return;
     }
     if (!paymentInfo.value.outOrderId) {
-        message.error('订单号不能为空')
+        message.error(t('message.cardOpenSteps.messages.emptyOrderId'))
         return;
     }
     reqPending.value = true;
@@ -170,10 +170,10 @@ const finishOpenCard = async () => {
     })
     reqPending.value = false;
     if (!res.err) {
-        message.success('开卡成功')
+        message.success(t('message.cardOpenSteps.messages.openSuccess'))
         current.value++;
     } else {
-        message.error('开卡失败')
+        message.error(t('message.cardOpenSteps.messages.openFailed'))
     }
 }
 
@@ -196,30 +196,29 @@ const prev = () => {
     }
 };
 
-const steps = [
+const steps = ref([
     {
-        title: '选择服务年限',
-
+        title: ('message.cardOpenSteps.steps.duration'),
     },
     {
-        title: '选择你需要的服务场景',
-
+        title: ('message.cardOpenSteps.steps.service'),
     },
     {
-        title: '支付费用',
-
+        title: ('message.cardOpenSteps.steps.payment'),
     },
     {
-        title: '填写姓名',
+        title: ('message.cardOpenSteps.steps.name'),
     },
     {
-        title: '开卡结果'
+        title: ('message.cardOpenSteps.steps.result')
     }
-];
-const items = steps.map(item => ({
-    key: item.title,
-    title: item.title,
-}));
+]);
+const items = computed(() => {
+    return steps.value.map(item => ({
+        key: item.title,
+        title: t(item.title),
+    }));
+})
 
 const paymentInfo = ref(null)
 
@@ -241,7 +240,7 @@ const handlePurchaseOnline = async () => {
 
 
     } else {
-        message.error('支付失败')
+        message.error(t('message.cardOpenSteps.messages.paymentFailed'))
     }
 }
 
@@ -254,7 +253,8 @@ const handlePurchaseOnline = async () => {
 
 
         <div class="steps-content h-[440px] w-full">
-            <CardDurationSelector :parentInviteCode="parentInviteCode" :promo="firstTimeAndReferred" v-if="current === 0" />
+            <CardDurationSelector :parentInviteCode="parentInviteCode" :promo="firstTimeAndReferred"
+                v-if="current === 0" />
             <ServiceSelector v-else-if="current === 1" />
             <UserInfoInput v-model:firstName="firstName" v-model:lastName="lastName" v-else-if="current === 3" />
             <CheckoutResult :paymentType="'openCard'" :outOrderId="paymentInfo.outOrderId" v-else-if="current === 4"
@@ -267,14 +267,14 @@ const handlePurchaseOnline = async () => {
         <a-steps progress-dot size="large" class="" :current="current" :items="items" />
         <div class="steps-action flex justify-end items-center gap-x-4 *:w-64 *:text-xl *:h-12 w-full py-4 pr-12">
             <a-button class="bg-gray-100 border-none" v-if="current in [0, 1]" style="margin-left: 8px"
-                @click="prev">上一步</a-button>
+                @click="prev">{{ t('message.cardOpenSteps.buttons.prev') }}</a-button>
 
-            <a-button v-show="current === 0" type="primary" @click="next">下一步</a-button>
-            <a-button v-show="current === 1" type="primary" @click="handlePurchaseOnline">线上购买</a-button>
+            <a-button v-show="current === 0" type="primary" @click="next">{{ t('message.cardOpenSteps.buttons.next') }}</a-button>
+            <a-button v-show="current === 1" type="primary" @click="handlePurchaseOnline">{{ t('message.cardOpenSteps.buttons.buyOnline') }}</a-button>
 
             <Spin :spinning="reqPending" wrapperClassName="w-64 h-12 text-xl">
                 <a-button class="w-64 h-12 text-xl" v-show="current === 3" type="primary"
-                    @click="finishOpenCard">完成开卡</a-button>
+                    @click="finishOpenCard">{{ t('message.cardOpenSteps.buttons.complete') }}</a-button>
             </Spin>
         </div>
         <GeneralModal :onClose="() => { openPayUrlModal = false; current = 1 }" v-model:open="openPayUrlModal"

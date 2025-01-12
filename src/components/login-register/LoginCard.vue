@@ -3,7 +3,9 @@
 import { ref } from 'vue';
 import PasswordLoginForm from './forms/PasswordLoginForm.vue';
 import OtpLoginForm from './forms/OtpLoginForm.vue';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 
 const loginType = ref('password')
 
@@ -19,10 +21,10 @@ const handleLoginTypeChange = () => {
     <div class="py-6 flex flex-col items-center justify-center h-full gap-y-8 w-full">
         <div class=" ">
             <div v-if="loginType === 'password'" class="text-[1.458333vw]">
-                密码登录
+                {{ t('message.loginModal.passwordTitle') }}
             </div>
             <div v-else class="text-[1.458333vw]">
-                手机验证码登录
+                  {{ t('message.loginModal.otpTitle') }}
             </div>
         </div>
         <div class="flex flex-col items-center justify-start  w-full  gap-y-10">
@@ -30,10 +32,10 @@ const handleLoginTypeChange = () => {
                 <button @click="handleLoginTypeChange"
                     class="button-style border border-gray-200  hover:bg-slate-200 duration-50">
                     <div v-if="loginType === 'password'">
-                        使用手机验证码登录
+                        {{ t('message.loginModal.switchToOtp') }}
                     </div>
                     <div v-else>
-                        使用密码登录
+                        {{ t('message.loginModal.switchToPassword') }}
                     </div>
                 </button>
             </PasswordLoginForm>
@@ -41,10 +43,10 @@ const handleLoginTypeChange = () => {
                 <button @click="handleLoginTypeChange"
                     class="button-style border border-gray-200  hover:bg-slate-200 duration-50">
                     <div v-if="loginType === 'password'">
-                        使用手机验证码登录
+                        {{ t('message.loginModal.switchToOtp') }}
                     </div>
                     <div v-else>
-                        使用密码登录
+                        {{ t('message.loginModal.switchToPassword') }}
                     </div>
                 </button>
             </OtpLoginForm>

@@ -62,6 +62,8 @@ const handleSubmit = async () => {
         }
 
     }
+
+    window.location.reload();
 };
 
 const handleCancel = () => {

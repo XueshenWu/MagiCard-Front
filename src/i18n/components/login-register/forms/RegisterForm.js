@@ -1,7 +1,7 @@
 export default {
     cn: {
         message: {
-            enterPhoneAndCode: "输入手机号及验证码",
+            enterPhoneAndCode: "注册",
             enterCode: "请输入验证码",
             getCode: "获取验证码",
             submit: "提交注册",
@@ -27,7 +27,7 @@ export default {
     },
     en: {
         message: {
-            enterPhoneAndCode: "Enter Phone Number and Verification Code",
+            enterPhoneAndCode: "Register",
             enterCode: "Enter verification code",
             getCode: "Get Code",
             submit: "Submit Registration",

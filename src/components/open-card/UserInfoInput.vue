@@ -1,7 +1,9 @@
 <script setup>
 
 import { Input } from 'ant-design-vue';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 
 const firstName = defineModel('firstName');
 
@@ -25,25 +27,25 @@ const lastName = defineModel('lastName');
                 <div class="w-full flex flex-row items-center justify-center">
                     <img src="/userinfo.png" alt="userinfo" class="w-8 h-8" />
                     <div class="text-2xl">
-                        请完善您的姓名信息以完成开卡
+                        {{ t('message.userInfoInput.title') }}
                     </div>
                 </div>
 
                 <div class="text-md">
-                    您的姓名将仅用于注册开卡，不会被用于其他用途
+                    {{ t('message.userInfoInput.subtitle') }}
                 </div>
             </div>
 
             <div class="flex flex-col items-start gap-y-2 w-1/3">
                 <div>
-                    输入您的名字
+                    {{ t('message.userInfoInput.firstName.label') }}
                 </div>
                 <Input v-model:value="firstName"/>
             </div>
 
             <div class="flex flex-col items-start gap-y-2 w-1/3">
                 <div>
-                    输入您的姓氏
+                    {{ t('message.userInfoInput.lastName.label') }}
                 </div>
                 <Input v-model:value="lastName"/>
             </div>

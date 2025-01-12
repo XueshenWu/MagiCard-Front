@@ -7,6 +7,7 @@ import Agreement from '../Agreement.vue';
 import { Form, FormItem, Input, Modal, Select } from 'ant-design-vue';
 import { message } from '../../Message.js'
 import { convertGt } from '../../../utils/converGt.js';
+import { useI18n } from 'vue-i18n';
 
 import URL from '../../../api/api-list.js';
 import post from '../../../api/post.js';
@@ -18,7 +19,7 @@ import { yetAnotherStore } from '../../../states/yastore.js';
 
 const openDowndown = ref(false)
 
-
+const { t } = useI18n();
 const captchaReady = ref(false)
 const captchaObj = ref(null)
 const formRef = ref(null)
@@ -74,7 +75,7 @@ const login = async () => {
 
         // window.location.reload();
         loginState.value = false
-        message.success('登录成功')
+        message.success(t('message.otpLoginForm.otp.success'))
         closeModal()
         router.replace('/cards')
         yetAnotherStore.isLoggedIn = true;
@@ -89,7 +90,7 @@ const login = async () => {
 
 
     } else {
-        message.error('登录失败')
+        message.error(t('message.otpLoginForm.failure'))
     }
 
 
@@ -123,10 +124,10 @@ onMounted(async () => {
 
             const data = await post(URL.user.smsCode, body, false)
             if (!data.err) {
-                message.success('验证码发送成功')
+                message.success(t('message.otpLoginForm.otp.success'))
 
             } else {
-                message.error('验证码发送失败')
+                message.error(t('message.otpLoginForm.otp.failure'))
             }
 
             cooldown.value = 30;
@@ -155,7 +156,7 @@ const validatePhoneNumber = async (_rule, value) => {
     }
     const res = validatePhoneNumberSync(value)
     if (!res) {
-        return Promise.reject('请输入有效的手机号码');
+        return Promise.reject(t('message.otpLoginForm.phoneNumber.invalid'));
     }
     return Promise.resolve();
 };
@@ -165,7 +166,7 @@ const validateOtp = async (_rule, value) => {
         return Promise.resolve();
     }
     if (value.length !== 6) {
-        return Promise.reject('请输入6位验证码');
+        return Promise.reject(t('message.otpLoginForm.otp.length'));
     }
 
     return Promise.resolve();
@@ -173,25 +174,25 @@ const validateOtp = async (_rule, value) => {
 
 const validateAgreement = async (_rule, value) => {
     if (!value) {
-        return Promise.reject('请阅读并同意协议');
+        return Promise.reject(t('message.otpLoginForm.agreement.required'));
     }
     return Promise.resolve();
 };
 
-const rules = {
+const rules = ref({
     phoneNumber: [
-        { required: true, message: '请输入手机号码', trigger: ['change', 'blur'] },
+        { required: true, message: t('message.otpLoginForm.phoneNumber.placeholder'), trigger: ['change', 'blur'] },
         { validator: validatePhoneNumber, trigger: ['change', 'blur'] }
     ],
     otp: [
-        { required: true, message: '请输入短信验证码', trigger: ['change', 'blur'] },
+        { required: true, message: t('message.otpLoginForm.otp.placeholder'), trigger: ['change', 'blur'] },
         { validator: validateOtp, trigger: ['change', 'blur'] }
     ],
     checkedAgreement: [
-        { required: true, message: '请阅读并同意协议', trigger: ['change'] },
+        { required: true, message: t('message.otpLoginForm.agreement.required'), trigger: ['change'] },
         { validator: validateAgreement, trigger: ['change'] }
     ]
-};
+});
 
 const onFinish = () => {
     formRef.value
@@ -217,7 +218,7 @@ const handleSendOtp = () => {
 
     const res = validatePhoneNumberSync(formState.phoneNumber)
     if (!res) {
-        message.error('请输入有效的手机号码')
+        message.error(t('message.otpLoginForm.phoneNumber.invalid'))
         return
     } else {
         captchaObj.value.showCaptcha()
@@ -253,12 +254,12 @@ const handleSendOtp = () => {
 
             <FormItem name="otp">
                 <div class="flex items-center justify-between gap-x-2">
-                    <Input v-model:value="formState.otp" placeholder="请输入验证码" size="large"
+                    <Input v-model:value="formState.otp" :placeholder="t('message.otpLoginForm.otp.placeholder')" size="large"
                         class="input-style border-radius-custom">
                     <template #suffix>
                         <a @click="handleSendOtp"
                             :class="`${cooldown > 0 ? cooldownClass : readyClass} text-[.9375vw]`">
-                            {{ cooldown > 0 ? `${cooldown}s` : '发送验证码' }}
+                            {{ cooldown > 0 ? `${cooldown}s` : t('message.otpLoginForm.otp.label') }}
                         </a>
                     </template>
                     </Input>
@@ -266,7 +267,7 @@ const handleSendOtp = () => {
             </FormItem>
             <FormItem>
                 <div class="flex flex-col gap-y-2">
-                    <a-button class="button-style w-full " type="primary" html-type="submit">登录</a-button>
+                    <a-button class="button-style w-full " type="primary" html-type="submit">{{ t('message.otpLoginForm.button') }}</a-button>
                     <slot />
                 </div>
             </FormItem>

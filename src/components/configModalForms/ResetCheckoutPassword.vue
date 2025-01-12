@@ -113,9 +113,7 @@ const open = defineModel('openModifyCheckoutPasswordModal');
 
 const validateConfirmPassword = async (rule, value) => {
     if (value !== formState.checkoutpwd_new) {
-        throw new Error('两次输入的密码不一致');
-    } else if (value === formState.checkoutpwd_old) {
-        throw new Error('新密码不能与原密码相同');
+        throw new Error(t('message.paymentPassword.validation.confirmRequired'));
     }
     return true;
 };

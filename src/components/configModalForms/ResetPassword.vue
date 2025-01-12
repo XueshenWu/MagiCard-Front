@@ -137,7 +137,7 @@ onMounted(async () => {
 <template>
     <template v-if="!userInfo">
         <div>
-            Loading...
+          
         </div>
     </template>
     <template v-else>

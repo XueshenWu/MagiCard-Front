@@ -6,6 +6,7 @@ import transactionRecord from "./transaction-record/transaction-record";
 import subscription from "./subscription/subscription";
 import CheckoutResult from "./CheckoutResult";
 import configModalForms from "./configModalForms/configModalForms";
+import openCard from "./open-card/openCard";
 
 export default {
     cn: {
@@ -17,7 +18,8 @@ export default {
             ...transactionRecord.cn.message,
             ...subscription.cn.message,
             ...CheckoutResult.cn.message,
-            ...configModalForms.cn.message
+            ...configModalForms.cn.message,
+            ...openCard.cn.message
 
         }
     },
@@ -30,7 +32,8 @@ export default {
             ...transactionRecord.en.message,
             ...subscription.en.message,
             ...CheckoutResult.en.message,
-            ...configModalForms.en.message
+            ...configModalForms.en.message,
+            ...openCard.en.message
         }
     }
 }

@@ -24,7 +24,7 @@ export const message = {
         ant_message.info({
             class:"text-[1vw]",
             content: " ",
-            icon: h(MessageIcon, { success: true, content }),
+            icon: h(MessageIcon, { success: true, content, info: true }),
         })
     },
 }

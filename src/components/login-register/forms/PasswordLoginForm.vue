@@ -12,6 +12,9 @@ import { Crisp } from 'crisp-sdk-web';
 // import { Crisp } from '../../../cws'
 import { getClientToken } from '../../../utils/clientToken.js';
 import { yetAnotherStore } from '../../../states/yastore.js';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 
 const captchaReady = ref(false)
@@ -78,7 +81,7 @@ const login = async (captchaValidateResult, formState) => {
 
 
     } else {
-        message.error('登录失败')
+        message.error(t('message.passwordLoginForm.failure'))
     }
     closeModal()
 
@@ -104,9 +107,15 @@ onMounted(async () => {
         })
 
         captcha.onFail(function () {
-            gtPromise.value.reject()
+            // gtPromise.value.reject(null)
             console.log('onFail')
         })
+
+        captcha.onClose(function () {
+            gtPromise.value.reject(null)
+        })
+
+        
     })
 })
 
@@ -117,7 +126,7 @@ const validatePhoneNumber = async (_rule, value) => {
     }
     const phoneRegex = /^1[3-9]\d{9}$/;
     if (!phoneRegex.test(value)) {
-        return Promise.reject('请输入有效的手机号码');
+        return Promise.reject(t('message.passwordLoginForm.phoneNumber.invalid'))
     }
     return Promise.resolve();
 };
@@ -127,7 +136,7 @@ const validatePassword = async (_rule, value) => {
         return Promise.resolve();
     }
     if (value.length < 8) {
-        return Promise.reject('密码长度至少为8位');
+        return Promise.reject(t('message.passwordLoginForm.password.tooShort'))
     }
 
     return Promise.resolve();
@@ -135,25 +144,25 @@ const validatePassword = async (_rule, value) => {
 
 const validateAgreement = async (_rule, value) => {
     if (!value) {
-        return Promise.reject('请阅读并同意协议');
+        return Promise.reject(t('message.passwordLoginForm.agreement.required'))
     }
     return Promise.resolve();
 };
 
-const rules = {
+const rules = ref({
     phoneNumber: [
-        { required: true, message: '请输入手机号码', trigger: ['change', 'blur'] },
+        { required: true, message: t('message.passwordLoginForm.phoneNumber.placeholder'), trigger: ['change', 'blur'] },
         { validator: validatePhoneNumber, trigger: ['change', 'blur'] }
     ],
     password: [
-        { required: true, message: '请输入密码', trigger: ['change', 'blur'] },
+        { required: true, message: t('message.passwordLoginForm.password.placeholder'), trigger: ['change', 'blur'] },
         { validator: validatePassword, trigger: ['change', 'blur'] }
     ],
     checkedAgreement: [
-        { required: true, message: '请阅读并同意协议', trigger: ['change'] },
+        { required: true, message: t('message.passwordLoginForm.agreement.required'), trigger: ['change'] },
         { validator: validateAgreement, trigger: ['change'] }
     ]
-};
+});
 
 const onFinish = async () => {
 
@@ -166,12 +175,20 @@ const onFinish = async () => {
         return
     }
 
-    const gtResult = await new Promise(async (resolve, reject) => {
+    let gtResult = null
+
+    try{
+        gtResult = await new Promise(async (resolve, reject) => {
         gtPromise.value = { resolve, reject }
         await nextTick()
         captchaObj.value.showCaptcha()
 
     })
+    }catch(err){
+        console.log('captcha failed')
+    
+    }
+    
 
     if (gtResult === null) {
         return
@@ -204,7 +221,7 @@ const onFinishFailed = () => {
         </FormItem>
         <FormItem>
             <div class="flex flex-col gap-y-2">
-                <a-button class="w-full button-style" size="large" type="primary" html-type="submit">登录</a-button>
+                <a-button class="w-full button-style" size="large" type="primary" html-type="submit">{{ t('message.passwordLoginForm.button') }}</a-button>
                 <slot />
             </div>
         </FormItem>
