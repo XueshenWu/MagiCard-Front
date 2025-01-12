@@ -7,7 +7,6 @@ import CheckoutResult from '../components/CheckoutResult.vue';
 import post from '../api/post';
 import get from '../api/get';
 import URL from '../api/api-list';
-import { message } from '../components/Message';
 import { QRCode, Spin } from 'ant-design-vue';
 import { Modal } from 'ant-design-vue';
 
@@ -17,6 +16,9 @@ const { t } = useI18n();
 
 const price = ref(0);
 const valid = ref(true);
+
+
+const cardListLock = ref(false)
 
 const cardId = ref("");
 
@@ -122,6 +124,9 @@ const pollPaymentStatus = () => {
 
 const current = ref(0);
 const next = () => {
+    if(cardListLock.value){
+        return
+    }
     current.value++;
 };
 const prev = () => {
@@ -191,7 +196,7 @@ const handleCheckoutModalConfirm = async () => {
     <div class="flex flex-col justify-around gap-y-20 p-12 py-4">
         <div class="steps-content">
             <SelectionBoard v-if="current === 0" />
-            <CardRechargeBoard v-if="current === 1" v-model:cardId="cardId" v-model:price="price"
+            <CardRechargeBoard  v-model:lock="cardListLock"  v-if="current === 1" v-model:cardId="cardId" v-model:price="price"
                 v-model:valid="valid" />
             <CheckoutResult :paymentType="'subscription'" :outOrderId="paymentInfo?.outOrderId ?? ''"
                 v-if="current === 2" v-model:current="current" />
@@ -200,9 +205,9 @@ const handleCheckoutModalConfirm = async () => {
         <div class="steps-action flex justify-end items-center gap-x-4 *:w-32 *:text-xl *:py-3 *:h-14 *:px-6 ">
             <a-button class="bg-gray-100 border-none" v-if="current > 0 && current != 2" style="margin-left: 8px"
                 @click="prev">{{ t('message.subscription.buttons.previous') }}</a-button>
-            <a-button v-show="current === 1" type="primary" @click="handleCheckout">{{
+            <a-button :disabled="cardListLock" v-show="current === 1" type="primary" @click="handleCheckout">{{
                 t('message.subscription.buttons.pay') }}</a-button>
-            <a-button v-show="current === 0" type="primary" @click="next">{{ t('message.subscription.buttons.next')
+            <a-button   v-show="current === 0" type="primary" @click="next">{{ t('message.subscription.buttons.next')
                 }}</a-button>
 
 

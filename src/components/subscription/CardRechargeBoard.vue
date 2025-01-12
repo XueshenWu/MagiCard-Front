@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, watchEffect } from 'vue';
+import { onMounted, onUnmounted, ref, watch, watchEffect } from 'vue';
 import { Divider, InputNumber, Select, Spin } from 'ant-design-vue';
 import CardNumber from '../CardNumber.vue';
 import NumberInput from '../NumberInput.vue';
@@ -23,6 +23,13 @@ const loading = ref(true)
 const valid = defineModel('valid')
 const price = defineModel('price')
 const cardId = defineModel('cardId')
+
+const lock = defineModel('lock')
+
+
+onMounted(()=>{
+    lock.value = true
+})
 
 watchEffect(() => {
 
@@ -96,7 +103,13 @@ async function getAvailableCards() {
 
 watchEffect(async () => {
     availableCards.value = await getAvailableCards();
+    lock.value = false
 }, { immediate: true })
+
+
+onUnmounted(() => {
+    lock.value = false
+})
 
 </script>
 

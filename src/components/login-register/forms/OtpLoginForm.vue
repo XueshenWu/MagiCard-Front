@@ -75,7 +75,7 @@ const login = async () => {
 
         // window.location.reload();
         loginState.value = false
-        message.success(t('message.otpLoginForm.otp.success'))
+        message.success(t('message.otpLoginForm.success'))
         closeModal()
         router.replace('/cards')
         yetAnotherStore.isLoggedIn = true;

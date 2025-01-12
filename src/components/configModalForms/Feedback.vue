@@ -18,7 +18,7 @@ const { t } = useI18n();
             </div>
         </template>
         <div class="flex flex-col items-center justify-center">
-            <img src="/QR_Wechat.webp" alt="wechat" class="" />
+            <img src="/feedback_2.png" alt="wechat" class="" />
         </div>
     </GeneralModal>
 </template>

@@ -201,7 +201,7 @@ watch(activeKey, async (newVal) => {
                         <div class="text-3xl font-semibold">
                             {{ t('message.customerService.title') }}
                         </div>
-                        <img src="/QR_Wechat.webp" :alt="t('message.customerService.wechatAlt')" class="" />
+                        <img :class="`h-96 w-96`" src="/feedback_2.png" :alt="t('message.customerService.wechatAlt')" class="" />
 
                     </div>
                 </GeneralModal>
