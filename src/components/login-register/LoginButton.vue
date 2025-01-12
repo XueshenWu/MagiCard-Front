@@ -28,6 +28,7 @@ provide('closeLoginRegisterModal', closeModal);
 
 
 
+
 const handleClick = () => {
    modalStore.loginModalOpen = true;
 }

@@ -24,7 +24,9 @@
     "vue3-geetest": "^1.0.19"
   },
   "devDependencies": {
+    "@playwright/test": "^1.49.1",
     "@types/express": "^5.0.0",
+    "@types/node": "^22.10.5",
     "@vitejs/plugin-vue": "^5.2.1",
     "autoprefixer": "^10.4.20",
     "express": "^4.21.2",

@@ -40,7 +40,7 @@ const login = async (captchaValidateResult, formState) => {
         geeTest: convertGt(captchaValidateResult)
     }
     const res = await post(URL.user.passwordLogin, body, false)
-   
+   console.log('loginRes',res)
     if (!res.err) {
        
         localStorage.setItem('token', res.data.token);
@@ -159,6 +159,13 @@ const onFinish = async () => {
 
 
     const _formState = await formRef.value.validate()
+
+
+    if(import.meta.env.VITE_E2E){
+        await login({}, _formState)
+        return
+    }
+
     const gtResult = await new Promise(async (resolve, reject) => {
         gtPromise.value = { resolve, reject }
         await nextTick()
