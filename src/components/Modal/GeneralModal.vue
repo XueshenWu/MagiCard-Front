@@ -87,6 +87,8 @@ const emit = defineEmits(['update:open', 'close']);
 
 const innerOpen = ref(props.open);
 
+const {lock, unlock} = inject('lightLock');
+
 
 
 
@@ -110,6 +112,9 @@ function handleClose() {
     emit('update:open', false);
     emit('close');
     props.onClose();
+    unlock();
+    turnOnLight();
+  
 }
 </script>
 

@@ -46,6 +46,9 @@ const switchSelected = (i) => {
 provide('switchSelected', switchSelected);
 
 
+const {lock, unlock} = inject('lightLock');
+
+
 watch(()=>yetAnotherStore.shouldShowResetPassword, (newVal) => {
 // debugger    
     if(newVal){
@@ -57,7 +60,12 @@ watch(()=>yetAnotherStore.shouldShowResetPassword, (newVal) => {
 }, { immediate: true });
 
 
-const handleMenuClick = ({ key }) => {
+const handleMenuClick = async ({ key }) => {
+
+    if(key in ['1', '2', '3', '4', '5', '6']){
+        lock();
+    }
+
     openModifyPhoneNumberModal.value = key === '1';
     openModifyEmailModal.value = key === '2';
     openResetCheckoutPasswordModal.value = key === '3';
@@ -65,7 +73,7 @@ const handleMenuClick = ({ key }) => {
     openApplyMonthlyStatementModal.value = key === '5';
     openFeedbackModal.value = key === '6';
 
- 
+    
 
     if (key === '7') {
         localStorage.removeItem('token');

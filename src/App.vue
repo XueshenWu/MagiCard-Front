@@ -25,54 +25,70 @@ const firstLightOff = ref(false);
 
 
 
+const lightOnLock = ref(false);
+
+
 
 
 provide('lightSwitch', {
     turnOnLight: () => {
+        if (lightOnLock.value) {
+            return
+        }
         lightOff.value = false;
     },
     turnOffLight: () => {
+
         lightOff.value = true;
     }
 });
+
+provide("lightLock", {
+    lock: () => {
+        lightOnLock.value = true;
+    },
+    unlock: () => {
+        lightOnLock.value = false;
+    }
+})
 
 
 onMounted(() => {
 
     router.beforeEach(async (to, from, next) => {
-    if (to.path === '/' && localStorage.getItem('token')) {
-        next('/cards');
+        if (to.path === '/' && localStorage.getItem('token')) {
+            next('/cards');
 
-    } else if (to.path !== '/' && !localStorage.getItem('token')) {
-
- 
-        modalStore.loginModalOpen = true;
-        await nextTick();
-        next('/');
+        } else if (to.path !== '/' && !localStorage.getItem('token')) {
 
 
-    } else {
+            modalStore.loginModalOpen = true;
+            await nextTick();
+            next('/');
 
-        if (to.path === '/cards' || to.path === '/subscriptions') {
 
-            const res = await get(URL.card.cardList, null, true)
-            if (res.err) {
-                router.replace('openCard')
-            } else {
-                const data = res.data;
-                if (data.length === 0) {
-                    message.info('请先开通会员')
+        } else {
+
+            if (to.path === '/cards' || to.path === '/subscriptions') {
+
+                const res = await get(URL.card.cardList, null, true)
+                if (res.err) {
                     router.replace('openCard')
+                } else {
+                    const data = res.data;
+                    if (data.length === 0) {
+                        message.info('请先开通会员')
+                        router.replace('openCard')
+                    }
                 }
+
+
+
             }
 
-
-
+            next();
         }
-
-        next();
-    }
-});
+    });
 
 
 
@@ -140,7 +156,8 @@ onMounted(() => {
 <template>
 
     <div class="scrollbar-hide ">
-        <Header :class="`fixed top-0 left-0 w-full z-50  ${lightOff||firstLightOff ? 'brightness-[0.2]' : 'brightness-100'}`" />
+        <Header
+            :class="`fixed top-0 left-0 w-full z-50  ${lightOff || firstLightOff ? 'brightness-[0.2]' : 'brightness-100'}`" />
 
 
         <div id="content-wrapper" class="scrollbar-hide w-full h-fit overflow-x-hidden "
@@ -148,7 +165,7 @@ onMounted(() => {
             <div id="scale-container" :class="`origin-top-left absolute left-0 `">
 
                 <div id="app"
-                    :class="`flex flex-col min-h-[1080px]  ${lightOff||firstLightOff ? 'brightness-[0.2]' : 'brightness-100'}`">
+                    :class="`flex flex-col min-h-[1080px]  ${lightOff || firstLightOff ? 'brightness-[0.2]' : 'brightness-100'}`">
                     <div id="body"
                         style="background: linear-gradient(180deg, rgba(228,246,255,1) 0%, rgba(255,255,255,1) 100%);"
                         class="w-full flex-1 flex flex-row items-start px-48 py-16 gap-x-6 overflow-y-hidden">
