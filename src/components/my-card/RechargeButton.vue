@@ -1,5 +1,5 @@
 <script setup>
-import { nextTick, ref, watchEffect,inject } from 'vue';
+import { nextTick, ref, watchEffect, inject, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import CashAmountSelector from '../CashAmountSelectorScaled.vue';
@@ -14,6 +14,36 @@ const props = defineProps(['cardId', 'disabled']);
 const openRechargeModal = ref(false);
 const current = ref(0);
 const rechargeAmount = ref(0);
+
+
+const rechargeAmountFixed = computed(() => {
+
+    try {
+        return rechargeAmount.value.toFixed(2)
+    } catch (e) {
+        return Number(0).toFixed(2)
+    }
+
+})
+
+const feeToFixed = computed(() => {
+    try {
+        rechargeAmount.value.toFixed(2)
+        return (rechargeAmount.value * feeRate.value).toFixed(2)
+    } catch (e) {
+        return Number(0).toFixed(2)
+    }
+})
+
+const totalFeeFixed = computed(() => {
+    try {
+        rechargeAmount.value.toFixed(2)
+        return (rechargeAmount.value * (1 + feeRate.value)).toFixed(2)
+    } catch (e) {
+        return Number(0).toFixed(2)
+    }
+})
+
 const quickSelect = [5, 10, 20, 25, 40, 60]
 const { t } = useI18n()
 
@@ -24,7 +54,7 @@ const paymentInfo = ref(null)
 
 const handleConfirmRecharge = async () => {
 
-    if(!valid.value){
+    if (!valid.value) {
         message.error(t('message.rechargeButton.invalidAmount'))
         return
     }
@@ -67,11 +97,11 @@ const pollPaymentStatus = () => {
 
         (new Promise((resolve, reject) => {
             const timeoutJob = async () => {
-                if(openConfirmRechargeModal.value === false){
+                if (openConfirmRechargeModal.value === false) {
                     reject()
                     return
                 }
-             
+
                 const res = await post(URL.payment.checkOrderStatus, { data: paymentInfo.value.outOrderId }, true)
 
 
@@ -174,13 +204,13 @@ const handleOpenRechargeModal = () => {
             <CashAmountSelector v-model:valid="valid" :quickSelect v-model:rechargeAmount="rechargeAmount" />
         </div>
         <div class="text-gray-400 text-[1.041667vw] flex flex-row items-center gap-x-1 w-full justify-center mt-6">
-            <span>{{ t('message.payment.total') }}</span><span class="text-black font-bold">${{ (rechargeAmount * (1 +
-                feeRate)).toFixed(2)
+            <span>{{ t('message.payment.total') }}</span><span class="text-black font-bold">
+                ${{ totalFeeFixed
                 }}</span><span>=
                 {{ t('message.payment.received') }}</span><span class="text-black font-bold">${{
-                    rechargeAmount.toFixed(2) }}</span>
-            <span> + {{ t('message.payment.fee') }}</span><span class="text-black font-bold">${{ (rechargeAmount *
-                (feeRate)).toFixed(2)
+                    rechargeAmountFixed }}</span>
+            <span> + {{ t('message.payment.fee') }}</span><span class="text-black font-bold">
+                ${{  feeToFixed
                 }}</span>({{ (feeRate * 100).toFixed(1) }}%)
         </div>
         <template #footer>
@@ -198,33 +228,34 @@ const handleOpenRechargeModal = () => {
         <div class="flex flex-col items-center justify-center payment-style space-y-[1.320833vw] ">
             <QRCode class="w-[8.85416667vw] h-[8.85416667vw]" :value="paymentInfo.payUrl" />
             <!-- <Spin :spinning="isPolling" wrapperClassName="w-full grid place-content-center"> -->
-                <button @click="pollPaymentStatus"
-                    class="py-[.520833vw] px-[1.7625vw]  text-white bg-[#3189ef] rounded-[0.625vw]">
-                    {{ t('message.qrCode.complete') }}
-                </button>
+            <button @click="pollPaymentStatus"
+                class="py-[.520833vw] px-[1.7625vw]  text-white bg-[#3189ef] rounded-[0.625vw]">
+                {{ t('message.qrCode.complete') }}
+            </button>
             <!-- </Spin> -->
         </div>
     </GeneralModal>
-    <Modal :zIndex="1500" :centered="true" v-model:open="openPaymentInfoConfirmModal" :maskClosable="false" width="29.1667vw">
-            <div class="flex flex-col items-center justify-center space-y-[1.320833vw]">
-                <div class="text-[1.458333vw]">
-                    {{ t('message.tip') }}
-                </div>
-                <div class="text-[.833333vw]">
-                    {{ t('message.checking') }}
-                </div>
+    <Modal :zIndex="1500" :centered="true" v-model:open="openPaymentInfoConfirmModal" :maskClosable="false"
+        width="29.1667vw">
+        <div class="flex flex-col items-center justify-center space-y-[1.320833vw]">
+            <div class="text-[1.458333vw]">
+                {{ t('message.tip') }}
             </div>
-            <template #footer>
-                <div class="grid place-content-center">
-                    <button @click="openPaymentInfoConfirmModal = false" class="
+            <div class="text-[.833333vw]">
+                {{ t('message.checking') }}
+            </div>
+        </div>
+        <template #footer>
+            <div class="grid place-content-center">
+                <button @click="openPaymentInfoConfirmModal = false" class="
                 px-[1.041667vw]
                 bg-[#eee] border border-[#eee] rounded-[0.625vw] text-[.833333vw]  h-[2.708333vw]">
-                        {{ t('message.retry') }}
-                    </button>
-                </div>
+                    {{ t('message.retry') }}
+                </button>
+            </div>
 
-            </template>
-        </Modal>
+        </template>
+    </Modal>
 </template>
 
 <style scoped>

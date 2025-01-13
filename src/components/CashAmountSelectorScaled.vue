@@ -14,6 +14,7 @@ const valid = defineModel('valid')
 
 watch(rechargeAmount, (val) => {
     const amount = parseFloat(val)
+    // console.log('amount', amount)
     if (isNaN(amount)) {
         rechargeAmount.value = 0
         valid.value = false
@@ -25,7 +26,7 @@ watch(rechargeAmount, (val) => {
         rechargeAmount.value = amount;
         valid.value = true
     }
-})
+}, { immediate: true })
 
 </script>
 
