@@ -13,8 +13,12 @@ const rechargeAmount = defineModel('rechargeAmount');
 const valid = ref(true);
 
 watch(rechargeAmount, (val) => {
-    const amount = Number(val)
-    if (isNaN(amount) || amount < 5) {
+    const amount = parseFloat(val)
+    if(isNaN(amount)){
+        rechargeAmount.value = 0
+        valid.value = false
+    }
+    else if (isNaN(amount) || amount < 5) {
         rechargeAmount.value = 5;
         valid.value = false
     } else if (amount > 60) {
