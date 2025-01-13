@@ -18,6 +18,9 @@ export default {
                     amount: '充值到账金额',
                     fee: '手续费',
                     totalUsd: '美元总额'
+                },
+                info:{
+                    warning:'请注意：充值金额必须介于5到60美元之间'    
                 }
             }
         }
@@ -41,6 +44,9 @@ export default {
                     amount: 'Recharge Amount',
                     fee: 'Service Fee',
                     totalUsd: 'Total USD'
+                },
+                info:{
+                    warning:'Please note: The recharge amount must be between $5 and $60'    
                 }
             }
         }

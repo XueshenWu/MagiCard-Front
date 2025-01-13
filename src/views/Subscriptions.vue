@@ -7,7 +7,7 @@ import CheckoutResult from '../components/CheckoutResult.vue';
 import post from '../api/post';
 import get from '../api/get';
 import URL from '../api/api-list';
-import { QRCode, Spin } from 'ant-design-vue';
+import { message, QRCode} from 'ant-design-vue';
 import { Modal } from 'ant-design-vue';
 
 import { useI18n } from 'vue-i18n';
@@ -165,6 +165,8 @@ const handleCheckoutModalConfirm = async () => {
     if (isNaN(price.value) || (price.value) <= 0 || (price.value) > 60) {
         valid.value = false
         openCheckoutConfirm.value = false
+        message.error(t('message.subscription.info.warning'))
+
     } else {
         valid.value = true
         const res = await post(URL.payment.rechargePayment, {

@@ -302,7 +302,7 @@ const freezed = computed(() => cardData.cardStatus !== 'Active');
                     style="background: radial-gradient(circle at top left, rgba(238,238,238,1) 0%, rgb(249, 249, 249) 100%);"
                     class="flex flex-col bg-gray-100 w-1/2 h-full gap-y-6  px-9 py-7 border  border-gray-300 rounded-2xl">
                     <div class="flex flex-row items-center justify-between">
-                        <img src="/logo.png" alt="logo" class="w-9 h-7" />
+                        <img src="/logo-thecard.jpg" alt="logo" class="h-9 h-auto" />
                         <div v-if="!trimed"
                             class="trim flex flex-row items-center justify-center gap-x-4 text-[#3189ef] [&>a]:cursor-pointer">
                             <CardHelp />

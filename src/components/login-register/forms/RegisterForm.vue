@@ -137,8 +137,7 @@ const register = async () => {
     }, 1000)
     if (!res.err && res.data.token) {
 
-        router.replace('/')
-
+  
         localStorage.setItem('token', res.data.token);
 
         const userCard = res.data.userCard;
@@ -151,6 +150,7 @@ const register = async () => {
         //    window.location.reload();
         message.success(t('message.registerForm.notifications.registerSuccess'))
 
+        router.replace('/')
 
         yetAnotherStore.isLoggedIn = true;
 

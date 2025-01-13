@@ -6,6 +6,7 @@ import NumberInput from '../NumberInput.vue';
 import get from '../../api/get';
 import URL from '../../api/api-list';
 import { useI18n } from 'vue-i18n';
+import { message } from '../Message';
 
 
 const {t} = useI18n()
@@ -43,22 +44,27 @@ watchEffect(() => {
 })
 
 
-const handleBlur = ()=>{
-    if (rechargeAmount.value < 5 || rechargeAmount.value > 999) {
-        rechargeAmount.value = 5;
-    }
-}
+
 
 
 watch(rechargeAmount, (val) => {
-    const amount = Number(val)
-    if (isNaN(amount) || amount < 5 || amount > 999) {
-        rechargeAmount.value = 5;
+    const amount = parseFloat(val)
+    if(isNaN(amount)){
+        rechargeAmount.value = 0
+        valid.value = false
+        price.value = getPrice(0)
+    }
+    else if ( amount < 5 || amount > 60) {
+        rechargeAmount.value = val
+        valid.value = false
+        price.value = getPrice(val)
+    
     } else {
         rechargeAmount.value = amount;
         valid.value = true
+        price.value = getPrice(amount);
     }
-    price.value = getPrice(amount);
+   
 
 }, { immediate: true })
 
