@@ -146,7 +146,7 @@ onMounted(async () => {
 
 
 const validatePhoneNumberSync = (value) => {
-    const phoneRegex = formState.phoneCode === '+86' ? /^1[3-9]\d{9}$/ : /^5\d{8}$/
+    const phoneRegex = formState.phoneCode === '+86' ? /^1[3-9]\d{9}$/ : /\d{8}$/
     return phoneRegex.test(value)
 }
 
@@ -281,8 +281,8 @@ const handleSendOtp = async () => {
             </div>
 
 
-            <FormItem name="otp">
-                <div class="flex items-center justify-between gap-x-2">
+            <FormItem name="otp" >
+                <div class="flex items-center justify-between gap-x-2 ">
                     <Input v-model:value="formState.otp" :placeholder="t('message.otpLoginForm.otp.placeholder')"
                         size="large" class="input-style border-radius-custom">
                     <template #suffix>
@@ -352,4 +352,9 @@ const handleSendOtp = async () => {
 ::v-deep(.ant-select-arrow) {
     display: none !important;
 }
+
+::v-deep(.ant-input-affix-wrapper){
+    width: 100% !important;
+}
+
 </style>

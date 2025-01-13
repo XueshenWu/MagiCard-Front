@@ -24,6 +24,11 @@ const paymentInfo = ref(null)
 
 const handleConfirmRecharge = async () => {
 
+    if(!valid.value){
+        message.error(t('message.rechargeButton.invalidAmount'))
+        return
+    }
+
     const res = await post(URL.payment.rechargePayment, {
         amount: rechargeAmount.value,
         cardId: props.cardId
@@ -127,6 +132,8 @@ const imgList = new Array(18).fill(0).map((_, idx) => `/subscriptionIcons/downlo
 
 const feeRate = ref(null)
 
+const valid = ref(false)
+
 
 watchEffect(async () => {
     if (!feeRate.value) {
@@ -164,7 +171,7 @@ const handleOpenRechargeModal = () => {
             <div class="title">
                 {{ t('message.selectAmount') }}
             </div>
-            <CashAmountSelector :quickSelect v-model:rechargeAmount="rechargeAmount" />
+            <CashAmountSelector v-model:valid="valid" :quickSelect v-model:rechargeAmount="rechargeAmount" />
         </div>
         <div class="text-gray-400 text-[1.041667vw] flex flex-row items-center gap-x-1 w-full justify-center mt-6">
             <span>{{ t('message.payment.total') }}</span><span class="text-black font-bold">${{ (rechargeAmount * (1 +

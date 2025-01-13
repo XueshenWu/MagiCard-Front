@@ -111,7 +111,8 @@ onMounted(async () => {
             const body = {
                 phone: userInfo.value.phoneNumber,
                 geeTest: convertGt(gtResult),
-                action: 'login'
+                action: 'login',
+                phoneCode: userInfo.value.phoneCode,
             };
             const data = await post(URL.user.smsCode, body, true);
             if (!data.err) {

@@ -43,6 +43,11 @@ const switchSelected = (i) => {
     handleMenuClick({ key: i });
 }
 
+const {
+    turnOnLight,
+    turnOffLight
+} = inject('lightSwitch');
+
 provide('switchSelected', switchSelected);
 
 
@@ -64,6 +69,10 @@ const handleMenuClick = async ({ key }) => {
 
     if(key in ['1', '2', '3', '4', '5', '6']){
         lock();
+    }else{
+        unlock();
+        turnOnLight();
+        
     }
 
     openModifyPhoneNumberModal.value = key === '1';

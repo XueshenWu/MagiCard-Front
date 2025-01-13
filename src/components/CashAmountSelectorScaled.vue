@@ -10,19 +10,16 @@ const { quickSelect, className } = defineProps([
 const rechargeAmount = defineModel('rechargeAmount');
 
 
-const valid = ref(true);
+const valid = defineModel('valid')
 
 watch(rechargeAmount, (val) => {
     const amount = parseFloat(val)
-    if(isNaN(amount)){
+    if (isNaN(amount)) {
         rechargeAmount.value = 0
         valid.value = false
     }
-    else if (isNaN(amount) || amount < 5) {
-        rechargeAmount.value = 5;
-        valid.value = false
-    } else if (amount > 60) {
-        rechargeAmount.value = 60;
+    else if (amount < 5 || amount > 60) {
+        rechargeAmount.value = amount;
         valid.value = false
     } else {
         rechargeAmount.value = amount;
@@ -50,7 +47,7 @@ watch(rechargeAmount, (val) => {
         <div>
             <NumberInput placeholder="输入在$5到$60之间的金额" :status="valid ? '' : 'error'" v-model:modelValue="rechargeAmount"
                 size="large" :class='`w-[24.375vw] *:h-14 text-lg`'>
-              
+
             </NumberInput>
             <div v-show="!valid" class="text-red-500 text-xs">
                 自定义金额必须在$5到$60之间

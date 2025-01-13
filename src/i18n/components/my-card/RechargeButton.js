@@ -17,6 +17,9 @@ export default {
       },
       rechargeSuccess: "充值成功",
       rechargeFailed: "充值失败",
+      rechargeButton:{
+        invalidAmount: "充值金额必须介于5到60美元之间"
+      }
     }
   },
   en: {
@@ -37,6 +40,9 @@ export default {
       },
       rechargeSuccess: "Recharge success",
       rechargeFailed: "Recharge failed",
+      rechargeButton:{
+        invalidAmount: "The recharge amount must be between $5 and $60"
+      }
     }
   }
 }

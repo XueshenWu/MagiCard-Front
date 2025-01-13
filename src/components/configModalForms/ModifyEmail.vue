@@ -66,10 +66,27 @@ const handleSubmit = async () => {
     window.location.reload();
 };
 
+
+const {lock, unlock} = inject('lightLock');
+const {
+    turnOnLight,
+    turnOffLight
+} = inject('lightSwitch');
+
+
+const handleClose = () => {
+    open.value = false;
+    unlock();
+    turnOnLight();
+
+}
+
+
 const handleCancel = () => {
     email.value = '';
     emailError.value = '';
     open.value = false;
+    unlock();
     switchSelected('');
 };
 </script>

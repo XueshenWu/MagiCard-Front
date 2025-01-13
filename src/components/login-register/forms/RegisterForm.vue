@@ -50,7 +50,7 @@ const formState = reactive({
 const openDowndown = ref(false)
 
 const validatePhoneNumberSync = (value) => {
-    const phoneRegex = formState.phoneCode === '+86' ? /^1[3-9]\d{9}$/ : /^5\d{8}$/
+    const phoneRegex = formState.phoneCode === '+86' ? /^1[3-9]\d{9}$/ : /\d{8}$/
     return phoneRegex.test(value)
 }
 

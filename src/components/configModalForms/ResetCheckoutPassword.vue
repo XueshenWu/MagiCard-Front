@@ -55,6 +55,7 @@ onMounted(async () => {
                 action: "login",
                 phone: userInfo.value.phoneNumber,
                 geeTest: convertGt(captcha.getValidate()),
+                phoneCode: userInfo.value.phoneCode
             }
 
             const data = await post(URL.user.smsCode, body)

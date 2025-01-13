@@ -7,6 +7,7 @@ import post from '../../api/post.js';
 import URL from '../../api/api-list.js';
 import { convertGt } from '../../utils/converGt.js'
 import { useI18n } from 'vue-i18n';
+import { watch } from 'less';
 
 const { t } = useI18n();
 
@@ -67,6 +68,7 @@ const finishModify = async () => {
     const body = {
         smsCode: formState.otp_new,
         phoneNumber: formState.phoneNumber_new,
+        phoneCode: formState.phoneCode_new,
     }
 
     if (!formState.otp_new) {
@@ -89,15 +91,34 @@ const finishModify = async () => {
     }
 }
 
+
+
 const validatePhoneNumber = (phonenumber) => {
 
-    const phoneFormat = formState.phoneCode_new === '+86' ? /^1[3456789]\d{9}$/ : /^5\d{8}$/
+    const phoneFormat = formState.phoneCode_new === '+86' ? /^1[3456789]\d{9}$/ : /\d{8}$/
 
     return phoneFormat.test(phonenumber)
 }
 
+
+const {lock, unlock} = inject('lightLock');
+const {
+    turnOnLight,
+    turnOffLight
+} = inject('lightSwitch');
+
+
+const handleClose = () => {
+    open.value = false;
+    unlock();
+    turnOnLight();
+
+}
+
+
 const toStep2 = async () => {
 
+    cooldown.value = 0;
 
     if (!formState.otp_old) {
         message.error(t('message.modifyPhonenumber.validation.verificationCodeRequired'));
@@ -107,6 +128,7 @@ const toStep2 = async () => {
     const body = {
         smsCode: formState.otp_old,
         phoneNumber: userInfo.value.phoneNumber,
+        phoneCode: userInfo.value.phoneCode,
     }
 
     const data = await post(URL.user.checkCurrentNumber, body)
@@ -120,7 +142,10 @@ const toStep2 = async () => {
     step.value = 2;
 }
 
-
+const toStep1 = ()=>{
+    cooldown.value = 0;
+    step.value = 1;
+}
 
 
 onMounted(async () => {
@@ -141,7 +166,8 @@ onMounted(async () => {
             const body = {
                 phone: step.value === 1 ? userInfo.value.phoneNumber : formState.phoneNumber_new,
                 geeTest: convertGt(gtResult),
-                action: 'changePhoneNumber'
+                action: 'changePhoneNumber',
+                phoneCode: step.value === 1 ? userInfo.value.phoneCode : formState.phoneCode_new,
             };
 
 
@@ -267,13 +293,13 @@ onMounted(async () => {
                     </template>
 
                     <div class="flex flex-row justify-between w-full text-xl gap-x-4 ">
-                        <button v-show="step === 1" @click="open = false" class="button-style bg-gray-200 rounded-xl">{{
+                        <button v-show="step === 1" @click="handleClose" class="button-style bg-gray-200 rounded-xl">{{
                             t('message.modifyPhonenumber.buttons.cancel') }}</button>
                         <button @click="toStep2" v-show="step === 1"
                             class="button-style text-white bg-blue-500 rounded-xl">
                             {{ t('message.modifyPhonenumber.buttons.next') }}
                         </button>
-                        <button v-show="step === 2" @click="step = 1"
+                        <button v-show="step === 2" @click="toStep1"
                             class="text-white bg-blue-500 rounded-xl button-style">
                             {{ t('message.modifyPhonenumber.buttons.previous') }}
                         </button>
