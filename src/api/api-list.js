@@ -1,10 +1,10 @@
 // local
-const BASE_URL = 'http://192.168.193.75:8085';
-const FRONTEND_URL = 'http://localhost:5173'
+// const BASE_URL = 'http://192.168.193.75:8085';
+// const FRONTEND_URL = 'http://localhost:5173'
 
-// // public
-// const BASE_URL = 'http://43.199.192.103:8085';
-// const FRONTEND_URL = 'http://43.199.192.103'
+// public
+const BASE_URL = 'http://43.199.192.103:8085';
+const FRONTEND_URL = 'http://43.199.192.103'
 
 
 // // test

@@ -11,7 +11,7 @@ import { message } from '../Message.js';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
-
+const reqPending = ref(false);
 const switchSelected = inject('switchSelected')
 
 const cooldown = ref(0);
@@ -68,13 +68,13 @@ onMounted(async () => {
 
             cooldown.value = 30;
 
-                const timer = setInterval(() => {
-                    cooldown.value--;
-                    if (cooldown.value <= 0) {
-                        clearInterval(timer);
-                        cooldown.value = 0;
-                    }
-                }, 1000)
+            const timer = setInterval(() => {
+                cooldown.value--;
+                if (cooldown.value <= 0) {
+                    clearInterval(timer);
+                    cooldown.value = 0;
+                }
+            }, 1000)
         });
     });
 });
@@ -97,10 +97,18 @@ const handleSendOtp = () => {
 
 
 const onFinish = async () => {
+
+    if (reqPending.value) {
+        return;
+    }
+
     const body = {
         smsCode: formState.otp,
         newPassword: formState.checkoutpwd_new,
     }
+
+    reqPending.value = true;
+
     const data = await post(URL.user.resetPaymentPassword, body)
     if (!data.err) {
         message.success(t('message.paymentPassword.messages.modifySuccess'));
@@ -108,6 +116,8 @@ const onFinish = async () => {
     } else {
         message.error(t('message.paymentPassword.messages.modifyFailed'));
     }
+
+    reqPending.value = false;
 };
 
 const open = defineModel('openModifyCheckoutPasswordModal');
@@ -126,7 +136,7 @@ const rules = {
         { len: 6, message: t('message.paymentPassword.validation.length'), trigger: 'blur' }
     ],
     checkoutpwd_confirm: [
-        { required: true, message:  t('message.paymentPassword.validation.length'), trigger: 'blur' },
+        { required: true, message: t('message.paymentPassword.validation.length'), trigger: 'blur' },
         { len: 6, message: t('message.paymentPassword.validation.length'), trigger: 'blur' },
         { validator: validateConfirmPassword, trigger: 'blur' }
     ],
@@ -138,12 +148,13 @@ const rules = {
 </script>
 <template>
     <template v-if="!userInfo">
-      123123
+        123123
     </template>
 
     <template v-else>
-     
-        <GeneralModal  :open="true" width="29.1667vw" :mainTitle="userInfo.paymentPassword ? t('message.paymentPassword.titles.modify') : t('message.paymentPassword.titles.set')"
+
+        <GeneralModal :open="true" width="29.1667vw"
+            :mainTitle="userInfo.paymentPassword ? t('message.paymentPassword.titles.modify') : t('message.paymentPassword.titles.set')"
             :centered="true">
             <div class="flex flex-col items-center justify-center gap-y-6 px-8 py-8">
 
@@ -172,25 +183,32 @@ const rules = {
                                 <Input v-model:value="formState.otp" placeholder="请输入验证码" size="large"
                                     class="input-style border-radius-custom">
                                 <template #suffix>
-                                    <a @click="handleSendOtp" :class="`${cooldown>0? cooldownClass:readyClass } text-[.9375vw]`">
-                                        {{ cooldown > 0 ? `${cooldown}s` : t('message.paymentPassword.buttons.sendOtp') }}
+                                    <a @click="handleSendOtp"
+                                        :class="`${cooldown > 0 ? cooldownClass : readyClass} text-[.9375vw]`">
+                                        {{ cooldown > 0 ? `${cooldown}s` : t('message.paymentPassword.buttons.sendOtp')
+                                        }}
                                     </a>
                                 </template>
                                 </Input>
 
                             </div>
                             <div class=" text-gray-500 text-lg text-center mt-4">
-                                {{ t('message.paymentPassword.input.sendTo', { phone: userInfo.phoneNumber, phoneCode:userInfo.phoneCode }) }}
+                                {{ t('message.paymentPassword.input.sendTo', {
+                                    phone: userInfo.phoneNumber,
+                                phoneCode:userInfo.phoneCode }) }}
                             </div>
                         </FormItem>
                     </div>
 
                     <FormItem>
                         <div class="w-full flex items-center justify-center">
-                            <button type="submit" html-type="submit"
-                                class="w-full bg-blue-500 text-white rounded-xl text-xl button-style hover:bg-blue-400 duration-100">
-                                {{ userInfo.paymentPassword ? t('message.paymentPassword.buttons.modify') : t('message.paymentPassword.buttons.set') }}
-                            </button>
+                            <Spin :spinning="reqPending" wrapperClassName="w-full gird place-items-center">
+                                <button type="submit" html-type="submit"
+                                    class="w-full bg-blue-500 text-white rounded-xl text-xl button-style hover:bg-blue-400 duration-100">
+                                    {{ userInfo.paymentPassword ? t('message.paymentPassword.buttons.modify') :
+                                        t('message.paymentPassword.buttons.set') }}
+                                </button>
+                            </Spin>
                         </div>
                     </FormItem>
                 </Form>

@@ -22,7 +22,7 @@ const isCheckoutCodeValid = computed(() => {
     return checkoutCode.value.length === 6;
 });
 
-
+const reqPending = ref(false);
 
 
 const open = ref(false);
@@ -33,15 +33,15 @@ const handleClick = async () => {
     if (disabled) {
         return;
     }
-  
+
     const res = await post(URL.user.userInfo, {}, true);
-    if(res.err){
+    if (res.err) {
         message.error(t('message.withdrawal.messages.error'));
         return;
-    }else{
+    } else {
         const paymentPassword = res.data.paymentPassword;
-        if(!paymentPassword){
-           
+        if (!paymentPassword) {
+
 
             openResetCheckoutPasswordModal.value = true;
             await nextTick();
@@ -49,7 +49,7 @@ const handleClick = async () => {
             return;
         }
     }
-  
+
 
     open.value = true;
     checkoutCode.value = '';
@@ -101,20 +101,20 @@ const formRef = ref(null);
 
 const checkoutCode = ref('');
 
-const reqPending = ref(false);
+
 
 const openCheckoutCodeModal = ref(false);
 
-const verifyCheckoutCode = async () =>{
-  
+const verifyCheckoutCode = async () => {
+
     const res = await post(URL.card.verifyPaymentPassword, {
         paymentPassword: checkoutCode.value
     })
 
-    if(!res.err){
+    if (!res.err) {
         openWithdrawlModal.value = true;
         openCheckoutCodeModal.value = false;
-    }else{
+    } else {
         message.error(t('message.withdrawal.messages.error'));
     }
 }
@@ -146,6 +146,7 @@ const onFinish = async () => {
     }
 
     openWithdrawlModal.value = false;
+    
 }
 
 
