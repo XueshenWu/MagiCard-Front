@@ -50,7 +50,7 @@ const formState = reactive({
 const openDowndown = ref(false)
 
 const validatePhoneNumberSync = (value) => {
-    const phoneRegex = formState.phoneCode === '+86' ? /^1[3-9]\d{9}$/ : /\d{8}$/
+    const phoneRegex = formState.phoneCode === '+86' ? /^1[3-9]\d{9}$/ : /^5\d{8}$/
     return phoneRegex.test(value)
 }
 
@@ -353,21 +353,20 @@ onMounted(async () => {
     height: 3.13vw;
     line-height: 1.458333vw;
     padding: .625vw;
-
-    ;
 }
 
 .input-style {
     padding: .989583vw 2.03125vw;
     height: 3.39vw;
-
     font-size: .9375vw;
-
 }
 
 ::v-deep(.ant-form-item) {
     margin-bottom: 1.875vw !important;
 }
+/* ::v-deep(.ant-form-item-explain-error){
+    margin-top: 20px;
+} */
 
 
 ::v-deep(.ant-select-selector) {
