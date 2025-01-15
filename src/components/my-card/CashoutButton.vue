@@ -3,10 +3,11 @@ import { reactive, ref, inject, computed, nextTick } from 'vue';
 import GeneralModal from '../Modal/GeneralModal.vue';
 import { message } from '../Message';
 import URL from '../../api/api-list';
+import ResetCheckoutPasswordCard from '../configModalForms/ResetCheckoutPasswordCard.vue';
 
 
 
-import { Input, Form, FormItem, Spin } from 'ant-design-vue';
+import { Input, Form, FormItem, Spin, Modal } from 'ant-design-vue';
 import { useI18n } from 'vue-i18n';
 import post from '../../api/post';
 const { t } = useI18n();
@@ -16,7 +17,7 @@ const { t } = useI18n();
 
 const updateCardData = inject('updateCardData');
 const openWithdrawlModal = ref(false);
-const openResetCheckoutPasswordModal = ref(false);
+const openModifyCheckoutPasswordModal = ref(false);
 
 const isCheckoutCodeValid = computed(() => {
     return checkoutCode.value.length === 6;
@@ -43,10 +44,14 @@ const handleClick = async () => {
         if (!paymentPassword) {
 
 
-            openResetCheckoutPasswordModal.value = true;
+            openModifyCheckoutPasswordModal.value = true;
             await nextTick();
             message.info(t('message.withdrawal.messages.noPaymentPassword'));
             return;
+        }else{
+     
+       
+            
         }
     }
 
@@ -101,6 +106,7 @@ const formRef = ref(null);
 
 const checkoutCode = ref('');
 
+const openSuccessModal = ref(false);
 
 
 const openCheckoutCodeModal = ref(false);
@@ -141,12 +147,16 @@ const onFinish = async () => {
     if (res.err) {
         message.error(t('message.withdrawal.messages.error'));
     } else {
-        message.success(t('message.withdrawal.messages.success'));
+
+        //
+
+        // message.success(t('message.withdrawal.messages.success'));
         openWithdrawlModal.value = false;
+        openSuccessModal.value = true;
     }
 
     openWithdrawlModal.value = false;
-    
+
 }
 
 
@@ -193,6 +203,26 @@ const onFinish = async () => {
         <template #footer></template>
     </GeneralModal>
 
+    <Modal v-model:open="openSuccessModal" width="29.1667vw" :centered="true">
+        <div class="flex items-center flex-col justify-center p-8 gap-y-8">
+            <div class="text-[1.458333vw]">
+                {{ t('message.withdrawal.messages.success') }}
+            </div>
+            <div class="flex flex-col items-center justify-center ">
+                <div class="w-full text-center text-[0.8vw]">
+                    <p> {{ t('message.withdrawal.withdrawalSuccess.first') }}</p>
+                    <p> {{ t('message.withdrawal.withdrawalSuccess.second') }}</p>
+                </div>
+
+            </div>
+            <button @click="openSuccessModal = false" :class="'bg-[#3189ef] hover:bg-blue-400 cursor-pointer'"
+                class="text-white font-normal text-[1.04167vw] w-[14.0625vw] h-[2.70833vw] px-14 rounded-xl duration-100">
+                {{ t('message.withdrawal.withdrawalSuccess.confirm') }}
+            </button>
+        </div>
+        <template #footer></template>
+    </Modal>
+
     <GeneralModal v-model:open="openWithdrawlModal" width="29.1667vw" :mainTitle="''" :centered="true">
         <div class="flex flex-col items-center justify-center gap-y-6 px-8 py-8">
 
@@ -234,7 +264,7 @@ const onFinish = async () => {
         </div>
         <template #footer></template>
     </GeneralModal>
-    <ResetCheckoutPassword v-if="openResetCheckoutPasswordModal" v-model:open="openResetCheckoutPasswordModal" />
+    <ResetCheckoutPasswordCard  v-if="openModifyCheckoutPasswordModal" v-model:openModifyCheckoutPasswordModal="openModifyCheckoutPasswordModal" />
 
 
 

@@ -163,10 +163,10 @@ const columns = ref([
                                 <div>{{ typeToString(record.type) }}</div>
                                 <div :class="`
                             `" :style="{
-                                color: record.status === 'Closed' ? 'rgb(17, 173, 166)' : '#000000'
+                                color: record.status === 'Closed' ? 'rgb(17, 173, 166)' : record.status === 'Fail' ? 'rgb(255, 0, 0)' : 'rgb(0,0,0)'
                             }">
-                                    {{ record.status === 'Closed' ? t('message.transactions.status.success') :
-                                        t('message.transactions.status.failed') }}
+                                    {{ record.status === 'Closed' ? t('message.transactions.status.success') : record.status === 'Fail'?
+                                        t('message.transactions.status.failed') :t('message.transactions.status.pending') }}
                                 </div>
                             </span>
                             <span class="font-semibold" v-else-if="column.dataIndex === 'lastFour'">

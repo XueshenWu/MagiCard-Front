@@ -50,7 +50,7 @@ watchEffect(async () => {
             </div>
             <div class="flex flex-col items-start gap-y-2">
                 <div class="font-bold flex flex-row items-center gap-x-1">
-                    <span class="text-3xl">$</span> <span class="text-5xl">{{ transactionMeta.totalConsumptionAmount.toFixed(2) }}</span>
+                    <span class="text-3xl">$</span> <span class="text-5xl">{{ transactionMeta.totalWithdrawAmount.toFixed(2) }}</span>
                 </div>
                 <div class="text-xl text-gray-500">
                     {{ t('message.transaction.totalWithdrawn') }}
@@ -58,7 +58,7 @@ watchEffect(async () => {
             </div>
             <div class="flex flex-col items-start gap-y-2">
                 <div class="font-bold flex flex-row items-center gap-x-1">
-                    <span class="text-3xl">$</span> <span class="text-5xl">{{ transactionMeta.totalWithdrawAmount.toFixed(2) }}</span>
+                    <span class="text-3xl">$</span> <span class="text-5xl">{{ transactionMeta.totalConsumptionAmount.toFixed(2) }}</span>
                 </div>
                 <div class="text-xl text-gray-500">
                     {{ t('message.transaction.totalConsumption') }}

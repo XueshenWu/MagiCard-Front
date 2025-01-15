@@ -29,6 +29,11 @@ export default {
                         label: "支付宝真实姓名",
                         placeholder: "请输入您的支付宝真实姓名"
                     },
+                },
+                withdrawalSuccess:{
+                    first:"已成功提交提现申请，提现会自动退回到充值订单",
+                    second:"到账时间为1-3天",
+                    confirm:"我知道了"
                 }
             }
         }
@@ -63,6 +68,11 @@ export default {
                         label: "Alipay Real Name",
                         placeholder: "Please enter your real name on Alipay"
                     },
+                },
+                withdrawalSuccess:{
+                    first:"Your withdrawal application has been successfully submitted, and the withdrawal will be automatically returned to the recharge order",
+                    second:"The arrival time is 1-3 days",
+                    confirm:"Confirm"
                 }
             }
         }

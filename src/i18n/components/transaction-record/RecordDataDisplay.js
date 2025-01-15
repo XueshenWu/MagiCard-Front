@@ -6,7 +6,8 @@ export default{
           refresh: "刷新",
           status: {
             success: "成功",
-            failed: "失败"
+            failed: "失败",
+            pending: "处理中"
           },
           columns: {
             time: "交易时间",
@@ -26,7 +27,8 @@ export default{
           refresh: "Refresh",
           status: {
             success: "Success",
-            failed: "Failed"
+            failed: "Failed",
+            pending: "Pending"
           },
           columns: {
             time: "Transaction Time",

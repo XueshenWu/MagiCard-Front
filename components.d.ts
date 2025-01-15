@@ -61,6 +61,7 @@ declare module 'vue' {
     RecordMetaDisplay: typeof import('./src/components/transaction-record/RecordMetaDisplay.vue')['default']
     RegisterForm: typeof import('./src/components/login-register/forms/RegisterForm.vue')['default']
     ResetCheckoutPassword: typeof import('./src/components/configModalForms/ResetCheckoutPassword.vue')['default']
+    ResetCheckoutPasswordCard: typeof import('./src/components/configModalForms/ResetCheckoutPasswordCard.vue')['default']
     ResetPassword: typeof import('./src/components/configModalForms/ResetPassword.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

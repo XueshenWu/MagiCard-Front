@@ -12,8 +12,8 @@ import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 const reqPending = ref(false);
-const switchSelected = inject('switchSelected')
 
+const open = defineModel('openModifyCheckoutPasswordModal');
 const cooldown = ref(0);
 const cooldownClass = ref('text-gray-500 cursor-not-allowed');
 const readyClass = ref('text-blue-500');
@@ -94,7 +94,7 @@ const handleSendOtp = () => {
     }
 };
 
-const open = defineModel('openModifyCheckoutPasswordModal');
+
 
 
 
@@ -114,18 +114,23 @@ const onFinish = async () => {
     const data = await post(URL.user.resetPaymentPassword, body)
     if (!data.err) {
         message.success(t('message.paymentPassword.messages.modifySuccess'));
-        switchSelected("")
+  
     } else {
         message.error(t('message.paymentPassword.messages.modifyFailed'));
     }
    
     reqPending.value = false;
     open.value = false;
-    switchSelected("")
+    unlock();
+    turnOnLight();
+    
 
 };
-
-
+const {lock, unlock} = inject('lightLock');
+const {
+    turnOnLight,
+    turnOffLight
+} = inject('lightSwitch');
 
 const validateConfirmPassword = async (rule, value) => {
     if (value !== formState.checkoutpwd_new) {
@@ -156,9 +161,9 @@ const rules = {
 
     </template>
 
-    <template v-else>
+    <template v-else-if="open">
 
-        <GeneralModal :open="true" width="29.1667vw"
+        <GeneralModal :open="true" :onClose="()=>open=false" width="29.1667vw"
             :mainTitle="userInfo.paymentPassword ? t('message.paymentPassword.titles.modify') : t('message.paymentPassword.titles.set')"
             :centered="true">
             <div class="flex flex-col items-center justify-center gap-y-6 px-8 py-8">
