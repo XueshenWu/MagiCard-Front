@@ -118,6 +118,7 @@ const onFinish = async () => {
     }
 
     reqPending.value = false;
+    switchSelected("")
 };
 
 const open = defineModel('openModifyCheckoutPasswordModal');
@@ -148,7 +149,7 @@ const rules = {
 </script>
 <template>
     <template v-if="!userInfo">
-        123123
+       
     </template>
 
     <template v-else>
